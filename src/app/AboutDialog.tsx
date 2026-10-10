@@ -192,11 +192,15 @@ export function AboutDialog() {
               <strong>Diagrams that stay alive.</strong> Paste one into Word or PowerPoint, and clicking the picture brings back
               the full, explorable version.
             </li>
-            <li>
-              <strong>Nothing is uploaded.</strong> No account, no server, no copy anywhere except this browser. Which also
-              means: download your file. We genuinely can't recover it for you.
-            </li>
           </ul>
+
+          <h3 className={styles.heading}>Your diagrams are yours</h3>
+          <p>We built {BRAND.name} around one idea, nesting, and one promise: your diagrams stay with you.</p>
+          <p>
+            No sign-up, no account, no password to hand over. Nothing you draw is sent to us. It stays in this browser,
+            whether you use {BRAND.host} or run your own copy, which the open source code lets you do.
+          </p>
+          <p>Which also means: download your file. We genuinely can't recover it for you.</p>
 
           <h3 className={styles.heading}>Who made this</h3>
           <p>
