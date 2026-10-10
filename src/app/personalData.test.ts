@@ -12,6 +12,9 @@ import { personalWordsIn } from "./personalWords";
 // The personal words themselves are checked by hash (personalWords.ts), so this file does not
 // publish the very words it keeps out.
 
+/** The one file that may write BRAND.repository, whose URL carries the owner's handle. */
+const REPOSITORY_FILE = "src/app/brand.ts";
+
 /** The one address the repository may carry: the product's own contact. */
 const ALLOWED_EMAILS = new Set([BRAND.contact]);
 
@@ -72,9 +75,18 @@ describe("no personal or machine-specific details in the repository", () => {
   it("names no one: none of the personal words appears in any file", () => {
     const offenders: string[] = [];
     for (const { rel, source } of files) {
-      for (const hash of personalWordsIn(source)) offenders.push(`${rel}: a personal word (sha256 ${hash.slice(0, 12)}…)`);
+      // The repository's own URL carries the owner's GitHub handle; brand.ts is the one file
+      // allowed to write it (BRAND.repository, D149), the way BRAND.contact is the one address.
+      const checked = rel === REPOSITORY_FILE ? source.split(BRAND.repository).join("") : source;
+      for (const hash of personalWordsIn(checked)) offenders.push(`${rel}: a personal word (sha256 ${hash.slice(0, 12)}…)`);
     }
     expect(offenders).toEqual([]);
+  });
+
+  it("writes the repository's URL once, in brand.ts", () => {
+    const holders = files.filter((f) => f.source.includes(BRAND.repository)).map((f) => f.rel);
+    expect(holders).toEqual([REPOSITORY_FILE]);
+    expect(files.find((f) => f.rel === REPOSITORY_FILE)!.source.split(BRAND.repository)).toHaveLength(2);
   });
 
   it("carries no email address but the product's own contact", () => {

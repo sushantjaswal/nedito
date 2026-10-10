@@ -12,8 +12,11 @@ test("typing 'about' in the palette opens it; the version line is read from code
   await expect(dialog).toBeVisible();
   await expect(page.getByTestId("nd-about-version")).toHaveText(/^Version \d+\.\d+\.\d+ · File format v\d+$/);
   await expect(dialog.getByText("Yet another diagram tool. Except this one has a basement.")).toBeVisible();
-  // No links at all: the contact address is plain text (user, 2026-10-08).
-  await expect(dialog.locator("a")).toHaveCount(0);
+  // The contact address is plain text, not a mail link (user, 2026-10-08); the one link is to the
+  // source repository, in a new tab (D149).
+  await expect(dialog.locator("a")).toHaveCount(1);
+  await expect(dialog.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.getByTestId("nd-about-repository")).toHaveAttribute("target", "_blank");
 });
 
 test("from the app menu, and the whole thing by keyboard: open the block, climb out, close with Esc", async ({ page }) => {

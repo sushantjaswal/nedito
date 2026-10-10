@@ -109,12 +109,13 @@ files (and the older `.deepdraw`), editable PNGs, Word exports and draw.io files
 `main` is protected and always working. Each change is its own short-lived branch off `main`:
 
 1. Branch (`feat/…`, `fix/…`, `docs/…`).
-2. Before opening a pull request, run the whole verification sweep and get it green:
-   `npm run test`, `npm run test:e2e`, `npm run lint`, `npx tsc -b`, `npm run build`.
+2. Before opening a pull request, run the fast checks and get them green — `npm run test`,
+   `npm run lint`, `npx tsc -b`, `npm run build` — plus the end-to-end tests for the area you
+   changed (`npx playwright test tests/e2e/<spec>`). The whole end-to-end suite runs in CI.
 3. Open the pull request with what changed and the verification results, and wait for review.
 4. One pull request open at a time: the next branch starts after the last one merges.
 
-The same checks run in GitHub Actions on every pull request (`.github/workflows/ci.yml`). Report a security problem privately, as `SECURITY.md` describes, not in an issue.
+Every pull request runs the full sweep in GitHub Actions (`.github/workflows/ci.yml`), the end-to-end tests split across three machines, and must be up to date with `main` and green before it merges. Report a security problem privately, as `SECURITY.md` describes, not in an issue.
 
 Commits use conventional messages (`feat(canvas): …`). New dependencies need a stated reason.
 [`CLAUDE.md`](CLAUDE.md) holds the full working agreements and the product rules,
@@ -124,5 +125,7 @@ past decision and why.
 ## Licence and attribution
 
 Nedito is open source under the Apache License 2.0 — see [`LICENSE`](LICENSE). The third-party icon
-sets it ships (Azure, AWS and Google Cloud architecture icons, and Google's Material Symbols) are used
-under their own terms, listed with their sources in [`NOTICE`](NOTICE).
+sets it ships (Azure, AWS and Google Cloud architecture icons, and Google's Material Symbols) and its
+typeface, IBM Plex (SIL Open Font License 1.1, full text in
+[`licenses/IBM-Plex-OFL-1.1.txt`](licenses/IBM-Plex-OFL-1.1.txt)), are used under their own terms,
+listed with their sources in [`NOTICE`](NOTICE).

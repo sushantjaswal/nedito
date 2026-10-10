@@ -2,7 +2,8 @@
 // docs/about-copy.md's, exactly (AboutDialog.test.tsx holds them to it); the name comes from
 // BRAND, the version from package.json and the file format's version from the format code — none
 // of them written out here. The contact address is BRAND.contact, shown as text to copy — no
-// mailto: link, which did nothing where no mail client is set up.
+// mailto: link, which did nothing where no mail client is set up. The one link is to the source
+// repository, BRAND.repository (D149).
 //
 // It shows the product rather than only describing it: a small Nested Block, "Why this exists?",
 // opens with ⤢ into its own three-box diagram, with a breadcrumb back out — and Esc goes back out
@@ -214,6 +215,15 @@ export function AboutDialog() {
           <p>
             Your diagram stays on your machine either way. Nothing here sends us your work, so if a bug involves a specific
             diagram, export it and attach it yourself.
+          </p>
+
+          <h3 className={styles.heading}>Open source</h3>
+          <p>
+            {BRAND.name} is open source under the Apache 2.0 licence. The code and the documented file format live{" "}
+            <a className={styles.link} href={BRAND.repository} target="_blank" rel="noopener noreferrer" data-testid="nd-about-repository">
+              on GitHub
+            </a>
+            .
           </p>
 
           <h3 className={styles.heading}>The name</h3>
