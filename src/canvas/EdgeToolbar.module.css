@@ -1,0 +1,157 @@
+.root {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: all;
+  transform-origin: 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--nd-color-ink);
+  z-index: 10;
+}
+
+/* Dark, like the shapes' context bar (R1, D90); its popups stay light. */
+.bar {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--nd-context-bar-bg);
+  color: var(--nd-color-topbar-ink);
+  border: 1px solid var(--nd-context-bar-edge);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(20, 26, 34, 0.28);
+}
+
+.bar .btn {
+  color: var(--nd-color-topbar-ink);
+}
+
+.bar .btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.bar .btn[aria-pressed="true"] {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.bar .btn:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 1px;
+}
+
+.textGlyph {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.btn,
+.choice,
+.choiceText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  cursor: pointer;
+}
+
+.btn:hover,
+.choice:hover,
+.choiceText:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.btn[aria-pressed="true"],
+.choice[aria-checked="true"],
+.choiceText[aria-checked="true"] {
+  border-color: var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 170px;
+  max-width: 260px;
+  padding: 8px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(20, 26, 34, 0.16);
+}
+
+.heading {
+  font-weight: 600;
+  color: var(--nd-color-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.select {
+  width: 100%;
+  font: inherit;
+}
+
+.number {
+  width: 56px;
+  font: inherit;
+}
+
+.unit {
+  color: var(--nd-color-muted);
+}
+
+.color {
+  width: 32px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  background: none;
+}
+
+.textBtn {
+  font: inherit;
+  padding: 4px 6px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  cursor: pointer;
+}
+
+/* Motion (D116): worded choices rather than pictures. */
+.choiceText {
+  padding: 0 8px;
+  font: inherit;
+  font-size: 12px;
+}
+
+.hint {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--nd-color-muted);
+}

@@ -1,0 +1,115 @@
+.browser {
+  padding: 4px 0 12px;
+}
+
+.section {
+  margin-bottom: 4px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.header:hover {
+  color: var(--nd-color-ink);
+}
+
+.chevron {
+  font-size: 9px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 10px 8px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  background: var(--nd-panel-bg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--nd-color-nest-accent);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  height: 64px;
+  border-radius: 4px;
+  background: var(--nd-color-canvas);
+  overflow: hidden;
+}
+
+.thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+.thumbEmpty {
+  display: block;
+  height: 100%;
+}
+
+/* The violet badge marking a template that contains a Nested Block — the differentiator, so
+   it is worth pointing at in the picker rather than leaving to be discovered. */
+.nestedBadge {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--nd-color-ink);
+  line-height: 1.25;
+}
+
+.description {
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--nd-color-muted);
+}
+
+.empty {
+  padding: 16px 12px;
+  font-size: 12px;
+  color: var(--nd-color-muted);
+}

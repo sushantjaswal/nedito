@@ -1,0 +1,868 @@
+{
+  "format": "nedito",
+  "formatVersion": 2,
+  "meta": {
+    "title": "Online store domain",
+    "created": "2026-09-23T00:00:00.000Z",
+    "modified": "2026-09-23T00:00:00.000Z",
+    "appVersion": "0.1.0"
+  },
+  "rootDiagramIds": [
+    "dContexts____________",
+    "dSchema______________"
+  ],
+  "diagrams": {
+    "dCatalogue___________": {
+      "id": "dCatalogue___________",
+      "title": "Catalogue",
+      "layers": [
+        {
+          "id": "LCatalogue___________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "cProduct_____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 60,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 130
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Product\n\nsku: Sku\nname: string\nprice: Money\n\nreprice(amount)",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cDigital_____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 20,
+            "y": 250
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "DigitalProduct\n\ndownloadUrl: Url\n",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cPhysical____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 250,
+            "y": 250
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "PhysicalProduct\n\nweightKg: number\n\nshippingClass()",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cCategory____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 360,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Category\n\nname: string\n",
+            "align": "center",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "ceDigital____________",
+          "source": {
+            "nodeId": "cDigital_____________"
+          },
+          "target": {
+            "nodeId": "cProduct_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "triangle",
+            "sourceHandle": "top",
+            "targetHandle": "bottom",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cePhysical___________",
+          "source": {
+            "nodeId": "cPhysical____________"
+          },
+          "target": {
+            "nodeId": "cProduct_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "triangle",
+            "sourceHandle": "top",
+            "targetHandle": "bottom",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "ceCategory___________",
+          "source": {
+            "nodeId": "cCategory____________"
+          },
+          "target": {
+            "nodeId": "cProduct_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "diamond-open",
+            "endArrow": "none",
+            "sourceHandle": "left",
+            "targetHandle": "right",
+            "look": "classic"
+          },
+          "label": {
+            "text": "0..*",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        }
+      ]
+    },
+    "dContexts____________": {
+      "id": "dContexts____________",
+      "title": "Bounded contexts",
+      "layers": [
+        {
+          "id": "LContexts____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "bCatalogue___________",
+          "type": "nested",
+          "childDiagramId": "dCatalogue___________",
+          "position": {
+            "x": 40,
+            "y": 60
+          },
+          "size": {
+            "w": 260,
+            "h": 160
+          },
+          "z": 1,
+          "style": {},
+          "label": {
+            "text": "Catalogue",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [],
+            "summary": "products · categories"
+          },
+          "ports": [
+            {
+              "id": "pcProduct____________",
+              "side": "right",
+              "offset": 0.5,
+              "innerNodeId": "cProduct_____________",
+              "label": "Product"
+            }
+          ]
+        },
+        {
+          "id": "bOrdering____________",
+          "type": "nested",
+          "childDiagramId": "dOrdering____________",
+          "position": {
+            "x": 440,
+            "y": 60
+          },
+          "size": {
+            "w": 260,
+            "h": 160
+          },
+          "z": 1,
+          "style": {},
+          "label": {
+            "text": "Ordering",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [],
+            "summary": "orders · lines · customers"
+          },
+          "ports": [
+            {
+              "id": "poLine_______________",
+              "side": "left",
+              "offset": 0.5,
+              "innerNodeId": "oLine________________",
+              "label": "OrderLine"
+            },
+            {
+              "id": "poOrder______________",
+              "side": "bottom",
+              "offset": 0.5,
+              "innerNodeId": "oOrder_______________",
+              "label": "Order"
+            }
+          ]
+        },
+        {
+          "id": "bPayments____________",
+          "type": "nested",
+          "childDiagramId": "dPayments____________",
+          "position": {
+            "x": 440,
+            "y": 360
+          },
+          "size": {
+            "w": 260,
+            "h": 160
+          },
+          "z": 1,
+          "style": {},
+          "label": {
+            "text": "Payments",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [],
+            "summary": "payments · methods"
+          },
+          "ports": [
+            {
+              "id": "ppPayment____________",
+              "side": "top",
+              "offset": 0.5,
+              "innerNodeId": "pPayment_____________",
+              "label": "Payment"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "xLineProduct_________",
+          "source": {
+            "nodeId": "bOrdering____________",
+            "portId": "poLine_______________"
+          },
+          "target": {
+            "nodeId": "bCatalogue___________",
+            "portId": "pcProduct____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "open",
+            "dash": "dashed",
+            "look": "classic"
+          },
+          "label": {
+            "text": "references by sku",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "xOrderPayment________",
+          "source": {
+            "nodeId": "bOrdering____________",
+            "portId": "poOrder______________"
+          },
+          "target": {
+            "nodeId": "bPayments____________",
+            "portId": "ppPayment____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "open",
+            "dash": "dashed",
+            "look": "classic"
+          },
+          "label": {
+            "text": "requests payment",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        }
+      ]
+    },
+    "dOrdering____________": {
+      "id": "dOrdering____________",
+      "title": "Ordering",
+      "layers": [
+        {
+          "id": "LOrdering____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "oOrder_______________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 60,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 150
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Order\n\norderNo: OrderNo\nplacedAt: Instant\nstatus: Status\n\nplace()\ncancel()",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "oLine________________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 60,
+            "y": 260
+          },
+          "size": {
+            "w": 200,
+            "h": 120
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "OrderLine\n\nsku: Sku\nquantity: number\n\nsubtotal()",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "oCustomer____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 360,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 110
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Customer\n\nname: string\nemail: Email\n",
+            "align": "center",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "oeLines______________",
+          "source": {
+            "nodeId": "oOrder_______________"
+          },
+          "target": {
+            "nodeId": "oLine________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "diamond",
+            "endArrow": "none",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          },
+          "label": {
+            "text": "1..*",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "oeCustomer___________",
+          "source": {
+            "nodeId": "oCustomer____________"
+          },
+          "target": {
+            "nodeId": "oOrder_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "open",
+            "sourceHandle": "left",
+            "targetHandle": "right",
+            "look": "classic"
+          },
+          "label": {
+            "text": "places",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        }
+      ]
+    },
+    "dPayments____________": {
+      "id": "dPayments____________",
+      "title": "Payments",
+      "layers": [
+        {
+          "id": "LPayments____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "pPayment_____________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 60,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 140
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Payment\n\namount: Money\nstatus: Status\n\ncapture()\nrefund()",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "pCard________________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 20,
+            "y": 250
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "CardPayment\n\nlast4: string\n",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "pWallet______________",
+          "type": "shape",
+          "shapeRef": "uml/class",
+          "position": {
+            "x": 250,
+            "y": 250
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "WalletPayment\n\nprovider: string\n",
+            "align": "center",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "peCard_______________",
+          "source": {
+            "nodeId": "pCard________________"
+          },
+          "target": {
+            "nodeId": "pPayment_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "triangle",
+            "sourceHandle": "top",
+            "targetHandle": "bottom",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "peWallet_____________",
+          "source": {
+            "nodeId": "pWallet______________"
+          },
+          "target": {
+            "nodeId": "pPayment_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "triangle",
+            "sourceHandle": "top",
+            "targetHandle": "bottom",
+            "look": "classic"
+          }
+        }
+      ]
+    },
+    "dSchema______________": {
+      "id": "dSchema______________",
+      "title": "Schema",
+      "layers": [
+        {
+          "id": "LSchema______________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "sCustomer____________",
+          "type": "shape",
+          "shapeRef": "entity-relation/table",
+          "position": {
+            "x": 40,
+            "y": 40
+          },
+          "size": {
+            "w": 210,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "CUSTOMER\n\nPK customer_id\nname\nemail",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "sOrder_______________",
+          "type": "shape",
+          "shapeRef": "entity-relation/table",
+          "position": {
+            "x": 360,
+            "y": 40
+          },
+          "size": {
+            "w": 210,
+            "h": 120
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "ORDER\n\nPK order_no\nFK customer_id\nplaced_at\nstatus",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "sLine________________",
+          "type": "shape",
+          "shapeRef": "entity-relation/table",
+          "position": {
+            "x": 360,
+            "y": 300
+          },
+          "size": {
+            "w": 210,
+            "h": 120
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "ORDER_LINE\n\nPK line_id\nFK order_no\nFK sku\nquantity",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "sProduct_____________",
+          "type": "shape",
+          "shapeRef": "entity-relation/table",
+          "position": {
+            "x": 680,
+            "y": 300
+          },
+          "size": {
+            "w": 210,
+            "h": 100
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "PRODUCT\n\nPK sku\nname\nprice",
+            "align": "center",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "sPayment_____________",
+          "type": "shape",
+          "shapeRef": "entity-relation/table",
+          "position": {
+            "x": 680,
+            "y": 40
+          },
+          "size": {
+            "w": 210,
+            "h": 120
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "PAYMENT\n\nPK payment_id\nFK order_no\namount\nstatus",
+            "align": "center",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "sOrders______________",
+          "source": {
+            "nodeId": "sCustomer____________"
+          },
+          "target": {
+            "nodeId": "sOrder_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "er-one",
+            "endArrow": "er-zero-or-many",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "places",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "sLines_______________",
+          "source": {
+            "nodeId": "sOrder_______________"
+          },
+          "target": {
+            "nodeId": "sLine________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "er-one",
+            "endArrow": "er-one-or-many",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          },
+          "label": {
+            "text": "contains",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "sProducts____________",
+          "source": {
+            "nodeId": "sProduct_____________"
+          },
+          "target": {
+            "nodeId": "sLine________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "er-one",
+            "endArrow": "er-zero-or-many",
+            "sourceHandle": "left",
+            "targetHandle": "right",
+            "look": "classic"
+          },
+          "label": {
+            "text": "appears in",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "sPayments____________",
+          "source": {
+            "nodeId": "sOrder_______________"
+          },
+          "target": {
+            "nodeId": "sPayment_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "er-one",
+            "endArrow": "er-zero-or-one",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "paid by",
+            "fontSize": 10,
+            "color": "#66707D"
+          }
+        }
+      ]
+    }
+  }
+}

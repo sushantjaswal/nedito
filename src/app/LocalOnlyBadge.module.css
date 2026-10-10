@@ -1,0 +1,97 @@
+.wrapper {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--nd-ok-line);
+  background: var(--nd-ok-soft);
+  color: var(--nd-ok-ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.badge:hover {
+  border-color: var(--nd-ok);
+}
+
+.badge:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}
+
+.lock {
+  font-size: 10px;
+}
+
+/* Anchored above the badge: the badge lives in the bottom strip, so a popover below it would
+   open off-screen. */
+.popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: 310px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--nd-border-color);
+  background: var(--nd-panel-bg);
+  box-shadow: 0 6px 20px rgba(20, 26, 34, 0.16);
+  z-index: 20;
+  color: var(--nd-color-ink);
+  white-space: normal;
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.body {
+  margin: 0 0 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--nd-color-muted);
+}
+
+.list {
+  margin: 0 0 12px;
+  padding-left: 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--nd-color-muted);
+}
+
+.download {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.download:hover {
+  background: var(--nd-color-nest-deep);
+  border-color: var(--nd-color-nest-deep);
+}
+
+.download:focus-visible {
+  outline: 2px solid var(--nd-color-nest-deep);
+  outline-offset: 2px;
+}

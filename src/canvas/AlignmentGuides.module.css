@@ -1,0 +1,20 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.vertical,
+.horizontal {
+  position: absolute;
+  background: var(--nd-color-nest-accent);
+}
+
+.vertical {
+  width: 1px;
+}
+
+.horizontal {
+  height: 1px;
+}

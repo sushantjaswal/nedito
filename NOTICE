@@ -1,0 +1,63 @@
+Nedito
+Copyright the Nedito contributors.
+
+This product includes third-party icon assets, used under each vendor's own published terms.
+Nedito does not claim ownership of these icons; all trademarks and icon artwork remain the
+property of their respective owners.
+
+--------------------------------------------------------------------------------
+Microsoft Azure architecture icons
+--------------------------------------------------------------------------------
+Source:  https://learn.microsoft.com/en-us/azure/architecture/icons/
+Package: Azure_Public_Service_Icons_V24.zip
+Files used: src/library/stencils/assets/azure/**/*.svg (full set, 714 icons, all categories)
+Terms:   "Microsoft permits the use of these icons in architectural diagrams, training
+         materials, or documentation. You can copy, distribute, and display the icons only
+         for the permitted use unless granted explicit permission by Microsoft. Microsoft
+         reserves all other rights." Icons are used unmodified (no crop/flip/rotate/recolor)
+         per Microsoft's guidelines.
+
+--------------------------------------------------------------------------------
+AWS architecture icons
+--------------------------------------------------------------------------------
+Source:  https://aws.amazon.com/architecture/icons/
+Package: AWS Architecture Icons (Q2 2026 release)
+Files used: src/library/stencils/assets/aws/**/*.svg (full Architecture-Service-Icons set,
+            305 icons, 48px size tier, all categories)
+Terms:   AWS provides these icons, resources, and toolkits so customers and partners can
+         build architecture diagrams. Used unmodified per the AWS Architecture Icons asset
+         package guidelines distributed with the package.
+
+--------------------------------------------------------------------------------
+Google Cloud icons
+--------------------------------------------------------------------------------
+Source:  https://cloud.google.com/icons
+Package: Category Icons (category-icons.zip) + Core Product Icons (core-products-icons.zip)
+Files used: src/library/stencils/assets/gcp/**/*.svg (full set, 45 icons: 26 category icons +
+            19 core product icons)
+Terms:   Google Cloud's official icon library, provided for use in diagrams, technical
+         documentation, and related materials. Used unmodified per Google Cloud's icon usage
+         guidelines.
+
+--------------------------------------------------------------------------------
+Google Material Symbols
+--------------------------------------------------------------------------------
+Source:  https://github.com/google/material-design-icons (Apache License 2.0)
+Files used: general.ts (16 UI-element icons), misc.ts (35 icons — full section), arrows.ts
+            (44 icons — full section), network.ts (52 icons: the original 32 device/network
+            glyphs plus 14 more media/comms/location icons), business.ts (44 icons: the
+            original 26 org/people/process glyphs plus 18 more). Coordinates transformed from
+            each icon's own viewBox into Nedito's shared 0 0 100 100 stencil space;
+            re-themed via the node's own fill/stroke like all other hand-drawn generic
+            shapes (not the unthemed `raw` path used for Azure/AWS/GCP's official
+            brand-color icons).
+Terms:   Apache License, Version 2.0 — full text at
+         https://github.com/google/material-design-icons/blob/master/LICENSE
+
+--------------------------------------------------------------------------------
+All other stencils (Basic, Advanced, Flowchart, UML, Entity Relation, General's 7 drawing
+primitives, Network's original 6)
+--------------------------------------------------------------------------------
+Original SVG geometry authored for Nedito, following published open standards (ISO 5807 /
+ANSI flowchart symbols, OMG UML notation, Chen ER notation) — no third-party or vendor assets
+involved.

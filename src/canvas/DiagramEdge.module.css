@@ -1,0 +1,111 @@
+.hitPath {
+  cursor: crosshair;
+}
+
+.waypoint {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--nd-panel-bg);
+  border: 2px solid var(--nd-color-nest-accent);
+  cursor: grab;
+  pointer-events: all;
+}
+
+.labelPill {
+  position: absolute;
+  pointer-events: all;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  /* Dragged to move it along or off its line (D97); double-click edits. */
+  cursor: move;
+  touch-action: none;
+}
+
+.labelDragging {
+  box-shadow: 0 2px 8px rgba(20, 26, 34, 0.2);
+  border-color: var(--nd-color-nest-accent);
+}
+
+/* A line with nothing at either end is moved by its body (draw.io's dangling edge). */
+.movable {
+  cursor: move;
+}
+
+/* Halfway along a stretch: drag to bend the line there. */
+.virtualBend {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nd-color-nest-accent);
+  opacity: 0.35;
+  cursor: grab;
+  pointer-events: all;
+}
+
+.virtualBend:hover {
+  opacity: 0.8;
+}
+
+/* A line's ends. A free one is solid; one attached to a shape is hollow, as in draw.io. */
+.endFree,
+.endAttached {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--nd-color-nest-accent);
+  cursor: move;
+  pointer-events: all;
+  box-sizing: border-box;
+}
+
+.endFree {
+  background: var(--nd-color-nest-accent);
+}
+
+.endAttached {
+  background: var(--nd-panel-bg);
+}
+
+/* The shape a dragged end will attach to if let go here. */
+.dropTarget {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 2px solid var(--nd-color-nest-accent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--nd-color-nest-accent) 8%, transparent);
+  pointer-events: none;
+}
+
+/* Where the dragged point is, as draw.io shows while dragging an end or a bend. */
+.coords {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  color: var(--nd-color-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Low detail, zoomed far out (P1, D115): lines without arrowheads or labels. */
+:global(.nd-lod) :global(.react-flow__edge:not(.selected)) :global(.react-flow__edge-path) {
+  marker-start: none;
+  marker-end: none;
+}
+
+:global(.nd-lod) .labelPill {
+  display: none;
+}

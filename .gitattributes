@@ -1,0 +1,21 @@
+# Development happens on Windows with core.autocrlf=true, which rewrites line endings on
+# checkout. That is harmless for source, and not harmless for files whose exact bytes matter.
+#
+# A `.nedito` file is written by encodeDoc() with LF endings, and examples/ has a test that
+# re-encodes the committed document and asserts the bytes match. Left to autocrlf, a fresh
+# clone would check that file out with CRLF and the test would fail for everyone except
+# whoever generated it — the classic "passes on my machine" failure.
+*.nedito text eol=lf
+# The same for documents written before the rename (D100), kept as fixtures.
+*.deepdraw text eol=lf
+
+# Same reasoning for the golden files the exporters are checked against, and for anything
+# whose bytes are compared rather than parsed.
+*.svg text eol=lf
+
+# Never touched: these are containers whose CRC/offsets a line-ending rewrite would corrupt.
+*.png binary
+*.pptx binary
+*.docx binary
+*.pdf binary
+*.woff2 binary

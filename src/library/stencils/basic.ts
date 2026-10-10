@@ -1,0 +1,150 @@
+// Standard "Basic" diagramming shapes (square, cylinder, cube, document, card, etc.) — generic
+// geometric conventions owned by no vendor, same as General/Flowchart/Network. Original SVG
+// geometry per CLAUDE.md's provenance guardrail.
+import type { StencilSection } from "./types";
+
+const section: StencilSection = {
+  id: "basic",
+  name: "Basic",
+  shapes: [
+    { id: "basic/square", hidden: true, keywords: ["box", "tile", "block"], label: "Square", defaultSize: { w: 90, h: 90 }, svgBody: '<rect x="1" y="1" width="98" height="98" />' },
+    { id: "basic/circle", hidden: true, keywords: ["round", "dot", "disc", "node"], label: "Circle", defaultSize: { w: 90, h: 90 }, svgBody: '<circle cx="50" cy="50" r="49" />' },
+    { id: "basic/triangle", hidden: true, keywords: ["pyramid", "delta", "warning", "up"], label: "Triangle", defaultSize: { w: 100, h: 90 }, svgBody: '<polygon points="50,2 98,98 2,98" />' },
+    {
+      id: "basic/pentagon",
+      keywords: ["five sides", "home plate", "badge"],
+      label: "Pentagon",
+      defaultSize: { w: 100, h: 100 },
+      svgBody: '<polygon points="50,2 95,38 78,95 22,95 5,38" />',
+    },
+    {
+      id: "basic/hexagon", hidden: true,
+      keywords: ["six sides", "honeycomb", "cell", "badge"],
+      label: "Hexagon",
+      defaultSize: { w: 120, h: 90 },
+      svgBody: '<polygon points="25,2 75,2 98,50 75,98 25,98 2,50" />',
+    },
+    {
+      id: "basic/octagon",
+      keywords: ["eight sides", "stop", "stop sign"],
+      label: "Octagon",
+      defaultSize: { w: 100, h: 100 },
+      svgBody: '<polygon points="30,2 70,2 98,30 98,70 70,98 30,98 2,70 2,30" />',
+    },
+    {
+      id: "basic/parallelogram", hidden: true,
+      keywords: ["slanted", "skewed", "input", "output"],
+      label: "Parallelogram",
+      defaultSize: { w: 120, h: 60 },
+      svgBody: '<polygon points="25,2 98,2 75,98 2,98" />',
+    },
+    {
+      id: "basic/trapezoid",
+      keywords: ["funnel", "manual operation", "bucket"],
+      label: "Trapezoid",
+      defaultSize: { w: 120, h: 60 },
+      svgBody: '<polygon points="25,2 75,2 98,98 2,98" />',
+    },
+    {
+      id: "basic/cylinder", hidden: true,
+      keywords: ["database", "db", "storage", "drum", "tank"],
+      label: "Cylinder",
+      defaultSize: { w: 90, h: 90 },
+      svgBody: '<path d="M10,18 A40,13 0 1 1 90,18 A40,13 0 1 1 10,18 Z M10,18 V82 A40,13 0 0 0 90,82 V18" />',
+    },
+    {
+      id: "basic/cube",
+      keywords: ["box", "3d", "block", "package", "container"],
+      label: "Cube",
+      defaultSize: { w: 100, h: 100 },
+      svgBody: '<path d="M2,25 L50,2 L98,25 L98,75 L50,98 L2,75 Z M2,25 L50,48 L98,25 M50,48 L50,98" fill-opacity="0.9" />',
+    },
+    {
+      id: "basic/document", hidden: true,
+      keywords: ["page", "report", "paper", "file", "wavy"],
+      label: "Document",
+      defaultSize: { w: 100, h: 90 },
+      svgBody: '<path d="M1,1 H99 V80 Q75,95 50,80 Q25,65 1,80 Z" />',
+    },
+    {
+      id: "basic/internal-storage", hidden: true,
+      keywords: ["memory", "ram", "grid", "table"],
+      label: "Internal Storage",
+      defaultSize: { w: 90, h: 90 },
+      svgBody: '<rect x="1" y="1" width="98" height="98" /><line x1="15" y1="1" x2="15" y2="99" fill="none" /><line x1="1" y1="15" x2="99" y2="15" fill="none" />',
+    },
+    {
+      id: "basic/step",
+      keywords: ["chevron", "arrow", "stage", "phase", "process step"],
+      label: "Step",
+      defaultSize: { w: 120, h: 70 },
+      svgBody: '<path d="M1,1 H80 L98,50 L80,99 H1 L19,50 Z" />',
+    },
+    { id: "basic/card", keywords: ["punched card", "index card", "folded corner"], label: "Card", defaultSize: { w: 100, h: 80 }, svgBody: '<polygon points="20,1 99,1 99,99 1,99 1,20" />' },
+    {
+      id: "basic/tape", hidden: true,
+      keywords: ["punched tape", "ribbon", "banner", "wave"],
+      label: "Tape",
+      defaultSize: { w: 120, h: 60 },
+      svgBody: '<path d="M1,15 Q25,1 50,15 Q75,29 99,15 V85 Q75,99 50,85 Q25,71 1,85 Z" />',
+    },
+    {
+      id: "basic/callout",
+      keywords: ["speech bubble", "tooltip", "comment", "balloon", "say"],
+      label: "Callout",
+      defaultSize: { w: 110, h: 100 },
+      svgBody: '<path d="M1,1 H99 V70 H35 L20,95 L25,70 H1 Z" />',
+    },
+    {
+      id: "basic/container",
+      keywords: ["frame", "boundary", "group", "panel", "region"],
+      label: "Container",
+      defaultSize: { w: 140, h: 100 },
+      svgBody: '<rect x="1" y="1" width="98" height="98" fill="none" /><line x1="1" y1="20" x2="99" y2="20" fill="none" />',
+    },
+    {
+      id: "basic/cross", hidden: true,
+      keywords: ["plus", "add", "health", "medical"],
+      label: "Cross",
+      defaultSize: { w: 90, h: 90 },
+      svgBody: '<polygon points="35,1 65,1 65,35 99,35 99,65 65,65 65,99 35,99 35,65 1,65 1,35 35,35" />',
+    },
+    {
+      id: "basic/ring",
+      keywords: ["donut", "annulus", "hoop", "target"],
+      label: "Ring",
+      defaultSize: { w: 90, h: 90 },
+      svgBody: '<path d="M50,2 A48,48 0 1 1 49.9,2 Z M50,25 A25,25 0 1 0 50.1,25 Z" fill-rule="evenodd" />',
+    },
+    {
+      id: "basic/plaque",
+      keywords: ["label", "badge", "tag", "nameplate", "scalloped"],
+      label: "Plaque",
+      defaultSize: { w: 120, h: 80 },
+      svgBody: '<polygon points="20,1 99,1 99,80 80,99 1,99 1,20" />',
+    },
+    {
+      id: "basic/right-triangle",
+      keywords: ["right angle", "corner", "wedge", "slope"],
+      label: "Right Triangle",
+      defaultSize: { w: 100, h: 90 },
+      svgBody: '<polygon points="2,2 2,98 98,98" />',
+    },
+    {
+      id: "basic/star",
+      label: "Star",
+      keywords: ["star", "rating", "favourite", "highlight", "five point"],
+      defaultSize: { w: 100, h: 96 },
+      svgBody: '<polygon points="50,2 61.8,36.2 98,37.3 69.1,59.3 79.4,94 50,73.4 20.6,94 30.9,59.3 2,37.3 38.2,36.2" />',
+    },
+    {
+      id: "basic/cloud",
+      label: "Cloud",
+      keywords: ["cloud", "internet", "saas", "hosted", "idea"],
+      defaultSize: { w: 140, h: 90 },
+      svgBody: '<path d="M24,86 C8,86 2,74 4,64 C6,54 14,49 22,50 C20,34 32,22 46,24 C52,12 68,8 79,16 C88,22 91,32 89,40 C97,44 100,54 97,64 C94,76 85,86 72,86 Z" />',
+    },
+  ],
+};
+
+export default section;

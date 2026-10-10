@@ -1,0 +1,312 @@
+/* Diagram motion (D116). Every animated element carries .nd-anim, so a few rules here stop all of
+   it: the reader's reduced-motion setting, the Motion switch (Preferences, or the viewer's strip),
+   and low detail far out (P1), where nothing is legible enough to be worth moving. A stopped
+   element shows its resting state, the same one the still exports draw. */
+
+/* Flow: the line's dashes march one whole pattern length per cycle — seamless at any pattern —
+   in whole-pixel steps. A dash offset cannot be composited, so every change is a repaint: one
+   per pixel of travel (about 20 a second at normal speed) instead of one per display frame (up to
+   165 a second), which looks the same and cost five to eight times the main thread (D116). */
+.nd-flow {
+  animation: nd-flow var(--nd-flow-duration, 0.7s) steps(var(--nd-flow-steps, 14)) infinite var(--nd-flow-turn, normal);
+}
+
+@keyframes nd-flow {
+  to {
+    stroke-dashoffset: var(--nd-flow-shift, -14px);
+  }
+}
+
+/* Pulse: a glow in the nesting accent fades in and settles around the shape. Only its opacity
+   moves — the glow itself is painted once — so the compositor runs it without repainting
+   (animating a filter repainted every frame, D116). At rest: invisible, the shape as authored. */
+.nd-glow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 3px var(--nd-color-nest-accent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  animation: nd-glow 1.6s ease-in-out infinite;
+}
+
+@keyframes nd-glow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* A shape's own outline (D130), for the selection, a trace's focus and Pulse: every part of the
+   body stroked in the accent and nothing filled, whatever colours the body sets itself. */
+.nd-outline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.nd-outline svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.nd-outline svg * {
+  fill: none !important;
+  stroke: var(--nd-color-nest-accent) !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: none !important;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Pulse on a shape's outline: a soft, wide stroke whose opacity alone moves (painted once). */
+.nd-glow-shape {
+  opacity: 0;
+  filter: blur(3px);
+  will-change: opacity;
+  animation: nd-glow 1.6s ease-in-out infinite;
+}
+
+.nd-glow-shape svg * {
+  stroke-width: 7px !important;
+}
+
+/* The ripple on a shape's outline: the outline itself widens and fades. */
+.nd-ripple-shape {
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: nd-ripple 1.8s ease-out infinite;
+}
+
+/* The optional ripple: a ring that widens and fades from the shape's edge. Invisible at rest. */
+.nd-ripple {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--nd-color-nest-accent);
+  border-radius: 10px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: nd-ripple 1.8s ease-out infinite;
+}
+
+@keyframes nd-ripple {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+/* Packets (A3, D119): SVG's own <animateMotion>, which CSS cannot pause — so a resting dot is
+   drawn beside the moving one, and the switches below show one or the other. */
+.nd-packet-rest {
+  display: none;
+}
+
+/* Health (A4, D120): the badge sits on the shape's top-right corner, upright whatever the
+   shape's rotation. Degraded and down blink; healthy holds still. */
+.nd-health {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 2;
+  display: block;
+  width: 16px;
+  height: 16px;
+  pointer-events: auto;
+  filter: drop-shadow(0 1px 1px rgba(20, 26, 34, 0.25));
+}
+
+.nd-health svg {
+  display: block;
+}
+
+.nd-health-blink {
+  will-change: opacity;
+  animation: nd-health-blink 1.4s steps(1, end) infinite;
+}
+
+.nd-health-blink[data-health="down"] {
+  animation-duration: 0.9s;
+}
+
+@keyframes nd-health-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Draw in (A5, D121): a one-shot in the viewer — each line traces itself from its start over
+   0.9s (its own length as the dash, so long and short lines finish together), then the canvas
+   gives it back its own dashes and motion. */
+.nd-drawin {
+  stroke-dasharray: var(--nd-len) var(--nd-len);
+  stroke-dashoffset: var(--nd-len);
+  animation: nd-drawin 0.9s ease-out forwards;
+}
+
+@keyframes nd-drawin {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Peek (A5, D121): a Nested Block's miniature and its open button stir three times on first view,
+   to show that the box opens, then stop for good. Transform and opacity: compositor only. */
+.nd-peek {
+  transform-origin: center;
+  animation: nd-peek 2.2s ease-in-out 3;
+}
+
+@keyframes nd-peek {
+  0%,
+  70%,
+  100% {
+    transform: scale(1);
+  }
+  80%,
+  90% {
+    transform: scale(1.08);
+  }
+}
+
+.nd-peek-btn {
+  animation: nd-peek-btn 2.2s ease-in-out 3;
+}
+
+@keyframes nd-peek-btn {
+  0%,
+  65%,
+  100% {
+    opacity: 0.55;
+  }
+  78%,
+  88% {
+    opacity: 1;
+  }
+}
+
+/* Presentation (A6, D123). Step numbers: a shape's on its top-left corner (Health has the
+   top-right), upright whatever the shape's rotation; a line's placed on its middle by its own
+   transform. Walkthrough's are solid and readers see them; Build's and Spotlight's are an outline
+   the author alone sees. */
+.nd-step {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.react-flow__node .nd-step {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+}
+
+.nd-step-walkthrough {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  border: 1.5px solid #ffffff;
+  filter: drop-shadow(0 1px 1px rgba(20, 26, 34, 0.25));
+}
+
+.nd-step-draft {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  border: 1.5px dashed var(--nd-color-nest-accent);
+}
+
+/* Walkthrough's travelling dot, beneath the shapes and above the lines. */
+.nd-walk {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.nd-walk-dot {
+  fill: var(--nd-color-nest-accent);
+  stroke: #ffffff;
+  stroke-width: 2;
+  filter: drop-shadow(0 1px 2px rgba(20, 26, 34, 0.3));
+}
+
+/* Build: a step not shown yet is not there to touch; one that arrives fades in. */
+.react-flow__node.nd-build-hidden,
+.react-flow__edge.nd-build-hidden,
+.nd-build-hidden-label {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.react-flow__node.nd-build-shown,
+.react-flow__edge.nd-build-shown {
+  opacity: 1;
+  transition: opacity 0.45s ease-out;
+}
+
+/* Spotlight cycles slower than a trace is clicked: let the focus glide. */
+.nd-spotlight .react-flow__node,
+.nd-spotlight .react-flow__edge {
+  transition: opacity 0.6s ease-in-out;
+}
+
+/* The off switches. */
+@media (prefers-reduced-motion: reduce) {
+  .nd-anim,
+  .nd-anim * {
+    animation: none !important;
+  }
+
+  .nd-packet-moving,
+  .nd-walk-dot {
+    display: none;
+  }
+
+  .nd-packet-rest {
+    display: inline;
+  }
+}
+
+.nd-motion-off .nd-anim,
+.nd-motion-off .nd-anim *,
+.nd-lod .nd-anim,
+.nd-lod .nd-anim * {
+  animation: none !important;
+}
+
+.nd-motion-off .nd-packet-moving,
+.nd-lod .nd-packet-moving,
+.nd-motion-off .nd-walk-dot,
+.nd-lod .nd-walk-dot {
+  display: none;
+}
+
+.nd-motion-off .nd-packet-rest,
+.nd-lod .nd-packet-rest {
+  display: inline;
+}

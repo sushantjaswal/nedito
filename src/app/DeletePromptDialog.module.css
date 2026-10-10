@@ -1,0 +1,89 @@
+/* The deletion prompts (N7, D138): the About dialog's look, small and to the point. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 18vh;
+  background: rgba(15, 20, 27, 0.35);
+  font-family: var(--font-sans);
+}
+
+.dialog {
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  padding: 18px 20px 16px;
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.body {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.note {
+  margin: 0 0 16px;
+  font-size: 12.5px;
+  color: var(--nd-color-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.button {
+  padding: 7px 14px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--nd-color-nest-deep);
+  outline-offset: 2px;
+}
+
+.primary {
+  border-color: var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.primary:hover {
+  background: var(--nd-color-nest-deep);
+}
+
+.danger {
+  border-color: var(--nd-status-bad);
+  color: var(--nd-status-bad);
+}
+
+.danger:hover {
+  background: var(--nd-status-bad);
+  color: #ffffff;
+}

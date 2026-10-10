@@ -1,0 +1,153 @@
+/* The layer never takes pointer events, so clicking empty canvas beside the card still pans,
+   rubber-band-selects and places shapes exactly as if the panel were not there. */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.card {
+  pointer-events: auto;
+  width: min(520px, calc(100% - 48px));
+  padding: 18px 20px 16px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgb(30 39 51 / 12%);
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nd-color-ink);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  background: var(--nd-panel-bg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tile:hover {
+  border-color: var(--nd-color-nest-accent);
+}
+
+.thumb {
+  display: block;
+  height: 66px;
+  border-radius: 4px;
+  background: var(--nd-color-canvas);
+  overflow: hidden;
+}
+
+.thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+.name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--nd-color-ink);
+  line-height: 1.25;
+}
+
+.browseAll {
+  padding: 5px 12px;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nd-color-nest-deep);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.browseAll:hover {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}
+
+.tile:focus-visible,
+.browseAll:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 620px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dismissing the panel (D81): a blank-canvas choice beside Browse, and a × in the corner. */
+.card {
+  position: relative;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.blank {
+  padding: 5px 12px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.blank:hover {
+  background: var(--nd-color-canvas);
+}
+
+.close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--nd-color-canvas);
+  color: var(--nd-color-ink);
+}
+
+.blank:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}

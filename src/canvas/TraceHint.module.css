@@ -1,0 +1,43 @@
+/* The trace hint (D117): a small pill at the top of the canvas, clear of the bottom row. */
+.hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 24px);
+  padding: 5px 6px 5px 12px;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 999px;
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  box-shadow: 0 2px 8px rgba(20, 26, 34, 0.1);
+  white-space: nowrap;
+}
+
+.hint span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stop {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stop:hover,
+.stop:focus-visible {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}
