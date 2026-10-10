@@ -12,7 +12,7 @@ Rules for maintaining this file (Claude Code, read carefully):
 
 ## Current state — 2026-10-08
 
-- **Version** `0.1.0` (`package.json`); **file format version** `6` (`CURRENT_FORMAT_VERSION` in `src/file/documentFormat.ts`, schema in `docs/FORMAT.md`). The Decision Log in `CLAUDE_HISTORY.md` runs to D152.
+- **Version** `0.1.0` (`package.json`); **file format version** `6` (`CURRENT_FORMAT_VERSION` in `src/file/documentFormat.ts`, schema in `docs/FORMAT.md`). The Decision Log in `CLAUDE_HISTORY.md` runs to D153.
 - **Shipped:** the Phase 1 editor (M0–M5); Phase 2's draw.io parity items (layers, outline, find and replace, PDF and print, dark mode, style presets, draw.io import); Phase 3, portable diagrams (share links and the read-only viewer, copy image with live link, PowerPoint and Word export); Phase 4's live-link tutorial; Phase 5's templates (38 in the catalogue); the redesign (R1–R6); the rename to Nedito; diagram motion and the three presentation modes (A1–A6); 18 animated icons in their own library section (I1–I5); the animated GIF export (G1–G5); the six draw.io import fixes from the audit (X1–X6); the nesting deletion prompts (N7).
 - **Tests** at this state: 1,459 unit tests in 140 files, 265 end-to-end tests in 33 files.
 - **History:** every completed item, with its completion note and decision, is in `CLAUDE_HISTORY.md` under "Completed work" (moved there on 2026-10-08).
@@ -28,5 +28,4 @@ Empty.
 
 ## Inbox (ideas / discovered work — needs user approval to schedule)
 
-- **The sidebar's search box stays white in dark mode.** Found while taking the README's dark screenshot (D152): on both the Shapes and the Templates tab, the search field keeps a white background with dark-mode text around it.
 - **`elkjs` is a dependency nothing uses.** Found by the documentation cleanup (D144). CLAUDE.md's fixed tech stack names it for optional auto-layout, but no auto-layout has shipped. Either build auto-layout or remove the dependency. Not a security risk: `npm audit` reports no advisory for it (checked in D149).
