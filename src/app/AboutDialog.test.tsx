@@ -23,6 +23,7 @@ function copyBlocks(): string[] {
         .trim()
         .replace(/\{BRAND\.name\}/g, BRAND.name)
         .replace(/\{BRAND\.contact\}/g, BRAND.contact)
+        .replace(/\[([^\]]+)\]\(\{BRAND\.repository\}\)/g, "$1")
         .replace(/^#+ /, "")
         .replace(/^- /, "")
         .replace(/\*\*([^*]+)\*\*/g, "$1")
@@ -74,8 +75,14 @@ describe("About", () => {
     const page = text(screen.getByTestId("nd-about-dialog"));
     expect(personalWordsIn(page)).toEqual([]);
     expect(screen.getByTestId("nd-about-contact")).toHaveTextContent(BRAND.contact);
-    // A mailto: did nothing where no mail client was set up (user, 2026-10-08).
-    expect(screen.getByTestId("nd-about-dialog").querySelectorAll("a")).toHaveLength(0);
+    // A mailto: did nothing where no mail client was set up (user, 2026-10-08). The one link is
+    // to the source repository (D149), opening in a new tab without handing it this page.
+    const links = screen.getByTestId("nd-about-dialog").querySelectorAll("a");
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute("href", BRAND.repository);
+    expect(links[0]).toHaveAttribute("target", "_blank");
+    expect(links[0]).toHaveAttribute("rel", "noopener noreferrer");
+    expect(links[0]).toHaveTextContent("on GitHub");
   });
 
   it("the Nested Block opens with ⤢ to the three boxes, and the breadcrumb climbs back out", async () => {
@@ -106,15 +113,16 @@ describe("About", () => {
     openAbout();
     const dialog = screen.getByRole("dialog", { name: `About ${BRAND.name}` });
     expect(dialog).toHaveAttribute("aria-modal", "true");
-    // The dialog's controls, in order: close, then the demo's ⤢. Tab past the last wraps to the
-    // first and Shift+Tab before the first wraps to the last (a real browser walks it in m27).
+    // The dialog's controls, in order: close, the demo's ⤢, then the link to the source. Tab past
+    // the last wraps to the first and Shift+Tab before the first wraps to the last (a real browser
+    // walks it in m27).
     const close = screen.getByTestId("nd-about-close");
-    const open = screen.getByTestId("nd-about-demo-open");
-    open.focus();
+    const repository = screen.getByTestId("nd-about-repository");
+    repository.focus();
     fireEvent.keyDown(window, { key: "Tab" });
     expect(document.activeElement).toBe(close);
     fireEvent.keyDown(window, { key: "Tab", shiftKey: true });
-    expect(document.activeElement).toBe(open);
+    expect(document.activeElement).toBe(repository);
     // Focus somehow outside (the page behind) is brought back in.
     (document.body as HTMLElement).focus();
     fireEvent.keyDown(window, { key: "Tab" });
