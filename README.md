@@ -41,6 +41,7 @@ npm run dev          # the app, with hot reload
 | Format (Prettier) | `npm run format` |
 | Regenerate the PNG app icons from their SVG | `npm run icons` |
 | Measure pan and zoom frame times | `npm run perf` (see the header of `scripts/perf-pan.mjs`) |
+| Run one balanced part of the end-to-end suite, as CI does | `node scripts/e2e-shard.mjs <part> 4` (`--plan 4` shows the split) |
 | Regenerate the repository's social preview image | `npm run social-preview`, with `npm run dev` running (see `docs/social-preview/`) |
 
 `wrangler.jsonc` serves the built `dist/` from a Cloudflare Worker.
@@ -116,7 +117,7 @@ files (and the older `.deepdraw`), editable PNGs, Word exports and draw.io files
 3. Open the pull request with what changed and the verification results, and wait for review.
 4. One pull request open at a time: the next branch starts after the last one merges.
 
-Every pull request runs the full sweep in GitHub Actions (`.github/workflows/ci.yml`), the end-to-end tests split across three machines, and must be up to date with `main` and green before it merges. Report a security problem privately, as `SECURITY.md` describes, not in an issue.
+Every pull request runs the full sweep in GitHub Actions (`.github/workflows/ci.yml`), the end-to-end tests split across four machines, and must be up to date with `main` and green before it merges. Report a security problem privately, as `SECURITY.md` describes, not in an issue.
 
 Commits use conventional messages (`feat(canvas): …`). New dependencies need a stated reason.
 [`CLAUDE.md`](CLAUDE.md) holds the full working agreements and the product rules,
