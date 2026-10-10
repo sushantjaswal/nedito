@@ -23,6 +23,7 @@ function copyBlocks(): string[] {
         .trim()
         .replace(/\{BRAND\.name\}/g, BRAND.name)
         .replace(/\{BRAND\.contact\}/g, BRAND.contact)
+        .replace(/\{BRAND\.host\}/g, BRAND.host)
         .replace(/\[([^\]]+)\]\(\{BRAND\.repository\}\)/g, "$1")
         .replace(/^#+ /, "")
         .replace(/^- /, "")
