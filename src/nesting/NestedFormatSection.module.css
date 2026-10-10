@@ -1,0 +1,179 @@
+.section {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--nd-color-nest-deep);
+}
+
+.openButton {
+  align-self: flex-start;
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.label {
+  font-size: 11px;
+  color: var(--nd-color-muted);
+  margin-top: 4px;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.iconsRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.iconChip {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconChip button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: none;
+  background: var(--nd-color-ink);
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.iconGlyph {
+  width: 18px;
+  height: 18px;
+}
+
+.portList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.portRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.portSide {
+  font-size: 10px;
+  color: var(--nd-color-muted);
+  text-transform: uppercase;
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.portLabelInput {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 5px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+}
+
+.portRow button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--nd-color-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* A port waiting to be linked wraps onto a second line so its "Link to…" picker gets full
+   width rather than crushing the label field. */
+.portRowUnmapped {
+  flex-wrap: wrap;
+  background: var(--nd-warn-soft);
+  border: 1px solid var(--nd-warn-line);
+  border-radius: 5px;
+  padding: 4px 5px;
+}
+
+.portMapSelect {
+  flex-basis: 100%;
+  min-width: 0;
+  margin-top: 4px;
+  padding: 3px 5px;
+  border: 1px solid var(--nd-warn-line);
+  border-radius: 4px;
+  background: var(--nd-panel-bg);
+  color: var(--nd-warn-ink);
+  font: inherit;
+  font-size: 11.5px;
+}
+
+.portUnmappedNote {
+  flex-basis: 100%;
+  margin-top: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--nd-warn-ink);
+}
+
+.addPortRow {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.addPortRow select {
+  flex-shrink: 0;
+  font-size: 12px;
+  padding: 3px;
+}
+
+.addPortRow button {
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  border-radius: 4px;
+  font-size: 11px;
+  padding: 3px 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addPortRow button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

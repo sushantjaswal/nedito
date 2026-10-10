@@ -1,0 +1,22 @@
+.dot {
+  width: 9px !important;
+  height: 9px !important;
+  background: var(--nd-panel-bg) !important;
+  border: 2px solid var(--nd-color-nest-accent) !important;
+  border-radius: 50% !important;
+  cursor: pointer;
+}
+
+/* Dashed amber = this port exists and holds a real external edge, but nothing inside the child
+   diagram is linked to it yet (see model/types.ts's Port). */
+.unmapped {
+  border-style: dashed !important;
+  border-color: var(--nd-warn) !important;
+}
+
+/* A traced line lands here (D117): the port lights in the accent. */
+.lit {
+  background: var(--nd-color-nest-accent);
+  border-color: var(--nd-color-nest-deep);
+  box-shadow: 0 0 0 3px var(--nd-color-nest-soft-fill);
+}

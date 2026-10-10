@@ -1,0 +1,102 @@
+/* Bottom-left of the canvas, clear of the fit-view control: the other three corners and the
+   top centre already belong to Layers, the outline, the zoom bar and Find/Replace. Same surface,
+   border and shadow as LayersPanel so it reads as part of the app, not a pop-up. */
+.panel {
+  position: absolute;
+  left: 12px;
+  bottom: 56px;
+  width: 340px;
+  max-height: 280px;
+  display: flex;
+  flex-direction: column;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-left: 3px solid var(--nd-warn);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(30, 39, 51, 0.16);
+  font-size: 12px;
+  color: var(--nd-color-ink);
+  z-index: 6;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 4px;
+}
+
+.title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.close {
+  border: none;
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.close:hover {
+  color: var(--nd-color-ink);
+}
+
+.close:focus-visible,
+.show:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 1px;
+}
+
+.intro {
+  margin: 0;
+  padding: 0 10px 6px;
+  color: var(--nd-color-muted);
+}
+
+.list {
+  margin: 0;
+  padding: 0 10px 10px;
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--nd-warn-soft);
+  border: 1px solid var(--nd-warn-line);
+  border-radius: 4px;
+}
+
+.message {
+  flex: 1;
+  line-height: 1.4;
+  color: var(--nd-warn-ink);
+}
+
+.show {
+  flex: none;
+  border: 1px solid var(--nd-border-color);
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.show:hover {
+  border-color: var(--nd-color-nest-accent);
+  color: var(--nd-color-nest-deep);
+}

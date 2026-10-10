@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    // DOM is only needed for tests/e2e/*.spec.ts's page.evaluate() callback bodies (which
+    // execute in the browser even though the surrounding test file runs under Node) —
+    // vite.config.ts/vitest.config.ts don't use it, but including it is harmless for them.
+    "lib": ["ES2023", "DOM"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    // examples/ builds documents from the app's own modules, which reach the stencil sections and
+    // their import.meta.glob — so this config needs Vite's client types, as tsconfig.app does.
+    "types": ["node", "vite/client"]
+  },
+  "include": ["vite.config.ts", "vite.brand.ts", "vitest.config.ts", "playwright.config.ts", "tests/e2e/**/*.ts", "examples/**/*.ts"]
+}

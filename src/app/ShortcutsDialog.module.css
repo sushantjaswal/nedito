@@ -1,0 +1,101 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(30, 39, 51, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog {
+  width: 560px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: var(--nd-panel-bg);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(30, 39, 51, 0.3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--nd-border-color);
+  position: sticky;
+  top: 0;
+  background: var(--nd-panel-bg);
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  color: var(--nd-color-ink);
+}
+
+.closeBtn {
+  border: none;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.closeBtn:hover {
+  color: var(--nd-color-ink);
+}
+
+.body {
+  padding: 8px 18px 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+
+.group {
+  margin-top: 14px;
+}
+
+.groupHeading {
+  margin: 0 0 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--nd-color-muted);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table tr + tr {
+  border-top: 1px solid var(--nd-border-color);
+}
+
+.keys {
+  padding: 5px 0;
+  color: var(--nd-color-nest-deep);
+  /* Shortcuts are the one place tabular alignment matters — "Ctrl+Shift+H" next to "Esc" reads
+     far better when the glyphs share a width. This is what --font-mono is for. */
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 12px;
+}
+
+.action {
+  padding: 5px 0;
+  color: var(--nd-color-ink);
+}
+
+@media (max-width: 520px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- %BRAND_HEAD%: title, description, canonical, og: tags and the manifest link, written from
+         src/app/brand.ts by the brand plugin in vite.config.ts (D100). Never spell them out here. -->
+    <!-- %BRAND_HEAD% -->
+  </head>
+  <body>
+    <!-- %BRAND_SPLASH%: the startup screen (N3, D102), from src/app/splashPage.ts; it sits
+         outside #root so it is in the first paint, before any script has loaded. -->
+    <!-- %BRAND_SPLASH% -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

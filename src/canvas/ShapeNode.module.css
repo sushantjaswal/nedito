@@ -1,0 +1,107 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+}
+
+.glyph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(30, 39, 51, 0.12));
+}
+
+/* A picture of the user's own (CLAUDE_HISTORY.md D79). Stretches to the node box: the resize
+   handles keep its proportions unless Shift is held. */
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.imageMissing {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--nd-color-muted);
+}
+
+.imageBorder {
+  position: absolute;
+  inset: 0;
+  border-style: solid;
+  pointer-events: none;
+}
+
+/* An image's label: below the picture, one line per typed line, never wrapped — the exporter
+   draws exactly those lines, so wrapping here would disagree with it (canvas/imageGeometry.ts). */
+.labelBelow {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  white-space: pre;
+  line-height: 1.25;
+  pointer-events: none;
+  text-align: center;
+}
+
+.label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  font-size: 12px;
+  /* A newline in a label is a line break the author typed, so honour it. Without this a flex
+     box collapses it to a space, and every multi-line label — a UML class's compartments, a C4
+     element's type and description lines, an ER table's columns — ran together on one line.
+     The SVG export already draws one <tspan> per line (CLAUDE_HISTORY.md D67), so leaving this
+     out also put the canvas and the export back into disagreement, the other way round.
+     "pre-line", not "pre": runs of spaces still collapse and long lines still wrap. */
+  white-space: pre-line;
+}
+
+/* Low detail, zoomed far out (P1, D115): outline and fill only — no label, no shadow. */
+:global(.nd-lod) :global(.react-flow__node:not(.selected)) .label,
+:global(.nd-lod) :global(.react-flow__node:not(.selected)) .labelBelow {
+  display: none;
+}
+
+:global(.nd-lod) :global(.react-flow__node:not(.selected)) .glyph,
+:global(.nd-lod) :global(.react-flow__node:not(.selected)) .glyph * {
+  filter: none !important;
+}
+
+/* Selected or traced (D130): the shape's own outline in the accent, over it. Hidden otherwise, so
+   it costs nothing but a layer the browser skips. A vendor icon or a picture keeps a box. */
+.halo {
+  opacity: 0;
+}
+
+:global(.react-flow__node.selected) .halo,
+:global(.react-flow__node.nd-trace-focus) .halo {
+  opacity: 1;
+}
+
+.haloBox {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--nd-color-nest-accent);
+  border-radius: 6px;
+  pointer-events: none;
+}

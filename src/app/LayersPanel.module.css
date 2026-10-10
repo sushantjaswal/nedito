@@ -1,0 +1,149 @@
+.panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 220px;
+  max-height: 320px;
+  display: flex;
+  flex-direction: column;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(30, 39, 51, 0.16);
+  font-size: 12px;
+  z-index: 5;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--nd-border-color);
+}
+
+.title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-color-ink);
+}
+
+.panelCloseBtn {
+  border: none;
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.panelCloseBtn:hover {
+  color: var(--nd-color-ink);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--nd-color-muted);
+}
+
+.row:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.rowActive {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-ink);
+  font-weight: 600;
+}
+
+.iconBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px;
+  color: inherit;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.renameInput {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+.moveBtn {
+  border: none;
+  background: none;
+  color: var(--nd-color-nest-deep);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 4px;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.row:hover .moveBtn {
+  visibility: visible;
+}
+
+.closeBtn {
+  border: none;
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  visibility: hidden;
+}
+
+.row:hover .closeBtn {
+  visibility: visible;
+}
+
+.closeBtn:hover {
+  color: var(--nd-color-ink);
+}
+
+.addBtn {
+  border: none;
+  border-top: 1px solid var(--nd-border-color);
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.addBtn:hover {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}

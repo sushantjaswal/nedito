@@ -1,0 +1,56 @@
+@import "./tokens.css";
+@import "./motion.css";
+@import "./animatedIcons.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--nd-color-ink);
+  background: var(--nd-color-canvas);
+}
+
+/* Our flat-group custom node type is registered under the key "group", which collides with
+   React Flow's own reserved node-type class .react-flow__node-group (dist/style.css gives it a
+   default border, padding, and a box-shadow on selection). That RF default rendered on top of
+   GroupNode's own .frame div, producing a double outline. Neutralize RF's defaults here so
+   GroupNode.module.css is the only thing drawing (or, per product decision, not drawing) a
+   border for groups. */
+.react-flow__node-group {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+.react-flow__node-group.selectable.selected,
+.react-flow__node-group.selectable:focus,
+.react-flow__node-group.selectable:focus-visible,
+.react-flow__node-group.selectable:hover {
+  box-shadow: none;
+}
+
+/* Line labels and a selected line's handles (its end dots, bend dots and toolbar) sit above the
+   shapes. React Flow lays its edge-label layer under the nodes, so a line's end dot resting on a
+   shape's own connection dot could not be grabbed — the press went to the shape and started a new
+   connection instead. The export already draws line labels over shapes (svgExport.ts). */
+.react-flow__edgelabel-renderer {
+  z-index: 5000;
+}
+
+/* Several shapes selected (D130): each shows its own outline, so React Flow's tinted box over the
+   whole selection — which painted a rectangle across diamonds and triangles alike — is drawn
+   clear. It stays, invisibly, as the handle that drags the selection. */
+.react-flow__nodesselection-rect {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}

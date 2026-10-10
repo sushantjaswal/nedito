@@ -1,0 +1,85 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  font-size: 13px;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.row input {
+  margin-top: 2px;
+  accent-color: var(--nd-color-nest-accent);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hint {
+  display: block;
+  margin-top: 1px;
+  font-size: 11.5px;
+  color: var(--nd-color-muted);
+}
+
+.note {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--nd-color-muted);
+}
+
+.heading {
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--nd-color-muted);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.choice {
+  padding: 3px 8px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.choice[aria-checked="true"] {
+  border-color: var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.choice:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* A presentation step (A6, D123). */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--nd-border-color);
+  font-size: 13px;
+}
+
+.stepStatus {
+  color: var(--nd-color-ink);
+}

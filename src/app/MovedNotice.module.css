@@ -1,0 +1,64 @@
+/* The "moved to the new address" notice (D100): over everything, until the visitor chooses. */
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(20, 26, 34, 0.55);
+}
+
+.card {
+  max-width: 440px;
+  padding: 22px 24px;
+  border-radius: 12px;
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  box-shadow: 0 12px 36px rgba(20, 26, 34, 0.3);
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.body {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.primary,
+.secondary {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.primary {
+  border: 0;
+  background: var(--nd-color-nest-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.secondary {
+  border: 1px solid var(--nd-border-color);
+  background: none;
+  color: var(--nd-color-ink);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}

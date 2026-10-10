@@ -1,0 +1,16 @@
+/* Sits under the nodes and the dot grid's content but above the canvas background. */
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.page {
+  position: absolute;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  box-shadow: 0 1px 4px rgba(20, 26, 34, 0.08);
+  box-sizing: border-box;
+}

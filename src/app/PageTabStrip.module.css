@@ -1,0 +1,85 @@
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 8px;
+  background: var(--nd-panel-bg);
+  border-top: 1px solid var(--nd-border-color);
+  font-size: 12px;
+  color: var(--nd-color-muted);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 10px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tab:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.tabActive {
+  color: var(--nd-color-ink);
+  background: var(--nd-color-canvas);
+}
+
+.tabActive:hover {
+  background: var(--nd-color-canvas);
+}
+
+.renameInput {
+  font: inherit;
+  font-size: 12px;
+  width: 90px;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+.closeBtn {
+  border: none;
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  visibility: hidden;
+}
+
+.tab:hover .closeBtn {
+  visibility: visible;
+}
+
+.closeBtn:hover {
+  color: var(--nd-color-ink);
+}
+
+.addBtn {
+  border: none;
+  background: none;
+  color: var(--nd-color-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.addBtn:hover {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}
+
+.divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--nd-border-color);
+  flex: none;
+}

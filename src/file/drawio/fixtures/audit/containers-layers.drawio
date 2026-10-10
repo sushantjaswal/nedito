@@ -1,0 +1,66 @@
+<mxfile host="app.diagrams.net" agent="audit fixture, hand-written for Nedito's import audit (D112)" version="24.7.17">
+  <diagram id="cl" name="Services">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" value="Base" parent="0" />
+        <mxCell id="lane" value="Payments" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="360" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="cards" value="Cards" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane">
+          <mxGeometry x="20" y="50" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fraud" value="Fraud" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane">
+          <mxGeometry x="200" y="50" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="inner" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="lane" source="cards" target="fraud">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grp" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="460" y="60" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ga" value="Primary" style="whiteSpace=wrap;html=1;" vertex="1" parent="grp">
+          <mxGeometry width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gb" value="Replica" style="whiteSpace=wrap;html=1;" vertex="1" parent="grp">
+          <mxGeometry x="140" y="70" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="box" value="VPC" style="rounded=0;whiteSpace=wrap;html=1;container=1;verticalAlign=top;align=left;spacingLeft=6;dashed=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="300" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="vm" value="App VM" style="whiteSpace=wrap;html=1;" vertex="1" parent="box">
+          <mxGeometry x="90" y="60" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="folded" value="Legacy (folded)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" vertex="1" collapsed="1" parent="1">
+          <mxGeometry x="420" y="320" width="160" height="23" as="geometry">
+            <mxRectangle x="420" y="320" width="300" height="200" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hiddenchild" value="Mainframe" style="whiteSpace=wrap;html=1;" vertex="1" parent="folded">
+          <mxGeometry x="40" y="60" width="120" height="50" as="geometry" />
+        </mxCell>
+        <UserObject label="Docs portal" tooltip="Internal documentation" link="https://example.org/docs" placeholders="1" owner="Platform team" id="uo">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="60" width="140" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <object label="Owner: %owner%" owner="SRE" placeholders="1" id="obj">
+          <mxCell style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="760" y="160" width="140" height="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="toVm" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="fraud" target="vm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L2" value="Annotations" parent="0" />
+        <mxCell id="callout" value="Single point of failure" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;fillColor=#f8cecc;" vertex="1" parent="L2">
+          <mxGeometry x="600" y="240" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="L3" value="Hidden layer" style="locked=1;" parent="0" visible="0" />
+        <mxCell id="secret" value="Draft" style="whiteSpace=wrap;html=1;" vertex="1" parent="L3">
+          <mxGeometry x="800" y="400" width="100" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

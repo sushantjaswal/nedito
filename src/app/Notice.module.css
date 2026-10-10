@@ -1,0 +1,100 @@
+/* Bottom-centre, so it reads as feedback about the action just taken rather than competing
+   with the export reminder's bottom-right corner. Lifted to the same height as that toast
+   (clear of the status bar, the page tab strip and the canvas's zoom controls) — at 62px a
+   wide notice lands on top of the zoom slider, which is the last control to take away from
+   someone who has just been told their diagram is too big. */
+.notice {
+  position: fixed;
+  left: 50%;
+  bottom: 104px;
+  transform: translateX(-50%);
+  z-index: 70;
+  width: min(420px, calc(100vw - 32px));
+  padding: 12px 14px 12px 16px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-left: 4px solid var(--nd-color-nest-accent);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgb(30 39 51 / 18%);
+  color: var(--nd-color-ink);
+}
+
+.warn {
+  border-left-color: var(--nd-warn);
+}
+
+.close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 5px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}
+
+.message {
+  margin: 0 18px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.urlRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.url {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 7px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  background: var(--nd-color-canvas);
+  color: var(--nd-color-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.copy,
+.action {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action {
+  margin-top: 9px;
+}
+
+.copy:hover,
+.action:hover {
+  background: var(--nd-color-nest-deep);
+  border-color: var(--nd-color-nest-deep);
+}
+
+.close:focus-visible,
+.copy:focus-visible,
+.action:focus-visible,
+.url:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}

@@ -1,0 +1,141 @@
+/* A side handle: still a 14px target centred on the border, as the arrow dots were, but now
+   transparent — what shows is its ＋ (R3, D92). */
+.side {
+  width: 14px !important;
+  height: 14px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms;
+}
+
+/* The ＋ reaches outward from the handle's centre: a transparent strip from the border to the
+   glyph, so moving the pointer from the shape onto the ＋ never leaves the node (which would
+   hide it), with the glyph at its far end. */
+.plus {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* One size on screen at any zoom, as draw.io's arrows are (ZoomVariable.tsx), growing out
+     from the side it sits on. */
+  transform: scale(var(--nd-inverse-zoom, 1));
+}
+
+.plus[data-side="right"],
+.plus[data-side="left"] {
+  top: -7px;
+  width: 30px;
+  height: 28px;
+}
+
+.plus[data-side="top"],
+.plus[data-side="bottom"] {
+  left: -7px;
+  width: 28px;
+  height: 30px;
+}
+
+.plus[data-side="right"] {
+  left: 7px;
+  justify-content: flex-end;
+}
+
+.plus[data-side="left"] {
+  right: 7px;
+  justify-content: flex-start;
+}
+
+.plus[data-side="bottom"] {
+  top: 7px;
+  align-items: flex-end;
+}
+
+.plus[data-side="top"] {
+  bottom: 7px;
+  align-items: flex-start;
+}
+
+.plus[data-side="right"] {
+  transform-origin: left center;
+}
+
+.plus[data-side="left"] {
+  transform-origin: right center;
+}
+
+.plus[data-side="bottom"] {
+  transform-origin: center top;
+}
+
+.plus[data-side="top"] {
+  transform-origin: center bottom;
+}
+
+.glyph {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1.5px solid var(--nd-panel-bg);
+  border-radius: 50%;
+  background: var(--nd-color-nest-accent);
+  box-shadow: 0 1px 3px rgba(20, 26, 34, 0.25);
+  transition: transform 100ms;
+}
+
+/* The ＋ itself, drawn rather than typed so it sits dead centre in any font. */
+.glyph::before,
+.glyph::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #fff;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+}
+
+.glyph::before {
+  width: 8px;
+  height: 1.75px;
+}
+
+.glyph::after {
+  width: 1.75px;
+  height: 8px;
+}
+
+.plus:hover .glyph {
+  transform: scale(1.15);
+  background: var(--nd-color-nest-deep);
+}
+
+.dot {
+  width: 7px !important;
+  height: 7px !important;
+  background: var(--nd-panel-bg) !important;
+  border: 1.5px solid var(--nd-color-nest-accent) !important;
+  border-radius: 50% !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms;
+}
+
+.visible {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+
+/* Hidden ＋ handles are hidden outright, not just transparent, so nothing announces or finds them. */
+.side .plus {
+  visibility: hidden;
+}
+
+.side.visible .plus {
+  visibility: visible;
+}

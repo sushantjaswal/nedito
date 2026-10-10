@@ -1,0 +1,26 @@
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.edge {
+  stroke: var(--nd-color-muted);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.nestedBox {
+  fill: var(--nd-color-nest-soft-fill);
+  stroke: var(--nd-color-nest-accent);
+  stroke-width: 1;
+}
+
+/* Stand-in tile for shapes we can't faithfully redraw at thumbnail scale (vendor icon packs). */
+.tile {
+  fill: var(--nd-color-nest-soft-fill);
+  stroke: var(--nd-color-muted);
+  stroke-width: 1;
+  opacity: 0.75;
+}

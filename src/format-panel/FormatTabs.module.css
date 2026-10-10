@@ -1,0 +1,232 @@
+.section {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.groupHeading {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--nd-color-muted);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row + .row {
+  margin-top: 2px;
+}
+
+.label {
+  flex: 0 0 56px;
+  font-size: 12px;
+  color: var(--nd-color-muted);
+}
+
+.input,
+.select {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  box-sizing: border-box;
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+}
+
+.numberInput {
+  composes: input;
+  flex: 0 0 64px;
+}
+
+/* Used in paired W/H and X/Y rows, where two number inputs must share the row without
+   overflowing the 240px sidebar. */
+.miniLabel {
+  flex: 0 0 14px;
+  font-size: 12px;
+  color: var(--nd-color-muted);
+}
+
+.numberInputPaired {
+  composes: input;
+  flex: 1;
+  min-width: 0;
+}
+
+.colorInput {
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.rangeInput {
+  flex: 1;
+}
+
+.toggleGroup {
+  display: flex;
+  gap: 4px;
+}
+
+.toggleBtn {
+  flex: 1;
+  border: 1px solid var(--nd-border-color);
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-muted);
+  border-radius: 4px;
+  padding: 5px 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toggleBtn:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.toggleBtnActive {
+  composes: toggleBtn;
+  background: var(--nd-color-nest-soft-fill);
+  border-color: var(--nd-color-nest-accent);
+  color: var(--nd-color-nest-deep);
+}
+
+.iconRow {
+  display: flex;
+  gap: 4px;
+}
+
+.iconBtn {
+  flex: 1;
+  border: 1px solid var(--nd-border-color);
+  background: var(--nd-panel-bg);
+  border-radius: 4px;
+  padding: 6px 0;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--nd-color-ink);
+}
+
+.iconBtn:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.iconBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.iconBtnActive {
+  background: var(--nd-color-nest-soft-fill);
+  border-color: var(--nd-color-nest-accent);
+  color: var(--nd-color-nest-deep);
+}
+
+.iconBtnActive:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--nd-color-muted);
+  padding: 4px 0;
+}
+
+.divider {
+  height: 1px;
+  background: var(--nd-border-color);
+  margin: 2px 0;
+}
+
+/* Icon buttons centre their icon; a button group fills the rest of its row rather than
+   shrinking to its contents (the Text tab's L/C/R and Top/Mid/Bot came out a few pixels wide). */
+.toggleBtn,
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+}
+
+.row > .toggleGroup {
+  flex: 1;
+}
+
+.checkLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--nd-color-ink);
+  cursor: pointer;
+}
+
+/* Sliders and checkboxes in the app's accent, not the browser's default blue. */
+.rangeInput,
+.checkLabel input {
+  accent-color: var(--nd-color-nest-accent);
+}
+
+/* The unit after a width field, so the number reads as what it is. */
+.unit {
+  color: var(--nd-color-muted);
+  font-size: 11px;
+}
+
+/* Style presets (D99): a row of fill-and-outline swatches at the top of Fill. */
+.presets {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.preset {
+  display: grid;
+  place-items: center;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.preset:hover {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.preset[aria-pressed="true"] {
+  border-color: var(--nd-color-nest-accent);
+}
+
+.preset:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 1px;
+}
+
+.presetSwatch {
+  width: 18px;
+  height: 14px;
+  border: 1.5px solid;
+  border-radius: 3px;
+}

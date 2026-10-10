@@ -1,0 +1,154 @@
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  background: var(--nd-panel-bg);
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  height: 44px;
+  background: var(--nd-color-topbar);
+  color: var(--nd-color-topbar-ink);
+  font-size: 13px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The mark (D101), in the strip's own text colour. */
+.brandMark {
+  width: 18px;
+  height: 18px;
+}
+
+/* Reads as a state, not a button: this is the one line telling the reader why the editor is
+   missing, so it has to be unmissable without looking clickable. */
+.readOnly {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--nd-color-topbar-ink);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nd-color-nest-accent);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.button {
+  font: inherit;
+  padding: 5px 11px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: var(--nd-color-topbar-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.buttonPrimary {
+  background: var(--nd-color-nest-accent);
+  border-color: var(--nd-color-nest-accent);
+}
+
+.buttonPrimary:hover {
+  background: var(--nd-color-nest-deep);
+}
+
+.canvas {
+  position: relative;
+  min-height: 0;
+}
+
+.footer {
+  border-top: 1px solid var(--nd-border-color);
+  background: var(--nd-status-bg);
+}
+
+/* --- boot states: the whole window, since nothing else has been mounted yet --- */
+
+.centred {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 24px;
+  background: var(--nd-color-canvas);
+  color: var(--nd-color-ink);
+  font-family: var(--font-sans);
+}
+
+.card {
+  max-width: 460px;
+  padding: 24px 26px;
+  border: 1px solid var(--nd-border-color);
+  border-radius: 10px;
+  background: var(--nd-panel-bg);
+  box-shadow: 0 6px 24px rgba(30, 39, 51, 0.08);
+}
+
+.cardTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cardBody {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--nd-color-muted);
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.cardButton {
+  font: inherit;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.cardButton:hover {
+  background: var(--nd-color-nest-deep);
+  border-color: var(--nd-color-nest-deep);
+}
+
+.loading {
+  font-size: 13px;
+  color: var(--nd-color-muted);
+}

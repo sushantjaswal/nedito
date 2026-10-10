@@ -1,0 +1,12 @@
+/* The mark at the app bar's size; its colour is the surface's text colour (currentColor). */
+.mark {
+  display: inline-flex;
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.mark svg {
+  width: 100%;
+  height: 100%;
+}
