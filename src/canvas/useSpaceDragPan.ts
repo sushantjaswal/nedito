@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-// draw.io behavior: plain left-drag is reserved for selection/interaction; panning happens via
+// Plain left-drag is reserved for selection/interaction; panning happens via
 // space+drag or middle-mouse-drag. React Flow's panOnDrag takes the set of mouse buttons that
 // pan; middle (1) is always active, left (0) is added while space is held.
 export function useSpaceDragPan(): number[] {

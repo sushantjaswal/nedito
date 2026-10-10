@@ -1,8 +1,8 @@
 // A shape's line pattern and its shadow: the values the canvas and every export both draw from.
 //
 // Shapes never drew a dashed outline, though the model has carried `style.dash` on nodes since
-// the draw.io importer (D44) and the cloud templates set it on their zones — they came out solid.
-// And draw.io's Shadow toggle had no counterpart at all. One definition of each, here, so the
+// the drawio importer and the cloud templates set it on their zones — they came out solid.
+// And there was no shadow at all. One definition of each, here, so the
 // two renderers cannot drift.
 import type { StyleMap } from "../model/types";
 

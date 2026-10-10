@@ -124,7 +124,7 @@ test.describe("Context bar", () => {
 test.describe("Canvas chip", () => {
   test.beforeEach(async ({ page }) => gotoFresh(page));
 
-  // D99: draw.io's style presets — fill and outline in one click, the label still readable.
+  // Style presets — fill and outline in one click, the label still readable.
   test("Fill's style presets restyle a shape in one click, and Default puts it back", async ({ page }) => {
     const id = await addShape(page, 200, 200);
     await select(page, [id]);

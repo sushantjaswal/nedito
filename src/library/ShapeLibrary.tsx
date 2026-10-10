@@ -366,8 +366,7 @@ export function ShapeLibrary() {
           })}
         </>
       )}
-      {/* Enables and disables *stencil* sections, so it belongs to the Shapes half only. It was
-          draw.io's "More Shapes…" until R4. */}
+      {/* Enables and disables *stencil* sections, so it belongs to the Shapes half only. */}
       {sidebarTab === "shapes" && (
         <button
           type="button"

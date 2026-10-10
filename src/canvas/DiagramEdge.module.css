@@ -32,7 +32,7 @@
   border-color: var(--nd-color-nest-accent);
 }
 
-/* A line with nothing at either end is moved by its body (draw.io's dangling edge). */
+/* A line with nothing at either end is moved by its body. */
 .movable {
   cursor: move;
 }
@@ -53,7 +53,7 @@
   opacity: 0.8;
 }
 
-/* A line's ends. A free one is solid; one attached to a shape is hollow, as in draw.io. */
+/* A line's ends. A free one is solid; one attached to a shape is hollow. */
 .endFree,
 .endAttached {
   position: absolute;
@@ -85,7 +85,7 @@
   pointer-events: none;
 }
 
-/* Where the dragged point is, as draw.io shows while dragging an end or a bend. */
+/* Where the dragged point is, shown while dragging an end or a bend. */
 .coords {
   position: absolute;
   left: 0;

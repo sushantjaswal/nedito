@@ -4,7 +4,7 @@ import { findMatches, replaceOne, type FindMatch } from "../model/findReplace";
 import { useDocStore } from "../model/store";
 import styles from "./FindReplacePanel.module.css";
 
-// draw.io's Find/Replace: search shape/edge labels in the current diagram, step through
+// Find/Replace: search shape/edge labels in the current diagram, step through
 // matches (selecting + centering the canvas on each), replace the current match or all of
 // them. A floating top-center bar rather than a corner panel — the sidebar top-right/top-left/
 // bottom-right corners are already Layers/Outline/zoom controls.

@@ -1,7 +1,6 @@
 import type { StencilSection } from "./types";
 
-// General is the first, default-open section — draw.io's own General palette is a broad set
-// of common structural shapes (rectangle, ellipse, basic polygons, ...), not app-UI pictograms.
+// General is the first, default-open section: a broad set of common structural shapes (rectangle, ellipse, basic polygons, ...), not app-UI pictograms.
 // An earlier pass added ~16 Material Symbols icons here (Cancel,
 // Check Circle, Grid View, Table Chart, ...) that are plain UI chrome, not diagramming shapes —
 // removed per user feedback ("why do we need check circles here... we need correct icons").

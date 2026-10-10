@@ -8,7 +8,7 @@ import styles from "./LocalOnlyBadge.module.css";
 // badge rather than a first-run consent modal, so it stays discoverable forever instead of
 // being clicked away once and forgotten, and never blocks someone from just drawing.
 //
-// Copy accuracy rule (docs/archive/onboarding-spec.md; D47): never claim the data is "secure", "encrypted" or
+// Copy accuracy rule: never claim the data is "secure", "encrypted" or
 // "private by design". Browser storage is neither secure nor permanent. The honest, checkable
 // claim is that nothing is uploaded — and the flip side, that clearing browser data destroys
 // the work, is stated just as plainly. LocalOnlyBadge.test.tsx enforces this.

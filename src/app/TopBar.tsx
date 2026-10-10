@@ -1,6 +1,6 @@
 // The top bar: the app menu and the command palette's button on the
-// left, the breadcrumb trail centred, Export and Share on the right. It replaced draw.io's
-// File · Edit · View · Arrange · Extras · Help menu bar; every command those held is in the palette.
+// left, the breadcrumb trail centred, Export and Share on the right. There is no menu
+// bar: every command is in the palette.
 import { useDocStore } from "../model/store";
 import { AppMenu } from "./AppMenu";
 import { Breadcrumbs } from "./Breadcrumbs";

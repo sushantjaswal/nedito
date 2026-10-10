@@ -24,7 +24,7 @@ interface MenuItem {
   disabled?: boolean;
 }
 
-// draw.io's right-click menu adapts to what was clicked: empty canvas gets paste/select-all;
+// The right-click menu adapts to what was clicked: empty canvas gets paste/select-all;
 // a shape or edge gets cut/copy/paste/duplicate/delete plus type-specific actions
 // (z-order/group for shapes, "Convert to nested block" for a shape selection, "Open child
 // diagram" for a single nested node). Closes on any outside click or Escape.

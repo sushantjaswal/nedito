@@ -1,6 +1,6 @@
 import type { StencilSection } from "./types";
 
-// The sidebar's lines, which place real lines, as draw.io's do: an edge with both ends free that
+// The sidebar's lines, which place real lines: an edge with both ends free that
 // can be bent, restyled from its toolbar, and dropped onto a shape at either end to connect it
 // (StencilDef.line; store.addShapeNode places it). Each entry's svgBody is only the picker's
 // picture of it, drawn with `<nd-line>` (see lineBody.ts) so its arrowheads read at tile size.

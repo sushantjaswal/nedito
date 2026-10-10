@@ -1,6 +1,6 @@
 // gzip via the platform's own CompressionStream — no library.
 //
-// docs/archive/portable-diagrams-spec.md proposed adding `pako` here, calling it "the only mature
+// The original plan proposed adding `pako` here, calling it "the only mature
 // browser-side deflate". That was true for years but no longer is: CompressionStream is
 // supported in every browser this app already requires, and `file/pdfExport.ts` has depended on
 // it since D46, so the baseline is already set and a 45KB dependency would buy nothing.

@@ -129,7 +129,7 @@ const section: StencilSection = {
     },
     {
       // Distinct from Off-Page Connector: on-page connectors between flowline segments on the
-      // same page are a plain circle (draw.io/ANSI convention); the inner ring gives it a
+      // same page are a plain circle (the ANSI convention); the inner ring gives it a
       // "target" look that reads clearly at small sidebar sizes.
       id: "flowchart/on-page-connector",
       label: "On-Page Connector",
@@ -196,7 +196,7 @@ const section: StencilSection = {
       svgBody: '<rect x="1" y="18" width="98" height="16" /><rect x="1" y="66" width="98" height="16" />',
     },
 
-    // The rest of the ISO 5807 set, as draw.io's Flowchart section carries it.
+    // The rest of the ISO 5807 set.
     {
       id: "flowchart/paper-tape",
       label: "Paper Tape",

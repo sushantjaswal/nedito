@@ -53,7 +53,7 @@ export interface Layer {
 
 export type DNode = ShapeNode | NestedNode | GroupNode;
 
-// draw.io-like style keys (fill, stroke, fontSize, etc.); kept as a loose string map so
+// Style keys (fill, stroke, fontSize, etc.); kept as a loose string map so
 // stencil-specific and future keys don't require a model change.
 export type StyleMap = Record<string, string | number | boolean>;
 
@@ -125,7 +125,7 @@ export interface Port {
 /**
  * One end of an edge: attached to a node (`nodeId`, optionally a port or a fixed anchor on it), or
  * — since formatVersion 4 — free, at a `point` on the canvas, as a line drawn from the sidebar's
- * Lines section is until either end is dropped on a shape (draw.io's dangling edge). Exactly one
+ * Lines section is until either end is dropped on a shape. Exactly one
  * of `nodeId` and `point` is set; model/edgeEnds.ts reads them, validate.ts enforces it.
  */
 export interface EdgeEnd {
@@ -145,7 +145,7 @@ export interface DEdge {
   /**
    * Where the label sits, once dragged: `t` of the way along the line
    * (0 at the source, 1 at the target), then `dx`,`dy` off it. Relative to the line, so the label
-   * keeps its place as the shapes move — draw.io's own model for an edge label. Omitted: the
+   * keeps its place as the shapes move. Omitted: the
    * middle of the line, as before.
    */
   labelPosition?: EdgeLabelPosition;

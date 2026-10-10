@@ -18,7 +18,7 @@ export interface StencilDefaultStyle {
 
 // Pictogram icons render as a flat, single-color silhouette (solid fill, no border — a stroke
 // traced around Material Symbols' intricate compound paths turns fine detail into a blobby
-// mess). Outline shapes keep the original draw.io-style default: white fill with a dark 1px
+// mess). Outline shapes keep the original default: white fill with a dark 1px
 // border, so they read as an empty box ready to hold text. Both the sidebar picker and the
 // canvas node fall back to this when the node's own style doesn't set fill/stroke explicitly —
 // keeping the two in sync until the user recolors the shape themselves.
@@ -76,7 +76,7 @@ export function stencilBody(stencil: StencilDef, classic = false): string {
 // black in light mode, near-white in dark mode — see styles/tokens.css) so pictogram icons stay
 // visible against the panel/canvas background in both. Outline shapes are unaffected: their
 // white-fill/ink-stroke default is meant to read as "paper" regardless of app theme, matching
-// how draw.io and other diagramming tools never re-theme already-drawn shape defaults.
+// so a shape already drawn never changes look when a default does.
 export function getStencilRenderFill(stencil: StencilDef, classic = false): string {
   return isIconStyleStencil(stencil) ? "var(--nd-color-ink)" : getStencilDefaultStyle(stencil, classic).fill;
 }

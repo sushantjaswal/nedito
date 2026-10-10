@@ -17,7 +17,7 @@ async function roundTrip(doc: Parameters<typeof encodeDocToFragment>[0]) {
 }
 
 describe("encodeDocToFragment / decodeFragmentToDoc", () => {
-  // docs/archive/portable-diagrams-spec.md's acceptance criterion (D51): round-trip at depth 0, 1 and 3.
+  // The requirement: round-trip at depth 0, 1 and 3.
   it.each([
     ["depth 0", docAtDepth0],
     ["depth 1", docAtDepth1],

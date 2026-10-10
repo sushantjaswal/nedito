@@ -86,7 +86,7 @@ describe("useGlobalShortcuts", () => {
     expect(saveCopy).toHaveBeenCalledTimes(1);
   });
 
-  // draw.io's clone-and-connect, which the ＋ handles' click also does (R3, D92).
+  // Clone-and-connect, which the ＋ handles' click also does.
   it("Alt+Shift+Arrow adds a connected copy of the one selected shape on that side", () => {
     const s = useDocStore.getState();
     const a = s.addShapeNode("general/rect", { x: 0, y: 0 }, { w: 100, h: 60 });

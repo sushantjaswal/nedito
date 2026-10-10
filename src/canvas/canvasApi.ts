@@ -54,7 +54,7 @@ export function stepZoom(direction: 1 | -1): void {
 
 /**
  * Pans the canvas, at the zoom it has, just far enough that a diagram rectangle is fully in
- * view with a margin — draw.io scrolls a newly added shape into view the same way. Nothing
+ * view with a margin, so a newly added shape is never placed out of sight. Nothing
  * happens when it is already visible.
  */
 export function revealRect(rect: { x: number; y: number; w: number; h: number }, margin = 40): void {

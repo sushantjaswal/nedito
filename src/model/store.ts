@@ -292,7 +292,7 @@ export interface DocStoreState {
    */
   addConnectedCopy: (nodeId: string, side: Side) => string | null;
   /**
-   * A line with free ends, as dropped from the sidebar's Lines section (draw.io's dangling edge):
+   * A line with free ends, as dropped from the sidebar's Lines section (a free line):
    * either end can then be dragged onto a shape to attach it. Selects it; returns its id.
    */
   addLine: (args: { source: { x: number; y: number }; target: { x: number; y: number }; waypoints?: { x: number; y: number }[]; style: StyleMap }) => string;

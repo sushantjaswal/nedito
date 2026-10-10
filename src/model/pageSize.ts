@@ -58,7 +58,7 @@ export function pxToPt(px: number): number {
 /**
  * How many pages of `page` it takes to cover `content`, and where that grid starts. Pages are
  * anchored to the origin rather than to the content, so page 1 is always the same region of the
- * canvas no matter what gets drawn later — the same stable-page-grid behaviour draw.io has.
+ * canvas no matter what gets drawn later: a stable page grid.
  * Content extending into negative coordinates simply extends the grid backwards.
  */
 export function pageGrid(

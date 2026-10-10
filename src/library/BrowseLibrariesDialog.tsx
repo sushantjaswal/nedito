@@ -15,7 +15,7 @@ const LISTING: { heading: string; sections: SectionId[] }[] = [
   ...LIBRARY_GROUPS.map((g) => ({ heading: g.label, sections: g.sections })),
 ];
 
-// "Browse all libraries", once draw.io's "More Shapes…" dialog: a
+// "Browse all libraries": a
 // checklist to show or hide whole shape-library sections, now laid out under the purpose groups
 // the sidebar shows them in. It still works section by section, on the same stored setting.
 export function BrowseLibrariesDialog({ enabled, onToggle, onClose }: BrowseLibrariesDialogProps) {
