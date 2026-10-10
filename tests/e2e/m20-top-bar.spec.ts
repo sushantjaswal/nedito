@@ -112,6 +112,22 @@ test.describe("Top bar (R2)", () => {
     expect(await page.evaluate(() => (window.__ddStore!.getState() as unknown as Store).ui.darkMode)).toBe(true);
     await page.keyboard.press("Escape");
     await expect(page.getByTestId("nd-preferences-dialog")).toHaveCount(0);
+    // The sidebar's search box follows the theme: it stayed white in dark mode (D153).
+    const search = page.getByTestId("nd-shape-search");
+    const look = () => search.evaluate((el) => ({ bg: getComputedStyle(el).backgroundColor, ink: getComputedStyle(el).color }));
+    const panel = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.background = "var(--nd-panel-bg)";
+      probe.style.color = "var(--nd-color-ink)";
+      document.body.append(probe);
+      const out = { bg: getComputedStyle(probe).backgroundColor, ink: getComputedStyle(probe).color };
+      probe.remove();
+      return out;
+    });
+    expect(panel.bg).not.toBe("rgb(255, 255, 255)");
+    expect(await look()).toEqual(panel);
+    await page.getByTestId("nd-sidebar-tab-templates").click();
+    expect(await look()).toEqual(panel);
   });
 
   test("Ctrl+S saves a copy as a .nedito file", async ({ page }) => {
