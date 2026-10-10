@@ -13,13 +13,13 @@ interface NestedMiniatureProps {
 // A live thumbnail of what's actually inside the child diagram, drawn straight from the model.
 //
 // This deliberately replaces the hand-picked `collapsed.icons` row as the *default* collapsed
-// view (CLAUDE.md's nesting section updated to match): authors kept seeing a box labelled
+// view: authors kept seeing a box labelled
 // "Empty" over a child diagram full of shapes, because the collapsed design was something you
 // had to remember to curate by hand. Explicitly chosen icons still win when present — the
 // author-designed view remains available, it's just no longer the only option.
 //
 // The markup itself is built in miniatureSvg.ts, which the SVG exporter calls too — the canvas
-// and an export must never draw different thumbnails (CLAUDE_HISTORY.md D67).
+// and an export must never draw different thumbnails.
 function NestedMiniatureComponent({ diagram, className }: NestedMiniatureProps) {
   // The thumbnail reads a stencil for every shape in the child, so it redraws whenever the cache
   // grows rather than waiting on any one of them.

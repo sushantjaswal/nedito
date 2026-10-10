@@ -4,10 +4,10 @@ import { describe, expect, it } from "vitest";
 import { BRAND } from "./brand";
 import { personalWordsIn } from "./personalWords";
 
-// This repository is public, so anything written in it is published. CLAUDE.md's working
-// agreements forbid personal or machine-specific details in any file here — names, addresses,
+// This repository is public, so anything written in it is published. The project's
+// rules forbid personal or machine-specific details in any file here — names, addresses,
 // handles, home directories, machine names, local URLs, the names of recordings or screenshots on
-// someone's own computer (CLAUDE_HISTORY.md D145). This scan is the guard, in the same spirit as
+// someone's own computer. This scan is the guard, in the same spirit as
 // styles/fontTokens.test.ts: a rule nobody checks drifts the first time someone forgets it.
 // The personal words themselves are checked by hash (personalWords.ts), so this file does not
 // publish the very words it keeps out.
@@ -67,8 +67,8 @@ describe("no personal or machine-specific details in the repository", () => {
 
   it("finds the files it is meant to scan", () => {
     const names = files.map((f) => f.rel);
-    expect(names).toContain("CLAUDE.md");
-    expect(names).toContain("CLAUDE_HISTORY.md");
+    expect(names).toContain("README.md");
+    expect(names).toContain("CONTRIBUTING.md");
     expect(names).toContain("src/app/brand.ts");
   });
 

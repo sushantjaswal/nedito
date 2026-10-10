@@ -143,7 +143,7 @@ function DiagramEdgeComponent({
 
   const points: Point[] = useMemo(() => [from, ...waypoints, to], [from, waypoints, to]);
 
-  // Geometry lives in edgeRouting so the exporters draw the identical path (CLAUDE_HISTORY D67).
+  // Geometry lives in edgeRouting so the exporters draw the identical path.
   const input: EdgePathInput = {
     sourceX: from.x,
     sourceY: from.y,

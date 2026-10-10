@@ -1,4 +1,4 @@
-// Draggable edge labels (CLAUDE_HISTORY.md D97): the geometry, the model, the store and the export.
+// Draggable edge labels: the geometry, the model, the store and the export.
 import { beforeEach, describe, expect, it } from "vitest";
 import { cacheStencils } from "../library/stencils";
 import generalSection from "../library/stencils/general";

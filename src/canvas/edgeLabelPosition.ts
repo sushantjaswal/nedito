@@ -1,4 +1,4 @@
-// Where a dragged edge label is kept (CLAUDE_HISTORY.md D97): the nearest point on its line, how
+// Where a dragged edge label is kept: the nearest point on its line, how
 // far along the line that is, and the label's offset from it — draw.io's model for an edge label,
 // so the label keeps its place relative to the line as the shapes it joins move.
 import type { EdgeLabelPosition } from "../model/types";

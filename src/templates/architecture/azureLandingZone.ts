@@ -11,7 +11,7 @@
 // hub is a port, so the connection survives the drill-in as a ghost link rather than being
 // something the reader has to remember.
 //
-// Icon ids verified against examples/azure-landing-zone.nedito (CLAUDE_HISTORY.md D60).
+// Icon ids verified against examples/azure-landing-zone.nedito.
 import type { DEdge, Diagram, NestedNode } from "../../model/types";
 import { templateDoc, tid } from "../starters/basicFlowchart";
 import { BOUNDARY, LINK, MANAGEMENT, PEERING, ZONE, boundary, icon, link, node, page } from "./archKit";

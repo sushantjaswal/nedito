@@ -1,6 +1,6 @@
 // Standard UML notation shapes (class, actor, package, component, etc.) — UML is a published
-// open standard (OMG), not vendor-owned. Original SVG geometry per CLAUDE.md's provenance
-// guardrail.
+// open standard (OMG), not vendor-owned. Original SVG geometry,
+// drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 import type { StencilSection } from "./types";
 
 const section: StencilSection = {

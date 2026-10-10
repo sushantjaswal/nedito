@@ -1,11 +1,11 @@
-// Cloud icons on draw.io import (X1, CLAUDE_HISTORY.md D132): an AWS, Azure or GCP icon in a
+// Cloud icons on draw.io import: an AWS, Azure or GCP icon in a
 // .drawio file becomes the official icon Nedito ships for the same service, instead of a coloured
 // box. draw.io names the service in its style — `resIcon=mxgraph.aws4.lambda`,
 // `shape=mxgraph.aws4.bucket`, `image=img/lib/azure2/compute/Virtual_Machine.svg`,
 // `shape=mxgraph.gcp2.hexIcon;prIcon=cloud_run` — and Nedito's icons are named for the service in
 // the vendors' own packs, so the two meet by name: exactly, through a short list of draw.io's own
 // abbreviations, or by every word of draw.io's name appearing in one of ours. Nothing is drawn
-// from draw.io; only its names are read (CLAUDE.md's provenance guardrail). An icon that matches
+// from draw.io; only its names are read, never its artwork. An icon that matches
 // nothing keeps the old fallback and its notice.
 import awsManifest from "../../library/stencils/assets/aws/manifest";
 import azureManifest from "../../library/stencils/assets/azure/manifest";

@@ -39,7 +39,7 @@ export async function openFile(file: File): Promise<OpenOutcome> {
   }
 
   // A .docx this app wrote carries the original document in a custom XML part, so exporting to
-  // Word is not a one-way trip (CLAUDE_HISTORY.md D59).
+  // Word is not a one-way trip.
   if (name.endsWith(".docx")) {
     const result = await decodeDocx(await file.arrayBuffer());
     return result.ok ? { ok: true, doc: result.doc, notices: [] } : result;

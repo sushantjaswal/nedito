@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { currentDiagramId, getDoc, gotoFresh } from "./helpers";
 import { decodeDoc } from "../../src/file/documentFormat";
 
-// M4 exit test (CLAUDE_HISTORY.md): multi-page doc with nesting saves to `.nedito`, survives
+// M4 exit test: multi-page doc with nesting saves to `.nedito`, survives
 // reload byte-identical (round-trip test), exports clean PNG and SVG, autosave restore works.
 test.describe("M4 — document & files", () => {
   test.beforeEach(async ({ page }) => {

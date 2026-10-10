@@ -109,7 +109,7 @@ describe("the template catalogue", () => {
 
   // An unnamed end falls back to React Flow's first handle, *top*, so the edge loops over its own
   // box or runs down through it. Each of T3–T6 checked this for its own batch; the T1 and T2 sets
-  // were never checked and shipped with it (CLAUDE_HISTORY.md D73). Now it holds for every template.
+  // were never checked and shipped with it. Now it holds for every template.
   it("names both ends of every edge, unless an end is a port", async () => {
     const unanchored: string[] = [];
     for (const t of await loadAllTemplates()) {

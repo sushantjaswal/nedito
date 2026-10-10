@@ -1,6 +1,6 @@
 // Standard ISO/ANSI flowchart symbols (process, decision, terminator, document, predefined
 // process, data) — generic diagramming vocabulary, not vendor-owned; original SVG geometry
-// per CLAUDE.md's provenance guardrail.
+// drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 import type { StencilSection } from "./types";
 
 const section: StencilSection = {

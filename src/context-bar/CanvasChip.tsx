@@ -1,5 +1,5 @@
 // The canvas chip: the diagram's own settings, in the canvas's bottom-left corner beside the zoom
-// controls (R1, CLAUDE_HISTORY.md D90). They lived in the right panel's Diagram settings view,
+// controls. They lived in the right panel's Diagram settings view,
 // shown when nothing was selected; with the panel gone they sit where they act. Grid and Snap are
 // one click each; Page opens a small popover with the page size, orientation and background, and
 // the palette's Diagram Settings opens that popover too. Since R2 (D91) the Layers and Outline

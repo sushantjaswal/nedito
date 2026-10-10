@@ -1,6 +1,6 @@
-# Pan and zoom with 500 nodes — 2026-10-07 (Q4, CLAUDE_HISTORY.md D114)
+# Pan and zoom with 500 nodes — 2026-10-07
 
-CLAUDE.md's guardrail: 60fps pan/zoom with 500 nodes on one canvas. Measured on the production
+The performance target: 60fps pan/zoom with 500 nodes on one canvas. Measured on the production
 build (`vite preview`), version 0.1.0, after the context bar, style presets, live miniatures,
 default shadows and the startup screen arrived. Re-run with `npm run perf` (see
 `scripts/perf-pan.mjs` for setup).

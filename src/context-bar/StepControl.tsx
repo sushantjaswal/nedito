@@ -1,4 +1,4 @@
-// A presentation step, in the Motion popover of a shape or a line (A6, CLAUDE_HISTORY.md D123):
+// A presentation step, in the Motion popover of a shape or a line:
 // where the selection falls in this level's Build, Walkthrough or Spotlight, and the means to move
 // it, add it or leave it out. Shown only when the level has a presentation mode (Page popover).
 import { useDocStore } from "../model/store";

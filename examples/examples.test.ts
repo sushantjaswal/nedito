@@ -4,7 +4,7 @@
 //
 // The first check is the one that was missing. azure-landing-zone.test.ts proved the committed
 // file round-trips, but never that its builder still produced it — and it did not: each rebuild
-// minted four new layer ids (CLAUDE_HISTORY.md D73). So here every builder is run and compared
+// minted four new layer ids. So here every builder is run and compared
 // with its committed file, byte for byte.
 import { readFileSync } from "node:fs";
 import path from "node:path";

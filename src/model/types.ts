@@ -1,4 +1,4 @@
-// Document data model. Authoritative shape defined in CLAUDE.md "Data model (authoritative)".
+// Document data model: the authoritative shape of a .nedito document (docs/FORMAT.md).
 import type { DiagramMotion, EdgeMotion, NodeMotion } from "./motion";
 
 export interface DiagramDocument {
@@ -143,7 +143,7 @@ export interface DEdge {
   style: StyleMap;
   label?: RichLabel;
   /**
-   * Where the label sits, once dragged (CLAUDE_HISTORY.md D97): `t` of the way along the line
+   * Where the label sits, once dragged: `t` of the way along the line
    * (0 at the source, 1 at the target), then `dx`,`dy` off it. Relative to the line, so the label
    * keeps its place as the shapes move — draw.io's own model for an edge label. Omitted: the
    * middle of the line, as before.

@@ -15,7 +15,7 @@ const DEFAULT_BACKGROUND = "#f6f7f9";
 // The page's own settings: its size and orientation, and its background. They lived in the right
 // panel's Diagram settings view; since R1 (D90) they open from the canvas chip's Page button, and
 // grid and snap — one click each — sit on the chip itself. Page size shipped once PDF export and
-// print gave it something to mean (CLAUDE_HISTORY.md D14, D46).
+// print gave it something to mean.
 export function PageSettings() {
   const background = useDocStore((s) => s.doc.diagrams[s.currentDiagramId()]?.background);
   const setDiagramBackground = useDocStore((s) => s.setDiagramBackground);

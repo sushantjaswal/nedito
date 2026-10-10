@@ -1,4 +1,4 @@
-// Where an image node's label goes: below the picture, as in draw.io (CLAUDE_HISTORY.md D79).
+// Where an image node's label goes: below the picture, as in draw.io.
 // Shared by the canvas, the SVG exporter and diagram bounds, so all three put it in the same
 // place. The label never wraps: the exporter draws exactly one line per line the author typed,
 // and a wrapping canvas label would disagree with it on any long caption.

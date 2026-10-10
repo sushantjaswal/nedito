@@ -1,4 +1,4 @@
-// The app menu — the product name at the top left (R2, CLAUDE_HISTORY.md D91). What stayed from the
+// The app menu — the product name at the top left. What stayed from the
 // File and Help menus once exporting and sharing got buttons of their own: New, Open, Save a copy,
 // the Recent diagrams, Preferences, Keyboard shortcuts, the tour and About. Everything else is in
 // the command palette (Ctrl+K).

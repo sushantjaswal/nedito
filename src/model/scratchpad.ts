@@ -1,4 +1,4 @@
-// The Scratchpad section (CLAUDE.md: "drag shapes in to reuse; persists in localStorage").
+// The Scratchpad section (shown as Favorites): shapes kept to reuse, persisted in localStorage.
 // A scratchpad item is a reusable snapshot of a shape node's appearance — shapeRef, size,
 // style, label — captured from the canvas and stored outside the document (a per-browser
 // convenience library, not part of the .nedito file, so it isn't part of DiagramDocument).

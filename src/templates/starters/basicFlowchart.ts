@@ -67,7 +67,7 @@ export type Side = "top" | "right" | "bottom" | "left";
  * An edge between two shapes, leaving and arriving on the named sides.
  *
  * `sides` defaults to bottom-to-top, the direction a flowchart reads. It was once not set at all,
- * and an unnamed end falls back to React Flow's first handle, *top* (CLAUDE_HISTORY.md D67) — so
+ * and an unnamed end falls back to React Flow's first handle, *top* — so
  * the Start → Receive edge left Start's top, looped up and came back down through Start itself.
  */
 export function edge(slug: string, from: string, to: string, text?: string, sides: [Side, Side] = ["bottom", "top"]): DEdge {

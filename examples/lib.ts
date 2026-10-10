@@ -4,7 +4,7 @@
 // rebuilding an unchanged example has to produce the committed file byte for byte, or every
 // rebuild churns the diff and nobody can tell a real change from noise. The Azure builder claimed
 // this and did not deliver it — its layers came from createDefaultLayers(), which mints a fresh
-// nanoid each call, so each rebuild rewrote four ids (CLAUDE_HISTORY.md D73). Hence `layer()`
+// nanoid each call, so each rebuild rewrote four ids. Hence `layer()`
 // below, and examples.test.ts, which rebuilds every example and compares.
 import type { Layer } from "../src/model/types";
 

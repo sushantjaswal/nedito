@@ -1,4 +1,4 @@
-// Nedito's own default look, and the classic one it replaced (R6, CLAUDE_HISTORY.md D95).
+// Nedito's own default look, and the classic one it replaced.
 //
 // New shapes and edges are drawn in Nedito's look whenever their style leaves a colour, corner
 // or arrowhead unset. Everything made before R6 — every saved document, autosave, share link and

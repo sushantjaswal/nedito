@@ -304,7 +304,7 @@ export function EdgeSection({ edges }: { edges: DEdge[] }) {
 }
 
 /**
- * A picture's own settings (CLAUDE_HISTORY.md D79): which file it is, and the two things a picture
+ * A picture's own settings: which file it is, and the two things a picture
  * can carry — a border, and opacity. Replace and Original size act on one picture and sit on the
  * bar itself (ImageActions); the border and opacity apply to every selected picture.
  */

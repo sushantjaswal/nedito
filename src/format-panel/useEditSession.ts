@@ -3,7 +3,7 @@
 // Typing "200" into a width field is three changes ("2", "20", "200"), dragging a slider is
 // dozens, and a colour picker reports every colour the pointer passes over. Committed one by one,
 // each became its own undo step, so undoing a typed width took four presses of Ctrl+Z (found by
-// the controls sweep, CLAUDE_HISTORY.md D84). draw.io treats an edit as one step, and so does
+// the controls sweep). draw.io treats an edit as one step, and so does
 // this: an edit session starts when the control is focused or pressed, the first change is
 // recorded (which saves the state from before the edit), later changes in the same session are
 // applied without being recorded, and the session ends when the control lets go.

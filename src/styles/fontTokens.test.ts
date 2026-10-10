@@ -13,7 +13,7 @@ const SRC = join(process.cwd(), "src");
 // sans-serif" on the reasoning that naming IBM Plex would make exports fall back to the
 // viewer's default. The outcome was worse than the problem it avoided: node labels came out in
 // whatever face the reader had, and edge labels, which named no family at all, came out serif.
-// Embedding the font removes the reason for the exemption (CLAUDE_HISTORY.md D67).
+// Embedding the font removes the reason for the exemption.
 //
 // This file is exempt from its own scan: the patterns it searches for are written out below,
 // so it would always report itself.

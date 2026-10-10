@@ -1,6 +1,6 @@
 # Dependabot (D146). Security updates are switched on in the repository's settings and open a pull
 # request whenever an advisory affects a dependency. These version updates are kept to one grouped
-# pull request per ecosystem, so they fit the one-PR-at-a-time rule in CLAUDE.md.
+# pull request per ecosystem, so they fit the project's one-pull-request-at-a-time workflow.
 version: 2
 updates:
   - package-ecosystem: npm
