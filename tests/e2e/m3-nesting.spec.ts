@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 import { currentDiagramId, getDoc, gotoFresh } from "./helpers";
 import type { NestedNode } from "../../src/model/types";
 
-// M3 exit test (CLAUDE_HISTORY.md): the "checkout scenario" — API Gateway -> nested Payment
+// M3 exit test: the "checkout scenario" — API Gateway -> nested Payment
 // Service -> Orders DB, drill into Payment Service, confirm ghost links render with the exact
-// CLAUDE.md wording, confirm breadcrumb navigation, confirm a root-level undo from N levels
+// specified wording, confirm breadcrumb navigation, confirm a root-level undo from N levels
 // deep both undoes the change and relocates the view back to where it happened.
 test.describe("M3 — nesting (checkout scenario)", () => {
   test.beforeEach(async ({ page }) => {
@@ -86,7 +86,7 @@ test.describe("M3 — nesting (checkout scenario)", () => {
     expect(nested.ports.length).toBeGreaterThanOrEqual(2);
   });
 
-  test("opening the nested node navigates in and shows ghost links with the CLAUDE.md wording", async ({ page }) => {
+  test("opening the nested node navigates in and shows ghost links with their wording", async ({ page }) => {
     const { nestedNodeId } = await buildCheckoutScenario(page);
     await page.getByTestId(`nd-nested-open-${nestedNodeId}`).click();
 

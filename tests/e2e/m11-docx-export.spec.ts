@@ -3,7 +3,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFresh } from "./helpers";
 
-// The Word export (CLAUDE_HISTORY.md D59). The XML shapes are unit-tested in
+// The Word export. The XML shapes are unit-tested in
 // src/export/docx/; what needs a browser is the render, the download, and the round trip back
 // in through Open.
 //

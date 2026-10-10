@@ -2,7 +2,7 @@ import { useDocStore } from "../model/store";
 import { navigateToBreadcrumb } from "../nesting/navigation";
 import styles from "./Breadcrumbs.module.css";
 
-// The nesting trail — "Main › Payment Service › Fraud Engine" (CLAUDE.md). Shared by the
+// The nesting trail — "Main › Payment Service › Fraud Engine". Shared by the
 // editor's top bar and the read-only share viewer: navigating levels is the whole point of a
 // nested diagram, so a viewer without breadcrumbs would be a viewer that can't be read.
 export function Breadcrumbs() {

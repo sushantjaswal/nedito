@@ -73,7 +73,7 @@ describe("ShapeLibrary", () => {
     expect(screen.queryByTestId("nd-stencil-general/rect")).not.toBeInTheDocument();
   });
 
-  // Slice 4 of the icon library sweep (CLAUDE_HISTORY.md D54): a pictogram has one label but
+  // Slice 4 of the icon library sweep: a pictogram has one label but
   // several honest names, and the picker is 700+ shapes deep. Search reads keywords and the
   // stencil id as well, which is what keeps a renamed shape reachable by its old name.
   it("search finds a shape by a keyword that is not in its label", async () => {

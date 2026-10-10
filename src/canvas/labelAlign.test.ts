@@ -7,7 +7,7 @@
 // in the lane's name band, it rendered in the middle of the diagram on top of the first task.
 //
 // This is the third time the canvas and the export have been found disagreeing about something
-// they both claim to implement — see CLAUDE_HISTORY.md D67 and D70.
+// they both claim to implement.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";

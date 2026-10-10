@@ -1,4 +1,4 @@
-// Keeps the system clipboard honest about what Nedito last copied (CLAUDE_HISTORY.md D79).
+// Keeps the system clipboard honest about what Nedito last copied.
 //
 // Shapes are copied to an in-app clipboard, but Ctrl+V now also accepts an image copied in
 // another app. Without this, a screenshot left on the system clipboard from earlier would win

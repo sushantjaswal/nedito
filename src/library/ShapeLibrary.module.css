@@ -12,7 +12,7 @@
  * These class names were referenced from ShapeLibrary.tsx from the day the Templates tab
  * landed, but the rules were never written — a CSS module returns undefined for a class it
  * doesn't have, so the two buttons rendered as bare browser <button>s: grey, beveled, and
- * obviously not part of the app (CLAUDE_HISTORY.md D67).
+ * obviously not part of the app.
  *
  * A segmented control rather than underlined tabs: there are exactly two, they're peers, and
  * a pill that slides between them reads as "pick one of these" at a glance. It sits in the

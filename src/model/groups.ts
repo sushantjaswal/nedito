@@ -1,5 +1,5 @@
-// Flat groups (CLAUDE.md: "a group is NOT a nested node; groups are flat draw.io-style
-// groups"). A GroupNode is a sibling of its children in the same diagram.nodes array — it
+// Flat groups: a group is not a nested node; groups are flat, one level, inside one
+// diagram. A GroupNode is a sibling of its children in the same diagram.nodes array — it
 // just carries a bounding-box position/size and a childIds list. Children keep their own
 // absolute positions in the model at all times; DiagramCanvas.tsx's React Flow adapter layer
 // is what converts to/from parent-relative coordinates for rendering and dragging.

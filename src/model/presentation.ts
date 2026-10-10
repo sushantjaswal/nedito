@@ -1,4 +1,4 @@
-// Presentation (A6, CLAUDE_HISTORY.md D123): one whole-diagram mode at most — Build, Walkthrough
+// Presentation: one whole-diagram mode at most — Build, Walkthrough
 // or Spotlight — saved in `Diagram.motion.presentation` with the author's order of steps. The
 // modes are exclusive by the shape of the data (one `mode`), never by a warning.
 //

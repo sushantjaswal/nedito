@@ -1,5 +1,5 @@
 // The context bar: a dark floating bar just above the selection, holding what the right-hand panel
-// used to (R1, CLAUDE_HISTORY.md D90). Each button opens a popover with the panel's own controls
+// used to. Each button opens a popover with the panel's own controls
 // for that group — moved, not redrawn — so every setting behaves exactly as it did.
 //
 // What the bar offers follows from what is selected, the way the panel's tabs did:

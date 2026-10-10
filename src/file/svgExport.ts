@@ -1,5 +1,6 @@
 // Hand-rolled SVG export: walks the model directly into real <rect>/<path>/<text> elements
-// (no dependency on html-to-image or similar — see CLAUDE_HISTORY.md M4 entry for why).
+// (no dependency on html-to-image or similar: a screenshot of the DOM can't carry real
+// shapes, text and links into another program).
 //
 // **An export must look exactly like the canvas.** This file used to claim that and not do it:
 // edge geometry, stencil default styles, the Nested Block's contents, fonts and the bounding
@@ -7,7 +8,8 @@
 // now live in canvas/edgeRouting.ts, library/stencils/defaultStyle.ts and
 // nesting/miniatureSvg.ts, and this module is only the part that turns them into a standalone
 // document. Anything a canvas component and this file could disagree about belongs in a shared
-// module, not here — CLAUDE_HISTORY.md D67 records what that drift actually cost.
+// module, not here: when the two drifted apart, exports drew lines and labels differently from
+// the canvas.
 import { edgeDashArray, edgeStrokeWidth, flowClass, flowVars, packetPointAt, packetRadius, packetRestPoint } from "../canvas/motionStyle";
 import { frameCss } from "./motionFrameCss";
 import { healthBadgeSvg, healthCentre } from "../canvas/healthStatus";

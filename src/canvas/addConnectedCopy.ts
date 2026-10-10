@@ -3,7 +3,7 @@ import type { Side } from "../model/connectedCopy";
 import { revealRect } from "./canvasApi";
 
 /**
- * The ＋ handles' click, and its keyboard and palette equivalents (R3, CLAUDE_HISTORY.md D92):
+ * The ＋ handles' click, and its keyboard and palette equivalents:
  * adds the connected copy, then brings it into view — off screen it would not even be drawn
  * (the canvas only renders what is visible), and its label could not open for typing.
  */

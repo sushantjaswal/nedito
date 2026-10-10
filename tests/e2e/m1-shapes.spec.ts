@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { currentDiagramId, getDoc, gotoFresh } from "./helpers";
 
-// M1 exit test (CLAUDE_HISTORY.md): click-to-place shapes, selection shows the format panel,
+// M1 exit test: click-to-place shapes, selection shows the format panel,
 // inline label editing, copy/paste/duplicate/delete, undo/redo.
 test.describe("M1 — shapes on canvas", () => {
   test.beforeEach(async ({ page }) => {

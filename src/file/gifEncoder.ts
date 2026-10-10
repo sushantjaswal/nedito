@@ -1,4 +1,4 @@
-// An animated GIF encoder (G1, CLAUDE_HISTORY.md D131), written here rather than added as a
+// An animated GIF encoder, written here rather than added as a
 // dependency: the format is small and old, and a diagram's frames are kind to it — flat colours,
 // antialiased edges, and from one frame to the next only the moving parts change.
 //

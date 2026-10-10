@@ -5,7 +5,7 @@
 // waypoint count and used React Flow's getBezierPath/getSmoothStepPath when there were none,
 // while the exporter always used the polyline builders — and buildSmoothPolyline falls back to
 // a straight line for fewer than three points. Since almost no edge has waypoints, almost every
-// curved edge exported as a straight one. See CLAUDE_HISTORY.md D67.
+// curved edge exported as a straight one.
 //
 // The rule for anything added here: if the canvas and an export can disagree about it, it
 // belongs in this file, not in either of them.
@@ -182,7 +182,7 @@ function boxAnchor(node: DNode, box: NodeBox, handleId?: string | null): HandleA
  *
  * So `portId` is the single source of truth: an end that has one attaches to that port. A stale
  * `"port:"` string with no `portId` behind it is ignored rather than trusted. Both renderers call
- * this, which is the only way to keep them agreeing (CLAUDE_HISTORY.md D72).
+ * this, which is the only way to keep them agreeing.
  */
 export function endHandle(end: { portId?: string }, styleHandle: unknown): string | null {
   if (end.portId) return `port:${end.portId}`;

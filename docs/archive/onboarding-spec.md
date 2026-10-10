@@ -1,6 +1,6 @@
 # Spec — First-visit onboarding & local-only disclosure
 
-Scope: four independent work items. Ship them **in the order below**, each on its own branch, each as its own PR, one PR open at a time (per CLAUDE.md's branch + PR workflow). Add each to PROGRESS.md's Phase 2 pipeline before starting, and log a decision entry in CLAUDE_HISTORY.md when merged.
+Scope: four independent work items. Ship them **in the order below**, each on its own branch, each as its own PR, one PR open at a time (per the project's branch and pull-request workflow). Add each to the work queue's Phase 2 pipeline before starting, and log a decision entry in the decision log when merged.
 
 All user-facing strings must read the product name from `BRAND` in `src/app/brand.ts`. No hardcoded product name anywhere. CSS classes and test ids use the `dd-` prefix. All new localStorage keys use `BRAND.storagePrefix`.
 

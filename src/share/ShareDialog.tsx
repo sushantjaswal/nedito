@@ -4,7 +4,7 @@ import { useDocStore } from "../model/store";
 import { createShareLink, formatShareSize, type ShareSizeLevel } from "./urlCodec";
 import styles from "./ShareDialog.module.css";
 
-// The share link dialog (CLAUDE_HISTORY.md D57): the share link on its own, for when an image isn't
+// The share link dialog: the share link on its own, for when an image isn't
 // what's wanted.
 //
 // Copy accuracy rule, inherited from docs/archive/onboarding-spec.md and enforced by a test: never say

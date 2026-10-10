@@ -1,4 +1,4 @@
-// R5 (CLAUDE_HISTORY.md D94): autosaved work comes back by itself with a note, Start new never
+// R5: autosaved work comes back by itself with a note, Start new never
 // loses it, and an autosave that cannot be read is surfaced rather than dropped.
 import { expect, test, type Page } from "@playwright/test";
 import { getDoc, gotoFresh } from "./helpers";

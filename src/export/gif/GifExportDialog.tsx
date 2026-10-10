@@ -17,7 +17,7 @@ import {
 } from "../../file/gifSize";
 import styles from "../pptx/PptxExportDialog.module.css";
 
-// The GIF export's choices: how big (G3, CLAUDE_HISTORY.md D141) — each option showing the pixels
+// The GIF export's choices: how big — each option showing the pixels
 // this level would come out at — and how smooth (G4, D142), the other lever on the file's size.
 // Both remembered.
 export function GifExportDialog() {

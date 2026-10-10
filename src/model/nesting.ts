@@ -1,5 +1,5 @@
-// Pure doc-transform functions for the nesting feature. See CLAUDE.md "The nesting feature"
-// and "Invariants" sections. Kept separate from actions.ts because nesting mutations touch
+// Pure doc-transform functions for the nesting feature, which keep the
+// invariants validate.ts checks (README, "How a document is put together"). Kept separate from actions.ts because nesting mutations touch
 // multiple diagrams at once (parent + child), unlike the single-diagram actions there.
 import { nanoid } from "nanoid";
 import { addNode } from "./actions";
@@ -253,8 +253,8 @@ export function ensurePortForConnection(
   if (!node || !isNested(node)) return { doc, portId: existingPortId };
 
   // Reuse the targeted port only while it is still free. Aiming at a port the author created
-  // themselves and attaching to it is the intended gesture (CLAUDE.md: a port is created "if
-  // the author didn't aim at an existing port dot") — but a port that already carries an edge
+  // themselves and attaching to it is the intended gesture (a port is created when
+  // the author didn't aim at an existing port dot) — but a port that already carries an edge
   // must not silently take a second one.
   //
   // It happened constantly, because React Flow snaps a connection to any handle within its
@@ -336,7 +336,7 @@ export function updatePort(
 //
 // "Node-level" means a real handle: the side the port was on. Clearing only `portId` left the
 // edge's handle string as "port:<removed>", which React Flow cannot find, so the edge vanished
-// from the canvas while staying in the file and in every export (CLAUDE_HISTORY.md D72).
+// from the canvas while staying in the file and in every export.
 export function removePort(doc: DiagramDocument, diagramId: string, nestedNodeId: string, portId: string): DiagramDocument {
   return updateDiagram(doc, diagramId, (diagram) => {
     const owner = diagram.nodes.find((n) => n.id === nestedNodeId);
@@ -397,7 +397,7 @@ export function collectDescendantDiagramIds(doc: DiagramDocument, rootDiagramId:
 // link with no indication anything had happened — the same invisible-failure class this
 // release set out to fix. Keeping the port (now unmapped) preserves the edge and surfaces it
 // inside the child as an amber "waiting to be linked" ghost, which is the non-modal reading of
-// CLAUDE.md's "deleting an inner node prompts to remap or remove dependent ports."
+// Deleting an inner node a port maps to: keep the port waiting (unmapped) or remove it.
 export function cascadePortCleanup(doc: DiagramDocument, childDiagramId: string, deletedInnerNodeIds: string[]): DiagramDocument {
   if (deletedInnerNodeIds.length === 0) return doc;
   const deleted = new Set(deletedInnerNodeIds);

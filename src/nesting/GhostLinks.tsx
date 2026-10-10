@@ -14,8 +14,8 @@ const UNMAPPED_GAP = 46;
 const EDGE_INSET = 8;
 /** How far apart pills into the same side of one shape stand (D117). */
 const SIBLING_GAP = 26;
-// Left/right ghosts run all the way to the canvas edge (CLAUDE.md's "dashed pills at the canvas
-// edges"), but a top/bottom one taken to the edge ends up far from its shape and lands on the
+// Left/right ghosts run all the way to the canvas edge (dashed pills at the canvas
+// edges), but a top/bottom one taken to the edge ends up far from its shape and lands on the
 // zoom bar, so the vertical variant stops just clear of the node instead.
 const VERTICAL_REACH = 56;
 

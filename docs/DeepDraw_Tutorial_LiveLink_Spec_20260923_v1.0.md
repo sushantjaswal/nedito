@@ -2,7 +2,7 @@
 
 **Goal.** The tour currently teaches drill-in and drill-out. It should also show the second thing no competitor does: a diagram pasted into Word or PowerPoint stays clickable and reopens fully drillable. Teach it twice, once in the tour and once at the moment a user is about to do the inferior thing.
 
-Two items plus one follow-up, each on its own branch and PR, one PR open at a time, per CLAUDE.md. UI-layer only: no model or `formatVersion` change. Copy rule from the onboarding spec applies: never claim data is "secure", "encrypted" or "private by design"; the accurate claim is that nothing is uploaded.
+Two items plus one follow-up, each on its own branch and PR, one PR open at a time, per the project's workflow. UI-layer only: no model or `formatVersion` change. Copy rule from the onboarding spec applies: never claim data is "secure", "encrypted" or "private by design"; the accurate claim is that nothing is uploaded.
 
 ---
 
@@ -47,7 +47,7 @@ With a `Try it` button that runs Copy image with live link on the current diagra
 
 ## Item L3 — Follow-up, gated on Phase 3.4 and 3.5
 
-Not buildable yet. Record in PROGRESS.md as a dependent item to pick up **immediately after** each export ships:
+Not buildable yet. Record in the work queue as a dependent item to pick up **immediately after** each export ships:
 
 - **After 3.4 (PowerPoint Slide Zoom) merges:** extend the step 3 body with `Or use File ▸ Export as PowerPoint for slides that zoom into each Nested Block.` Add a second secondary button `Show me` that highlights the menu item. Extend the L2 tip to mention the PowerPoint export when the user exports PNG while the document contains a Nested Block.
 - **After 3.5 (Word export) merges:** add the equivalent line for `Export as Word`. Keep step 3 to one card; if the copy grows past three short sentences, move the export options into a small "More ways to share" link rather than lengthening the card.

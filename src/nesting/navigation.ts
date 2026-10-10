@@ -9,7 +9,7 @@ const TRANSITION_MS = 300;
 
 /**
  * Converts the selection to a Nested Block, then selects it with its name open for typing:
- * CLAUDE.md's convert "prompts the author", and a name is the first thing a new level needs —
+ * Converting a selection asks the author for a name, and a name is the first thing a new level needs —
  * otherwise every converted block and its breadcrumb read "New Diagram" (D113).
  */
 export function convertSelectionAndName(): void {

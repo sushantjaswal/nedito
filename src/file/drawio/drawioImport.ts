@@ -1,4 +1,4 @@
-// drawio XML import (Phase 2, CLAUDE.md: "best-effort mapping"). Turns an .drawio/.xml file
+// drawio XML import, a best-effort mapping. Turns an .drawio/.xml file
 // into a DiagramDocument, reporting in plain words whatever it could not carry across.
 //
 // "Best-effort" is the whole design brief, so two rules run through everything below:
@@ -205,7 +205,7 @@ function convertPage(model: Element, title: string, pageLabel: string, pictures:
   const diagramId = nanoid();
 
   // draw.io ids are unique per page and may be things like "0"/"1"; Nedito requires nanoid
-  // strings unique across the whole document (CLAUDE.md invariants), so every cell gets a new
+  // strings unique across the whole document (a validation invariant), so every cell gets a new
   // id and edges are rewired through this map.
   const idMap = new Map<string, string>();
   for (const c of cells) if (c.id) idMap.set(c.id, nanoid());
@@ -242,7 +242,7 @@ function convertPage(model: Element, title: string, pageLabel: string, pictures:
     return { x, y };
   }
 
-  // Layers (X3, CLAUDE_HISTORY.md D134): draw.io's layers are the root's own children, bottom
+  // Layers: draw.io's layers are the root's own children, bottom
   // first. Each becomes a Nedito layer with its name, visibility and lock, so a layer the author
   // hid stays hidden for everyone the file is passed to. What a collapsed container folds away
   // goes on a hidden layer of its own rather than spilling out beside it.

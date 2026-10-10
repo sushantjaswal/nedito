@@ -29,7 +29,7 @@ export const ZONE: StyleMap = { fill: "none", stroke: MUTED, strokeWidth: 1 };
 /**
  * A container drawn behind its contents.
  *
- * Unfilled, for the same reason the cloud templates' boundaries are (CLAUDE_HISTORY.md D69):
+ * Unfilled, for the same reason the cloud templates' boundaries are:
  * React Flow draws every node above the edge layer, so a filled container paints over the links
  * running through it.
  */

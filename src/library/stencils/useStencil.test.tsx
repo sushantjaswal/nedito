@@ -2,8 +2,8 @@
 //
 // It did not: the cache was read synchronously and announced nothing, so a canvas node rendered
 // in the first second of a session — before ShapeLibrary had loaded, say, the Azure section —
-// stayed blank for the rest of it, while an export made a moment later drew the icon perfectly
-// (CLAUDE_HISTORY.md D72). The render-parity sweep found it because its extra document is applied
+// stayed blank for the rest of it, while an export made a moment later drew the icon perfectly.
+// The render-parity sweep found it because its extra document is applied
 // the instant the app starts.
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";

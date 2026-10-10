@@ -51,7 +51,7 @@ describe("the Business & Process templates", () => {
     nodesOf(doc).filter((n) => n.type === "shape" && /^(sl\d_|pPool_|pLane\d_)/.test(n.id));
   const nameBands = (doc: DiagramDocument) => nodesOf(doc).filter((n) => n.type === "shape" && n.style.horizontal === false);
 
-  // Same reason as the cloud boundaries (CLAUDE_HISTORY.md D69): React Flow draws nodes above
+  // Same reason as the cloud boundaries: React Flow draws nodes above
   // the edge layer, so a filled container hides the links running through it.
   it.each([
     ["swimlane-process", swimlane],

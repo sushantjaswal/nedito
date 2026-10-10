@@ -19,7 +19,7 @@
   filter: drop-shadow(0 1px 2px rgba(30, 39, 51, 0.12));
 }
 
-/* A picture of the user's own (CLAUDE_HISTORY.md D79). Stretches to the node box: the resize
+/* A picture of the user's own. Stretches to the node box: the resize
    handles keep its proportions unless Shift is held. */
 .image {
   position: absolute;
@@ -70,7 +70,7 @@
   /* A newline in a label is a line break the author typed, so honour it. Without this a flex
      box collapses it to a space, and every multi-line label — a UML class's compartments, a C4
      element's type and description lines, an ER table's columns — ran together on one line.
-     The SVG export already draws one <tspan> per line (CLAUDE_HISTORY.md D67), so leaving this
+     The SVG export already draws one <tspan> per line, so leaving this
      out also put the canvas and the export back into disagreement, the other way round.
      "pre-line", not "pre": runs of spaces still collapse and long lines still wrap. */
   white-space: pre-line;

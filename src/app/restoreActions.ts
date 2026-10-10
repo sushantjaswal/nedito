@@ -1,4 +1,4 @@
-// R5's restore note (CLAUDE_HISTORY.md D94): its timing, and what Start new does.
+// R5's restore note: its timing, and what Start new does.
 import { hasContent, rememberDocument } from "../file/recentDocs";
 import { createEmptyDoc, useDocStore } from "../model/store";
 import { BRAND } from "./brand";

@@ -2,7 +2,7 @@
 //
 // An image is an ordinary ShapeNode whose shapeRef is IMAGE_SHAPE_REF and whose imageId names an
 // entry in DiagramDocument.assets — so selecting, resizing, labels, layers, groups, edges and
-// copy/paste all treat it as the shape it is, and only drawing differs (CLAUDE_HISTORY.md D79).
+// copy/paste all treat it as the shape it is, and only drawing differs.
 // The pixels live once, in the table: a picture shown five times is stored once, and undo
 // history shares one asset object instead of copying megabytes per step.
 //

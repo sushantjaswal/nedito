@@ -54,7 +54,7 @@ describe("the Architecture & Cloud templates", () => {
 
   it.each(ALL)("%s names both ends of every link", (_id, doc) => {
     // An unnamed end anchors at the node's top, which in a topology drawing means the link
-    // loops over the diagram instead of joining two things (CLAUDE_HISTORY.md D67).
+    // loops over the diagram instead of joining two things.
     for (const edge of edgesOf(doc)) {
       const hasPort = Boolean(edge.source.portId || edge.target.portId);
       if (hasPort) continue;

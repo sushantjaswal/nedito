@@ -3,7 +3,7 @@
 // A port attachment used to live in two places — `end.portId` and a `"port:<id>"` handle string —
 // and the code paths that change one did not all change the other. React Flow drops an edge whose
 // handle names a port that is not there, so each slip made an edge vanish from the canvas while it
-// stayed in the file and in every export (CLAUDE_HISTORY.md D72). `endHandle` now derives the
+// stayed in the file and in every export. `endHandle` now derives the
 // handle from `portId`, which is the only copy anything should trust.
 import { describe, expect, it } from "vitest";
 import { Position } from "@xyflow/react";

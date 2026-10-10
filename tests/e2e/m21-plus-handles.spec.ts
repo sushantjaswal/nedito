@@ -1,4 +1,4 @@
-// R3 (CLAUDE_HISTORY.md D92): the ＋ handles that replaced the four hover arrows. Clicking one
+// R3: the ＋ handles that replaced the four hover arrows. Clicking one
 // adds a connected copy, ready to name; dragging one connects exactly as the arrows did.
 import { expect, test, type Page } from "@playwright/test";
 import { getDoc, gotoFresh } from "./helpers";

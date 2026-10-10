@@ -1,9 +1,9 @@
-// Single source of truth for product identity. See CLAUDE.md "Brand indirection (rename-ready)".
+// Single source of truth for product identity, so a rename touches this one file.
 // Never hardcode the product name, file extension, format id, storage prefix or host outside this
 // file.
 //
-// Renamed from DeepDraw to Nedito (short for Nested Diagram Tool) on 2026-10-06, CLAUDE_HISTORY.md
-// D100: another live product, deepdraw.app, writes .deepdraw.json, .deepdraw.html and .deepdraw.png
+// Renamed from DeepDraw to Nedito (short for Nested Diagram Tool) on 2026-10-06:
+// another live product, deepdraw.app, writes .deepdraw.json, .deepdraw.html and .deepdraw.png
 // files, so ours had to stop sharing its name and extensions. Everything the app ever wrote under
 // an earlier identity is listed in LEGACY_BRANDS and keeps working forever: old files open, old
 // share links decode, old browser storage is migrated (app/storageMigration.ts), and the old host
@@ -21,8 +21,8 @@ export interface Brand {
   contact: string;
   /**
    * The public source repository (About). The one place its URL is written: it carries the
-   * owner's GitHub handle, so CLAUDE.md's personal-data rule and src/app/personalData.test.ts
-   * allow it here and nowhere else (D149).
+   * owner's GitHub handle, so the repository's no-personal-details rule, enforced by
+   * src/app/personalData.test.ts, allows it here and nowhere else.
    */
   repository: string;
 }

@@ -1,9 +1,9 @@
 // Advanced: structure and annotation shapes — braces and brackets to group, a named frame, a
-// titled box and a vertical swimlane (lines have their own section, lines.ts). Original SVG geometry per CLAUDE.md's
-// provenance guardrail.
+// titled box and a vertical swimlane (lines have their own section, lines.ts). Original SVG geometry,
+// drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 //
 // This section used to hold the less common flowchart symbols (delay, display, sort, …). They
-// belong with the rest of ISO 5807 and moved to Flowchart (CLAUDE_HISTORY D84); their old ids
+// belong with the rest of ISO 5807 and moved to Flowchart; their old ids
 // still draw, through RETIRED_STENCIL_IDS.
 import type { StencilSection } from "./types";
 

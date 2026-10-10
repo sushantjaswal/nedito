@@ -1,4 +1,4 @@
-# The verification sweep from CLAUDE.md, run on every pull request (D146, sped up in D149). It runs
+# The verification sweep, run on every pull request. It runs
 # on Windows because the project is developed and tested there. Actions are pinned to full commit
 # SHAs, and the workflow token can only read.
 #

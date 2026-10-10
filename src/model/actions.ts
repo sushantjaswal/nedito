@@ -1,5 +1,5 @@
 // Pure doc-transform functions. Every mutation in the app goes through one of these
-// (command pattern, CLAUDE.md "State & architecture rules") so the store can wrap each
+// (command pattern) so the store can wrap each
 // call in exactly one undo entry. No component mutates `doc` directly.
 import { nanoid } from "nanoid";
 import type { DiagramDocument, DEdge, Diagram, DNode, NodeBase, RichLabel } from "./types";

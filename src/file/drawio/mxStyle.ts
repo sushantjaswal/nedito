@@ -230,7 +230,7 @@ export function toEdgeStyle(style: MxStyle): Record<string, string | number> {
 }
 
 /**
- * draw.io's arrowheads, as Nedito's (X2, CLAUDE_HISTORY.md D133). The ones that carry meaning
+ * draw.io's arrowheads, as Nedito's. The ones that carry meaning
  * come across as themselves — UML's hollow triangle and diamonds, every crow's-foot end — with
  * draw.io's `startFill`/`endFill=0` deciding hollow from filled. The rest keep the old rule:
  * "is there a head, and is it solid", which is what a reader takes from a head Nedito lacks.

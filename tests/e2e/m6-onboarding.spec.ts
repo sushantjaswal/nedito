@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { currentDiagramId, getDoc, gotoFirstVisit, gotoFresh } from "./helpers";
 
-// Onboarding item 1 (CLAUDE_HISTORY.md D47): the permanent local-only disclosure. The acceptance
+// Onboarding item 1: the permanent local-only disclosure. The acceptance
 // bar is that it is reachable everywhere and by keyboard — a disclosure the user cannot find,
 // or cannot escape from, is worse than none.
 test.describe("Onboarding — local-only disclosure", () => {
@@ -239,7 +239,7 @@ test.describe("Onboarding — coach marks", () => {
   });
 });
 
-// Onboarding item 4 (CLAUDE_HISTORY.md D53): the piece that actually prevents data loss. The
+// Onboarding item 4: the piece that actually prevents data loss. The
 // thresholds and suppressions are unit-tested in src/onboarding/exportReminder.test.ts; what
 // only a real browser can prove is that ordinary editing reaches the counter at all, and that
 // the toast is reachable and dismissible on the real page.
