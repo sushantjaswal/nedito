@@ -1,0 +1,20 @@
+name: Feature request
+description: An idea for Nedito, or something that got in your way.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you were trying to do
+      description: Start from the problem. What were you drawing, and where did Nedito get in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help
+      description: How you imagine it working. If another tool does it well, say which and how.
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What you do today instead
