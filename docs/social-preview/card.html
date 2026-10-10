@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- The repository's social preview card (D150), 1280×640. Rendered to social-preview.png by
+     scripts/social-preview.mjs, which first captures top.png and inside.png from the app. The zoom
+     and highlight coordinates below are tuned to those two captures of the Azure landing zone. -->
+<style>
+@font-face{font-family:Plex;font-weight:400;src:url("../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2")}
+@font-face{font-family:Plex;font-weight:600;src:url("../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2")}
+@font-face{font-family:Plex;font-weight:700;src:url("../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-700-normal.woff2")}
+html,body{margin:0;padding:0}
+body{width:1280px;height:640px;overflow:hidden;font-family:Plex,sans-serif;color:#fff;
+  background:#141A22;position:relative}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.3px);background-size:22px 22px}
+.glow{position:absolute;width:760px;height:760px;right:-120px;top:-160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(109,90,230,.42),rgba(109,90,230,0) 62%)}
+.left{position:absolute;left:60px;top:64px;width:400px}
+.brand{display:flex;align-items:center;gap:14px;font-weight:700;font-size:34px;letter-spacing:-.3px}
+.brand svg{width:46px;height:46px;color:#fff}
+.tag{margin-top:6px;font-size:15px;color:#A9A3F5;letter-spacing:2.4px;text-transform:uppercase;font-weight:600}
+h1{margin:54px 0 0;font-size:47px;line-height:1.08;font-weight:700;letter-spacing:-1px}
+h1 em{font-style:normal;color:#B3A8FF}
+.sub{margin-top:20px;font-size:20px;line-height:1.45;color:#C4CBD6}
+.foot{position:absolute;left:60px;bottom:52px;font-size:17px;color:#8D97A6}
+.foot b{color:#fff;font-weight:600;margin-right:14px}
+.panel{position:absolute;border-radius:14px;overflow:hidden;background:#F6F7F9;
+  box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08)}
+.top{left:480px;top:52px;width:760px;height:352px}
+.top img{position:absolute;width:800px;left:-24px;top:-46px}
+.hl{position:absolute;left:1062px;top:76px;width:172px;height:116px;border:3px solid #6D5AE6;border-radius:9px;
+  box-shadow:0 0 0 6px rgba(109,90,230,.25)}
+svg.zoom{position:absolute;left:0;top:0;width:1280px;height:640px;pointer-events:none}
+.inside{left:676px;top:318px;width:564px;height:244px;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 3px #6D5AE6}
+.crumbs{height:40px;background:#fff;border-bottom:1px solid #E3E6EB;display:flex;align-items:center;gap:8px;
+  padding:0 16px;font-size:15px;color:#66707D}
+.crumbs .here{color:#4B3BC4;font-weight:600}
+.crumbs .sep{color:#A0A8B4}
+.crumbs .lvl{margin-left:auto;font-size:12px;font-weight:600;letter-spacing:1px;color:#fff;background:#6D5AE6;border-radius:999px;padding:3px 10px}
+.shot{position:relative;height:204px;overflow:hidden}
+.shot img{position:absolute;width:600px;left:-8px;top:-10px}
+</style></head>
+<body>
+<div class="dots"></div><div class="glow"></div>
+<div class="left">
+  <div class="brand"><svg viewBox="0 0 64 64" fill="none"><rect x="8" y="8" width="48" height="48" rx="13" stroke="currentColor" stroke-width="5"/><rect x="29" y="29" width="19" height="19" rx="5" fill="currentColor"/></svg>Nedito</div>
+  <div class="tag">Nested Diagram Tool</div>
+  <h1>Any box can hold <em>a whole diagram.</em></h1>
+  <div class="sub">Open a box to zoom inside, follow the breadcrumb back out. As many levels deep as your system goes.</div>
+</div>
+<div class="foot"><b>nedito.app</b>Open source · runs in your browser · no sign-up</div>
+
+<div class="panel top"><img src="top.png"></div>
+<svg class="zoom" viewBox="0 0 1280 640">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6D5AE6" stop-opacity=".30"/><stop offset="1" stop-color="#6D5AE6" stop-opacity=".06"/></linearGradient></defs>
+  <polygon points="1065,195 1231,195 1240,318 676,318" fill="url(#g)"/>
+  <line x1="1065" y1="195" x2="676" y2="318" stroke="#8B7BF0" stroke-width="2" stroke-dasharray="6 5"/>
+  <line x1="1231" y1="195" x2="1240" y2="318" stroke="#8B7BF0" stroke-width="2" stroke-dasharray="6 5"/>
+</svg>
+<div class="hl"></div>
+<div class="panel inside">
+  <div class="crumbs">Platform <span class="sep">›</span> <span class="here">Retail spoke</span><span class="lvl">LEVEL 2</span></div>
+  <div class="shot"><img src="inside.png"></div>
+</div>
+</body></html>
