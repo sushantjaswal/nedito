@@ -160,7 +160,7 @@ licenses/         the full text of third-party licences NOTICE refers to
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome. For a bug, say what you did, what you expected
+Bug reports, ideas and pull requests are welcome — [`CONTRIBUTING.md`](CONTRIBUTING.md) has the details, and everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). For a bug, say what you did, what you expected
 and what happened, and attach the diagram if it matters: export it yourself, because nothing in the
 app sends us your work.
 
