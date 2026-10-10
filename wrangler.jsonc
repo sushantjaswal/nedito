@@ -4,7 +4,7 @@
   // and build history, behind. Domains are attached to this worker in the Cloudflare dashboard —
   // nedito.app as the canonical host, www.nedito.app as an alias the app itself redirects from
   // (src/app/originGuard.ts) — not declared here. myconifer.app is no longer served (D106).
-  "name": "deepdraw",
+  "name": "nedito",
   "compatibility_date": "2026-08-25",
   "workers_dev": false,
   "assets": {
