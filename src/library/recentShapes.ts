@@ -1,4 +1,4 @@
-// Recently used shapes (R4, CLAUDE_HISTORY.md D93): the last few different stencils placed from
+// Recently used shapes: the last few different stencils placed from
 // the shape library, newest first, shown as a row above Favorites. A per-browser convenience, so
 // localStorage under BRAND.storagePrefix, like the sidebar's other settings.
 import { BRAND } from "../app/brand";

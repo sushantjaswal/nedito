@@ -1,4 +1,4 @@
-// The shape library organised by purpose (R4, CLAUDE_HISTORY.md D93): the sidebar shows these
+// The shape library organised by purpose: the sidebar shows these
 // groups, named for what is being drawn, instead of draw.io's list of sections.
 //
 // Groups are presentation only. Underneath, every section keeps its id, its stencils keep

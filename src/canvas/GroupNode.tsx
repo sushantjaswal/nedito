@@ -9,11 +9,11 @@ export interface GroupNodeData extends Record<string, unknown> {
 
 export type FlowGroupNode = Node<GroupNodeData, "group">;
 
-// Flat group frame: an invisible hit area behind its children (CLAUDE.md — "a group is NOT a
-// nested node; groups are flat draw.io-style groups"). No resize handle in v1: resizing a
+// Flat group frame: an invisible hit area behind its children (a group is not a
+// nested node: groups are flat, one level, like any editor's groups). No resize handle in v1: resizing a
 // group would need to proportionally scale every child, which is real added complexity for
-// a feature CLAUDE.md's checklist doesn't call for ("Group/ungroup ... with correct
-// select/move semantics" — move, not resize). Children are wired as React Flow child nodes
+// a feature groups don't need (group and ungroup,
+// with select and move — move, not resize). Children are wired as React Flow child nodes
 // (parentId, no extent clamp) in DiagramCanvas.tsx, so dragging the frame moves them for
 // free via React Flow's own parent/child rendering; dragging a single child instead moves
 // the whole group as one rigid unit (DiagramCanvas.tsx's onNodeDrag/onNodeDragStop).

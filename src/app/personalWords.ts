@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 // For tests only; nothing the app ships imports this. The personal words the repository must
-// never carry (CLAUDE.md's working agreements, CLAUDE_HISTORY.md D145), stored as SHA-256 hashes
+// never carry (the no-personal-details rule in CONTRIBUTING.md), stored as SHA-256 hashes
 // of their lowercase form so that the guard does not publish the very words it keeps out.
 const PERSONAL_WORD_HASHES = new Set([
   "be58414e65f0f8ab95c6b21b7ddd62aa5b56f718b037fdbf95908b4919fc7cd5",

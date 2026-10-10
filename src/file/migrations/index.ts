@@ -1,7 +1,7 @@
-// Format-version migration registry (CLAUDE.md: "breaking changes bump formatVersion and
-// add a migration in file/migrations/").
+// Format-version migration registry: a breaking change bumps formatVersion and adds a
+// migration here, so every older file still opens.
 //
-// Also the rename-policy map (CLAUDE.md brand indirection): "after any rename, the app
+// Also the rename-policy map: "after any rename, the app
 // writes the new formatId/extension but reads all previous formatIds forever." The ids come from
 // brand.ts: the current one first, then every earlier one ("deepdraw", the name until D100).
 import { BRAND, LEGACY_BRANDS } from "../../app/brand";
@@ -36,7 +36,7 @@ const migrateV1ToV2: MigrationFn = (raw) => {
 // an image is added (see documentFormat.ts's versionFor).
 // v3 -> v4 needs none either: v4 only adds free edge ends (EdgeEnd.point), so every v3 edge, attached
 // at both ends, is already a valid v4 one. Written as v4 only when a free end exists (versionFor).
-// v4 -> v5 (R6, CLAUDE_HISTORY.md D95): DeepDraw's own default look. Unset colours, corners and
+// v4 -> v5: DeepDraw's own default look. Unset colours, corners and
 // arrowheads now resolve to the new look, so every shape and edge from before it is marked
 // `look: "classic"` to keep drawing exactly as it did (see model/look.ts). Groups and Nested
 // Blocks draw their own way and are not marked.

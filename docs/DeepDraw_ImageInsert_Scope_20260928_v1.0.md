@@ -1,6 +1,6 @@
 # Insert your own image — scope
 
-**Status:** implemented, 2026-09-28 (CLAUDE_HISTORY.md D80); decisions in §9, and what changed from this plan in §10. Replaces the descoped custom shape libraries (CLAUDE_HISTORY.md D77).
+**Status:** implemented, 2026-09-28; decisions in §9, and what changed from this plan in §10. Replaces the descoped custom shape libraries.
 **Goal:** a user can put any image of their own into a diagram, and it travels inside the `.deepdraw` file like everything else.
 
 ## 1. How draw.io does it
@@ -80,13 +80,13 @@ interface ShapeNode extends NodeBase {
 
 - **`formatVersion` 2 → 3.**
   - The migration from 2 to 3 changes nothing, because a v2 file has no images.
-  - An older app shown a v3 file gives the existing "made with a newer version" message instead of silently drawing blank shapes. That is the behaviour CLAUDE.md requires.
+  - An older app shown a v3 file gives the existing "made with a newer version" message instead of silently drawing blank shapes. That is the behaviour the file-format rules require.
 - **Validation (new checks):**
   - every image node's `imageId` exists in `assets`;
   - the MIME type is in the allowlist;
   - `data` is well-formed base64 whose decoded bytes start with that format's signature;
   - `width` and `height` are positive.
-- **Still plain JSON.** CLAUDE.md rules out compression and binary packaging. Base64 adds a third to the image's size; that is the honest cost of a single readable file.
+- **Still plain JSON.** The file format rules out compression and binary packaging. Base64 adds a third to the image's size; that is the honest cost of a single readable file.
 - **`docs/FORMAT.md`** gets a v3 section.
 
 ## 5. Size: the constraint that shapes the feature
@@ -144,7 +144,7 @@ Three limits, measured from the code:
 5. **Exports:** SVG `<image>` (so all exports follow), the miniature, and the parity sweep extended.
 6. **Autosave honesty:** the "autosave is off" notice, and the cached asset encoding.
 7. **E2E:** insert by each way in, save, reopen, undo and redo across a delete, and export to PNG and PowerPoint.
-8. **Docs:** a decision-log entry and PROGRESS.
+8. **Docs:** a decision-log entry and the work queue.
 
 **No new dependencies.** The browser already decodes, scales (`<canvas>`) and re-encodes (`toBlob`) images.
 

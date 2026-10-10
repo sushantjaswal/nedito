@@ -1,4 +1,4 @@
-// Inserting your own image (CLAUDE_HISTORY.md D79), end to end in a real browser: every way in,
+// Inserting your own image, end to end in a real browser: every way in,
 // save and reopen, undo across a delete, and the picture actually appearing in exports.
 //
 // The unit tests cover every decision; what needs a real browser is the file chooser, a real

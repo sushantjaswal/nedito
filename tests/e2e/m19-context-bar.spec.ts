@@ -1,4 +1,4 @@
-// The context bar and canvas chip, driven as a person drives them (R1, CLAUDE_HISTORY.md D90): it
+// The context bar and canvas chip, driven as a person drives them: it
 // sits over the selection and follows it, keeps inside the canvas, hides while a shape is dragged,
 // is reachable from the keyboard, and the diagram's settings live on the chip.
 import { expect, test, type Page } from "@playwright/test";

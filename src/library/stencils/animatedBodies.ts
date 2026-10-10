@@ -1,4 +1,4 @@
-// The animated icons' drawings (I1–I5, CLAUDE_HISTORY.md D124), shared by the Animated section and
+// The animated icons' drawings, shared by the Animated section and
 // the still twins in Misc, so every pair matches.
 //
 // Original SVG, drawn for Nedito from simple primitives in the usual 0..100 box. Each body *is*

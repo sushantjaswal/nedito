@@ -1,4 +1,4 @@
-// Health (A4, CLAUDE_HISTORY.md D120): a status badge on a shape — healthy, degraded or down. It is
+// Health: a status badge on a shape — healthy, degraded or down. It is
 // drawn by hand, not fed by anything live, and must look it: a solid disc with a white ring and a
 // symbol per state (never colour alone), and a tooltip that says the author set it. Shared by the
 // canvas and the still exports, which draw the badge exactly as it rests.

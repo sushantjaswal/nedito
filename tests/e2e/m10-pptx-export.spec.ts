@@ -3,7 +3,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFresh } from "./helpers";
 
-// The PowerPoint export (CLAUDE_HISTORY.md D58). The package structure and the Slide Zoom XML are
+// The PowerPoint export. The package structure and the Slide Zoom XML are
 // unit-tested in src/export/pptx/; what needs a real browser is that Export ▾ › PowerPoint
 // renders the diagrams through a canvas and hands over a file.
 //

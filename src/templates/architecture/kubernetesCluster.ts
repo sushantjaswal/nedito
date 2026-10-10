@@ -3,7 +3,7 @@
 // **Deliberately drawn with generic shapes, not Kubernetes icons.** The spec is explicit: use
 // the official icon set only if it is added to the library with proper NOTICE attribution,
 // otherwise generic shapes and no vendor artwork. No Kubernetes icon set is in the repo, and
-// adding one is a licensing and provenance task of its own (CLAUDE.md's guardrail), not
+// adding one is a licensing and provenance task of its own (official or openly licensed sources only, recorded in NOTICE), not
 // something to slip in under a template. So this reads as a cluster because of its structure
 // and labels rather than because of borrowed logos.
 //

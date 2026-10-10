@@ -1,5 +1,5 @@
 // What the File menu did, as plain actions anything can call: the app menu, the Export button, the
-// command palette and the keyboard (R2, CLAUDE_HISTORY.md D91). The File menu itself is gone; its
+// command palette and the keyboard. The File menu itself is gone; its
 // behaviour is unchanged — each action below is the old menu handler, moved.
 import { downloadBlob, downloadText } from "../file/download";
 import { saveDocument, toFilename } from "../file/saveDocument";

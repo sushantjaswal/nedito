@@ -1,10 +1,10 @@
 // Which group, if any, the current selection is — however it was selected.
 //
 // A selection "is" a group when it is the group's own id, its member shapes (rubber-banding the
-// shapes inside a group selects them one by one, CLAUDE_HISTORY D32), or both at once (a rubber
+// shapes inside a group selects them one by one), or both at once (a rubber
 // band sweeping the group's frame and its members reports all of their ids, D33). The context
 // menu and the Arrange tab each worked this out for themselves; the Arrange menu did not, and
-// offered Ungroup for any single shape (CLAUDE_HISTORY D84). One rule now serves all three.
+// offered Ungroup for any single shape. One rule now serves all three.
 import type { DNode, GroupNode } from "./types";
 
 export function groupOfSelection(nodes: DNode[], nodeIds: string[]): GroupNode | undefined {

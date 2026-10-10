@@ -1,5 +1,5 @@
 // Onboarding flags, keyed under BRAND.storagePrefix like every other persisted key so a future
-// rename migrates them along with the autosave (CLAUDE.md brand indirection).
+// rename migrates them along with the autosave (the rename policy in brand.ts).
 //
 // Every access is wrapped: localStorage throws in private-browsing and disabled-storage modes,
 // and onboarding state going missing must never stop someone drawing. A read that fails is

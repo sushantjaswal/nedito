@@ -42,7 +42,7 @@ function labelStyle(label: RichLabel, backdropColor: string | null): React.CSSPr
     // textAlign positions the lines *within* the text block; justifyContent positions the block
     // itself. The label is a centring flex box, so textAlign alone did nothing to a single-line
     // label and `align` was silently inert on the canvas — while the SVG export honoured it via
-    // text-anchor, so the two disagreed. Third instance of that drift; see CLAUDE_HISTORY D67.
+    // text-anchor, so the two disagreed. Third instance of that drift between the canvas and the exporters.
     justifyContent: JUSTIFY[align],
     textAlign: align,
   };

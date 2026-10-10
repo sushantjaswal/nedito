@@ -20,9 +20,9 @@ never in a public issue.
 ## Suggesting a feature
 
 Open an issue with the **Feature request** form, starting from the problem rather than the
-solution: what you were trying to draw or do, and where Nedito got in the way. For how existing
-editor behaviour should work, the reference is draw.io's behaviour and keyboard map, unless
-[`CLAUDE.md`](CLAUDE.md) says otherwise.
+solution: what you were trying to draw or do, and where Nedito got in the way. Editing behaviour
+— selecting, connecting, keyboard shortcuts — follows the conventions people already know from
+diagram editors, so a request to change one should say what it would gain.
 
 ## Making a change
 
@@ -62,8 +62,9 @@ Commits use conventional messages (`feat(canvas): edge waypoints`, `fix(library)
 
 ## Rules that review will hold you to
 
-These come from [`CLAUDE.md`](CLAUDE.md), which has the full working agreements and the product
-rules; [`CLAUDE_HISTORY.md`](CLAUDE_HISTORY.md) has every past decision and why.
+The README explains how a document is put together and the invariants it keeps
+([How a document is put together](README.md#how-a-document-is-put-together)) and where the shapes
+come from ([Where the shapes come from](README.md#where-the-shapes-come-from)). On top of those:
 
 - **The product's name and hosts live in [`src/app/brand.ts`](src/app/brand.ts).** Every UI
   string, file filter, storage key and link reads them from there; code identifiers stay
@@ -72,16 +73,16 @@ rules; [`CLAUDE_HISTORY.md`](CLAUDE_HISTORY.md) has every past decision and why.
   addresses, handles, local paths, machine names or local URLs, and no file names of recordings or
   screenshots from someone's own computer. Write about people by role ("the user", "a reviewer").
   `src/app/personalData.test.ts` checks it.
-- **Never copy from draw.io.** No code, icons, stencils or templates from its repositories or from
-  app.diagrams.net, in any form. Icons come only from the official Azure, AWS and Google Cloud
-  sets and openly licensed sets, each recorded with its source and licence in
-  [`NOTICE`](NOTICE); everything else is drawn for Nedito.
+- **Nothing copied from another diagram tool.** No code, icons, stencils or templates taken from
+  any other diagram product, in any form — copied, converted or traced. Icons come only from the
+  official Azure, AWS and Google Cloud sets and openly licensed sets, each recorded with its
+  source and licence in [`NOTICE`](NOTICE); everything else is drawn for Nedito.
 - **Never break the file format silently.** A breaking change bumps `formatVersion`, adds a
   migration in `src/file/migrations/`, and updates [`docs/FORMAT.md`](docs/FORMAT.md). Old files
   always open.
-- **New dependencies need a stated reason**, recorded in [`PROGRESS.md`](PROGRESS.md) with the work
-  that introduced them.
-- **A decision gets a Decision Log entry** in `CLAUDE_HISTORY.md`: what was decided, and why.
+- **New dependencies need a stated reason**, given in the pull request that adds them.
+- **Design decisions are explained** in the pull request: what was decided, and why, so the
+  reasoning survives the review.
 
 ## Licence
 

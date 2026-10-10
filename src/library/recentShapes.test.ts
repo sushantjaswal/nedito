@@ -1,4 +1,4 @@
-// Recently used shapes (R4, CLAUDE_HISTORY.md D93).
+// Recently used shapes.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BRAND } from "../app/brand";
 import { readRecentShapes, RECENT_SHAPES_LIMIT, recordShapeUse, subscribeRecentShapes } from "./recentShapes";

@@ -1,4 +1,4 @@
-// The stylesheet a moving-picture frame carries (G1, CLAUDE_HISTORY.md D131): the canvas's own
+// The stylesheet a moving-picture frame carries: the canvas's own
 // motion rules — styles/motion.css and styles/animatedIcons.css, read as they ship — with every
 // animation paused at the frame's moment. A paused CSS animation with a negative delay shows
 // exactly that moment, in an SVG drawn as an image too, so a GIF frame is the canvas at time t

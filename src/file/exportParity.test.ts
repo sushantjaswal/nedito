@@ -1,6 +1,6 @@
 // Does an export look like the canvas?
 //
-// Every assertion here corresponds to a way it did not (CLAUDE_HISTORY.md D67): curved edges
+// Every assertion here corresponds to a way it did not: curved edges
 // exported as straight lines, the Nested Block exported as an empty box, text fell back to
 // serif, and labels were clipped out of the bounds. Each of these fails against the renderer
 // as it was, which is the only reason to write them — the drift was invisible in code review
@@ -174,7 +174,7 @@ describe("export parity — the Nested Block", () => {
   });
 
   it("draws the stacked-card ghosts behind the body", () => {
-    // Two offset rectangles, per CLAUDE.md's visual identity.
+    // Two offset rectangles: the stacked-card look of a Nested Block.
     expect([...svg().matchAll(/<rect x="(9|4\.5)" y="(9|4\.5)"/g)]).toHaveLength(2);
   });
 

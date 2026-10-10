@@ -32,7 +32,7 @@ export interface StencilDefaultStyle {
 // (StencilGlyph in the sidebar/canvas/Favorites/nested-format-panel) wants a theme-aware icon
 // fill instead — use getStencilRenderFill() for that, not this fill value directly.
 //
-// R6 (CLAUDE_HISTORY.md D95) gave new outline shapes Nedito's own look — a faint cool tint and a
+// R6 gave new outline shapes Nedito's own look — a faint cool tint and a
 // soft slate outline — while anything marked `look: "classic"` (everything made before it, and
 // every template; see model/look.ts) keeps the white and ink it was drawn with. `classic` picks the
 // table. Widths never change, and a stencil with its own colour (a yellow Note, a BPMN pool) keeps

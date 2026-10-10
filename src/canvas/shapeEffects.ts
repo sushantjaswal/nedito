@@ -3,7 +3,7 @@
 // Shapes never drew a dashed outline, though the model has carried `style.dash` on nodes since
 // the draw.io importer (D44) and the cloud templates set it on their zones — they came out solid.
 // And draw.io's Shadow toggle had no counterpart at all. One definition of each, here, so the
-// two renderers cannot drift (CLAUDE_HISTORY D67).
+// two renderers cannot drift.
 import type { StyleMap } from "../model/types";
 
 /** Dash patterns, in screen pixels (shape outlines do not scale with the shape, fitBody.ts). */

@@ -1,4 +1,4 @@
-// Page size for print/PDF layout. Deferred through M4/Phase 2 (see CLAUDE_HISTORY.md D14)
+// Page size for print/PDF layout. Deferred through M4/Phase 2
 // because the canvas is infinite and "page size" had nothing to mean yet; PDF export and print
 // are what finally give it a job, so the two shipped together.
 //

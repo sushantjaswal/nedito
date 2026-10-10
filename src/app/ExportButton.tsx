@@ -1,4 +1,4 @@
-// The Export split button (R2, CLAUDE_HISTORY.md D91). Its main part repeats the last format used
+// The Export split button. Its main part repeats the last format used
 // in this browser — PNG until the first export — so the export you do most is one click; its arrow
 // lists every format, with Copy image with live link at the top and Print at the bottom.
 import { useState } from "react";

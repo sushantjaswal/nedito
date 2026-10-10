@@ -1,4 +1,4 @@
-// Document store. See CLAUDE.md "State & architecture rules": one Zustand store per open
+// Document store: one Zustand store per open
 // document, all mutations go through named actions (command pattern), undo/redo is
 // document-global. zundo tracks only the `doc` slice — selection/viewport/ui churn never
 // enters the undo history.
@@ -64,7 +64,7 @@ export interface ViewportState {
 // Onboarding state. Only the flags that must outlive a reload are persisted (to localStorage
 // via onboarding/onboardingStorage.ts, not into the document) — `demoActive` is transient by
 // design: it describes this session's canvas, not a user preference. Items 3 and 4 of
-// The export reminder (CLAUDE_HISTORY.md D53) extends this with actionsSinceExport.
+// The export reminder extends this with actionsSinceExport.
 /**
  * The tour's last real step, and the sentinel meaning "over".
  *
@@ -936,7 +936,7 @@ export const useDocStore = create<DocStoreState>()(
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           // Resolves whichever group the current selection "belongs to," however it was
           // selected: the group's own id directly, its member shapes directly (e.g. via
-          // rubber-band, which selects children individually — see CLAUDE_HISTORY D32), or a
+          // rubber-band, which selects children individually), or a
           // mix of both (a rubber-band sweeping over the group's own invisible frame *and* its
           // children reports all of their ids together — see D33's follow-up fix). A node
           // qualifies as "in" a group if it IS that group or is one of its listed children.
@@ -1371,7 +1371,7 @@ export const useDocStore = create<DocStoreState>()(
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           return diagram ? getLayers(diagram) : [];
         },
-        // New shapes land here (CLAUDE.md draw.io parity: the panel's currently-selected layer
+        // New shapes land here (as in any layered editor: the panel's currently-selected layer
         // is where new content goes). Falls back to the diagram's first layer if nothing was
         // explicitly chosen yet, or if the previously-active layer was since deleted.
         activeLayerId: () => {

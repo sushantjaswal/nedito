@@ -1,4 +1,4 @@
-// Connecting two nodes, and the ＋ handle's "add a connected copy" (R3, CLAUDE_HISTORY.md D92).
+// Connecting two nodes, and the ＋ handle's "add a connected copy".
 //
 // draw.io's hover arrows clone the shape on that side and connect the two when clicked (and
 // Alt+Shift+Arrow does the same from the keyboard). Nedito's ＋ handles keep that, with two
@@ -62,8 +62,8 @@ export function connectNodes(
     target: { nodeId: targetNodeId, portId: tgt.portId },
     style: {
       // Curved by default — a deliberate visual departure from draw.io's orthogonal
-      // default (CLAUDE.md's "match draw.io unless this file says otherwise"; the user
-      // asked for this as a recognisable differentiator). Straight/orthogonal remain
+      // default (curved is Nedito's default line style, chosen
+      // as a recognisable look). Straight/orthogonal remain
       // one click away in the context bar.
       edgeStyle: "curved",
       startArrow: "none",

@@ -1,4 +1,4 @@
-// Animated icons (I1–I5, CLAUDE_HISTORY.md D124): motion inside a shape, placed like any other icon
+// Animated icons: motion inside a shape, placed like any other icon
 // and found by search beside its still twin. Library entries, not a toggle. Every drawing is in
 // animatedBodies.ts, which says how they rest, colour and export.
 import {

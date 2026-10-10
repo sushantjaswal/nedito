@@ -1,4 +1,4 @@
-// Recent diagrams (R2, CLAUDE_HISTORY.md D91), against the in-memory backend.
+// Recent diagrams, against the in-memory backend.
 import { describe, expect, it } from "vitest";
 import { createEmptyDoc } from "../model/store";
 import type { DiagramDocument } from "../model/types";

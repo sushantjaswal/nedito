@@ -1,4 +1,4 @@
-/* Visual identity tokens. See CLAUDE.md "Visual identity tokens". */
+/* Visual identity tokens: the only place the app's colours and font stacks are defined. */
 :root {
   --nd-color-canvas: #f6f7f9;
   --nd-color-grid-dot: #d8dce3;

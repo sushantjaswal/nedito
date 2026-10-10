@@ -99,7 +99,7 @@ const edgeTypes = { diagram: DiagramEdge };
 // A group's children are wired as real React Flow child nodes (parentId, deliberately without
 // `extent: "parent"` — see toFlowNode) so dragging the group frame moves them for free via
 // React Flow's own parent/child rendering — the authoritative model still stores every node's
-// position as absolute (CLAUDE.md's data model), so this map (and the relative-position math
+// position as absolute (the document model), so this map (and the relative-position math
 // below) exists only at this rendering-adapter boundary, converted back to absolute in
 // onNodeDragStop.
 function buildChildToGroup(diagram: Diagram): Map<string, GroupNodeModel> {
@@ -201,7 +201,7 @@ function resolveGroupDragDelta(
 
 // Color-codes the minimap's node thumbnails by type so a nested diagram's structure (which
 // boxes are "drill-in" boxes vs. plain shapes vs. groups) reads at a glance, using the same
-// violet nesting accent as the real NestedNode rendering (CLAUDE.md visual identity tokens).
+// violet nesting accent as the real NestedNode rendering (the nesting accent in styles/tokens.css).
 function minimapNodeColor(node: FlowNode): string {
   if (node.type === "point") return "transparent";
   if (node.type === "nested") return "#6D5AE6";
@@ -284,7 +284,7 @@ function ZoomControls() {
       >
         −
       </button>
-      {/* Free-form zoom to any value in CLAUDE.md's mandated 10%-400% range, independent of
+      {/* Free-form zoom to any value in the 10%-400% range, independent of
           the +/- buttons' 25% grid. Per-diagram by construction: the store already keeps a
           viewport per diagram id, so a nested canvas remembers its own zoom. */}
       <input

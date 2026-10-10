@@ -2,13 +2,13 @@ import type { StencilSection } from "./types";
 
 // General is the first, default-open section — draw.io's own General palette is a broad set
 // of common structural shapes (rectangle, ellipse, basic polygons, ...), not app-UI pictograms.
-// An earlier pass (see CLAUDE_HISTORY.md D22) added ~16 Material Symbols icons here (Cancel,
+// An earlier pass added ~16 Material Symbols icons here (Cancel,
 // Check Circle, Grid View, Table Chart, ...) that are plain UI chrome, not diagramming shapes —
 // removed per user feedback ("why do we need check circles here... we need correct icons").
 // Square/Circle/Triangle/Half Circle were specifically called out as missing basics that
 // belong in a user's first, default-open section rather than buried in a separate Basic tab
 // they may not think to open; Parallelogram/Hexagon/Cylinder/Cross round out the same "common
-// shapes at a glance" goal. All original SVG geometry per CLAUDE.md's provenance guardrail.
+// shapes at a glance" goal. All original SVG geometry, drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 const section: StencilSection = {
   id: "general",
   name: "General",

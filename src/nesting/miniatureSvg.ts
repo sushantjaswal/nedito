@@ -3,7 +3,7 @@
 // Extracted from NestedMiniature.tsx so an export can draw the *same* thumbnail the canvas
 // draws. Before this, svgExport's nested node was three empty rectangles and a summary line —
 // no title, no miniature, no ports — so a Nested Block pasted into Word looked like a blank
-// box (CLAUDE_HISTORY.md D67).
+// box.
 //
 // Colours are parameters rather than CSS classes because an exported SVG is read outside the
 // app, where no stylesheet and no custom properties exist.
