@@ -19,6 +19,12 @@ export interface Brand {
   host: string;
   /** Where people write to us (About, N8). */
   contact: string;
+  /**
+   * The public source repository (About). The one place its URL is written: it carries the
+   * owner's GitHub handle, so CLAUDE.md's personal-data rule and src/app/personalData.test.ts
+   * allow it here and nowhere else (D149).
+   */
+  repository: string;
 }
 
 export const BRAND: Brand = {
@@ -29,6 +35,7 @@ export const BRAND: Brand = {
   storagePrefix: "nedito",
   host: "nedito.app",
   contact: "hello@nedito.app",
+  repository: "https://github.com/sushantjaswal/nedito",
 };
 
 /** `https://` + the canonical host: where share links and live-linked images point. */
@@ -42,7 +49,7 @@ export const EDITABLE_PNG_EXT = `${BRAND.fileExt}.png`;
  * files with these extensions and format ids still open, and storage under these prefixes is
  * migrated once. Old hosts are not kept: DeepDraw's myconifer.app is no longer served (D106).
  */
-export type LegacyBrand = Omit<Brand, "host" | "tagline" | "contact">;
+export type LegacyBrand = Omit<Brand, "host" | "tagline" | "contact" | "repository">;
 
 export const LEGACY_BRANDS: readonly LegacyBrand[] = [
   { name: "DeepDraw", fileExt: ".deepdraw", formatId: "deepdraw", storagePrefix: "deepdraw" },
