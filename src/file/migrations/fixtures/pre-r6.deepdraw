@@ -1,0 +1,249 @@
+{
+  "format": "deepdraw",
+  "formatVersion": 4,
+  "meta": {
+    "title": "Untitled DeepDraw diagram",
+    "created": "2026-10-05T07:28:10.963Z",
+    "modified": "2026-10-05T07:28:10.966Z",
+    "appVersion": "0.0.1"
+  },
+  "rootDiagramIds": [
+    "87O15Y7jtZ1ezivfCB6PC"
+  ],
+  "diagrams": {
+    "87O15Y7jtZ1ezivfCB6PC": {
+      "id": "87O15Y7jtZ1ezivfCB6PC",
+      "title": "Page 1",
+      "nodes": [
+        {
+          "id": "XBlJA7f_qtEpygjYioFhN",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "size": {
+            "w": 120,
+            "h": 60
+          },
+          "style": {},
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 1,
+          "label": {
+            "text": "Order placed"
+          }
+        },
+        {
+          "id": "OV9PAmIXbXrGIJFd6vFcO",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 200,
+            "y": 0
+          },
+          "size": {
+            "w": 120,
+            "h": 60
+          },
+          "style": {},
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 2,
+          "label": {
+            "text": "Payment"
+          }
+        },
+        {
+          "id": "Ih1Q3TsuiIT5i_aeZ_kw0",
+          "type": "shape",
+          "shapeRef": "flowchart/decision",
+          "position": {
+            "x": 400,
+            "y": -10
+          },
+          "size": {
+            "w": 100,
+            "h": 80
+          },
+          "style": {},
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 3,
+          "label": {
+            "text": "Paid?"
+          }
+        },
+        {
+          "id": "Yjpv_Erda2_L3fBplT6BK",
+          "type": "shape",
+          "shapeRef": "general/note",
+          "position": {
+            "x": 0,
+            "y": 140
+          },
+          "size": {
+            "w": 120,
+            "h": 80
+          },
+          "style": {},
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 4,
+          "label": {
+            "text": "A note"
+          }
+        },
+        {
+          "id": "IEjmwztEX3AStJzJyS-J3",
+          "type": "shape",
+          "shapeRef": "misc/anchor",
+          "position": {
+            "x": 200,
+            "y": 140
+          },
+          "size": {
+            "w": 48,
+            "h": 48
+          },
+          "style": {},
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 5
+        },
+        {
+          "id": "hLkozMVuWIwJVcvcgU7e_",
+          "type": "shape",
+          "shapeRef": "general/ellipse",
+          "position": {
+            "x": 300,
+            "y": 140
+          },
+          "size": {
+            "w": 100,
+            "h": 60
+          },
+          "style": {
+            "fill": "#ffe0e0",
+            "stroke": "#cc0000"
+          },
+          "layerId": "XJCmJrz_av5rCfvO_dzj2",
+          "z": 6
+        },
+        {
+          "id": "dVCYPbwVYFGlT9ZKDlu1j",
+          "type": "nested",
+          "position": {
+            "x": 500,
+            "y": 140
+          },
+          "size": {
+            "w": 160,
+            "h": 100
+          },
+          "style": {},
+          "childDiagramId": "gNdWCiAM77dY1a4ExLN9z",
+          "collapsed": {
+            "icons": []
+          },
+          "ports": [],
+          "z": 7,
+          "layerId": "XJCmJrz_av5rCfvO_dzj2"
+        }
+      ],
+      "edges": [
+        {
+          "id": "m4YrN9Wt9oJ-Ao_zTkbry",
+          "source": {
+            "nodeId": "XBlJA7f_qtEpygjYioFhN"
+          },
+          "target": {
+            "nodeId": "OV9PAmIXbXrGIJFd6vFcO"
+          },
+          "style": {
+            "edgeStyle": "curved",
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "left"
+          }
+        },
+        {
+          "id": "_N5QjUrK_GngjmJlpjXRM",
+          "source": {
+            "nodeId": "OV9PAmIXbXrGIJFd6vFcO"
+          },
+          "target": {
+            "nodeId": "Ih1Q3TsuiIT5i_aeZ_kw0"
+          },
+          "style": {
+            "edgeStyle": "curved",
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "stroke": "#2266cc"
+          }
+        },
+        {
+          "id": "cxiilJI5DE4-ETO-tMT8S",
+          "source": {
+            "nodeId": "Ih1Q3TsuiIT5i_aeZ_kw0"
+          },
+          "target": {
+            "point": {
+              "x": 450,
+              "y": 220
+            }
+          },
+          "style": {
+            "edgeStyle": "curved",
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom"
+          },
+          "layerId": "XJCmJrz_av5rCfvO_dzj2"
+        },
+        {
+          "id": "Cl2WYrwVAT1lf2Fru71su",
+          "source": {
+            "point": {
+              "x": 0,
+              "y": 270
+            }
+          },
+          "target": {
+            "point": {
+              "x": 160,
+              "y": 270
+            }
+          },
+          "style": {
+            "edgeStyle": "straight",
+            "startArrow": "none",
+            "endArrow": "classic"
+          },
+          "layerId": "XJCmJrz_av5rCfvO_dzj2"
+        }
+      ],
+      "layers": [
+        {
+          "id": "XJCmJrz_av5rCfvO_dzj2",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ]
+    },
+    "gNdWCiAM77dY1a4ExLN9z": {
+      "id": "gNdWCiAM77dY1a4ExLN9z",
+      "title": "New Diagram",
+      "nodes": [],
+      "edges": [],
+      "layers": [
+        {
+          "id": "W0FeNuTXk5_bgZQpYQvSC",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ]
+    }
+  }
+}

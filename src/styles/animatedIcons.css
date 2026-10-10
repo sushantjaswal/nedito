@@ -1,0 +1,406 @@
+/* Animated icons (I1–I5, D124): motion inside a shape. The drawings are in
+   library/stencils/animatedBodies.ts, where each body is its resting pose; these rules move parts
+   of it on screen only. Every moving part carries .nd-anim, so motion.css's off switches —
+   reduced motion, the Motion switch, low detail far out — stop it on that pose. Transforms and
+   opacity, which the compositor can run, save Streaming's dash offset, stepped a pixel at a time
+   as Flow's is (D116). */
+.nd-ic-spin,
+.nd-ic-spin-fast,
+.nd-ic-retry,
+.nd-ic-appear {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Processing: the gear turns. */
+.nd-ic-spin {
+  animation: nd-ic-spin 4s linear infinite;
+}
+
+/* Running: the arc goes round its track. */
+.nd-ic-spin-fast {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: nd-ic-spin 1.2s linear infinite;
+}
+
+@keyframes nd-ic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scaling out: the second box arrives, then the third; both go, and it begins again. */
+.nd-ic-appear {
+  animation: nd-ic-appear 3.2s ease-out infinite;
+}
+
+.nd-ic-later {
+  animation-delay: 0.45s;
+}
+
+@keyframes nd-ic-appear {
+  0%,
+  12% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30%,
+  82% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Retrying: comes round once, quickly, then waits before trying again. */
+.nd-ic-retry {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: nd-ic-retry 2.4s cubic-bezier(0.55, 0, 0.35, 1) infinite;
+}
+
+@keyframes nd-ic-retry {
+  0% {
+    transform: rotate(0deg);
+  }
+  55%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* In the shape library an animated icon moves only while it is pointed at: a whole section of
+   them turning at once would pull the eye from the canvas. */
+.nd-library .nd-anim {
+  animation-play-state: paused;
+}
+
+.nd-library :hover > svg .nd-anim,
+.nd-library :focus-visible > svg .nd-anim {
+  animation-play-state: running;
+}
+
+/* Writes: the level rises from the bottom of the store and settles. */
+.nd-ic-level {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: nd-ic-level 2.6s ease-in-out infinite;
+}
+
+@keyframes nd-ic-level {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1.45);
+  }
+}
+
+/* Replicating: a half turn, then a pause — the two arrows trade places. */
+.nd-ic-half-turn {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: nd-ic-half-turn 2.2s cubic-bezier(0.55, 0, 0.35, 1) infinite;
+}
+
+@keyframes nd-ic-half-turn {
+  0% {
+    transform: rotate(0deg);
+  }
+  50%,
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+/* Queue: the messages advance one place; the first arrives as the last leaves, so the loop is seamless. */
+.nd-ic-advance {
+  animation: nd-ic-advance 1.8s ease-in-out infinite;
+}
+
+@keyframes nd-ic-advance {
+  0%,
+  25% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(29px);
+  }
+}
+
+.nd-ic-arrive {
+  animation: nd-ic-arrive 1.8s ease-in-out infinite;
+}
+
+@keyframes nd-ic-arrive {
+  0%,
+  25% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.nd-ic-leave {
+  animation: nd-ic-leave 1.8s ease-in-out infinite;
+}
+
+@keyframes nd-ic-leave {
+  0%,
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Streaming: the dashes run along the waves — whole steps of one pattern (11 + 6), like Flow. */
+.nd-ic-stream {
+  animation: nd-ic-stream 0.85s steps(17) infinite;
+}
+
+@keyframes nd-ic-stream {
+  to {
+    stroke-dashoffset: -17;
+  }
+}
+
+/* Uploading: the arrow rises out of the tray and fades, then comes again. */
+.nd-ic-rise {
+  animation: nd-ic-rise 1.9s ease-out infinite;
+}
+
+@keyframes nd-ic-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  30%,
+  65% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+/* Load balancing: each request runs its branch from the source to a server, in turn. */
+.nd-ic-lb-up,
+.nd-ic-lb-mid,
+.nd-ic-lb-down {
+  animation: 1.8s ease-in-out infinite;
+}
+
+.nd-ic-lb-up {
+  animation-name: nd-ic-lb-up;
+}
+
+.nd-ic-lb-mid {
+  animation-name: nd-ic-lb-mid;
+  animation-delay: 0.6s;
+}
+
+.nd-ic-lb-down {
+  animation-name: nd-ic-lb-down;
+  animation-delay: 1.2s;
+}
+
+@keyframes nd-ic-lb-up {
+  0% {
+    opacity: 0;
+    transform: translate(-27px, 14px);
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(27px, -14px);
+  }
+}
+
+@keyframes nd-ic-lb-mid {
+  0% {
+    opacity: 0;
+    transform: translate(-27px, 0);
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(27px, 0);
+  }
+}
+
+@keyframes nd-ic-lb-down {
+  0% {
+    opacity: 0;
+    transform: translate(-27px, -14px);
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(27px, 14px);
+  }
+}
+
+/* Live traffic: the arcs light from the inside out, both sides at once. */
+.nd-ic-ring {
+  animation: nd-ic-ring 1.5s ease-in-out infinite;
+}
+
+.nd-ic-ring-2 {
+  animation-delay: 0.25s;
+}
+
+.nd-ic-ring-3 {
+  animation-delay: 0.5s;
+}
+
+@keyframes nd-ic-ring {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+/* Cache hit: a quick double flash, then lit until the next request. */
+.nd-ic-flash {
+  animation: nd-ic-flash 1.6s steps(1, end) infinite;
+}
+
+@keyframes nd-ic-flash {
+  0%,
+  60%,
+  100% {
+    opacity: 1;
+  }
+  70%,
+  85% {
+    opacity: 0.25;
+  }
+  77% {
+    opacity: 1;
+  }
+}
+
+/* Healthy: the light's halo breathes; the light itself stays on. */
+.nd-ic-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nd-ic-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes nd-ic-breathe {
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Degraded: blinks, as Health's degraded badge does (D120). */
+.nd-ic-blink {
+  animation: nd-ic-blink 1.4s steps(1, end) infinite;
+}
+
+@keyframes nd-ic-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.35;
+  }
+}
+
+/* Down: a shudder, then still, then again. */
+.nd-ic-shake {
+  animation: nd-ic-shake 1.6s ease-in-out infinite;
+}
+
+@keyframes nd-ic-shake {
+  0%,
+  40%,
+  100% {
+    transform: translateX(0);
+  }
+  8%,
+  24% {
+    transform: translateX(-5px);
+  }
+  16%,
+  32% {
+    transform: translateX(5px);
+  }
+}
+
+/* Heartbeat: two beats and a rest — lub-dub. */
+.nd-ic-beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nd-ic-beat 1.3s ease-in-out infinite;
+}
+
+@keyframes nd-ic-beat {
+  0%,
+  40%,
+  100% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.12);
+  }
+  26% {
+    transform: scale(1.06);
+  }
+}
+
+/* Scheduled: the hand goes round, a tick at a time, from 12. */
+.nd-ic-tick {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: nd-ic-spin 4.8s steps(12, end) infinite;
+}
+
+/* Protected: the shield braces, as if it took a hit, then rests. */
+.nd-ic-guard {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nd-ic-guard 2.4s ease-out infinite;
+}
+
+@keyframes nd-ic-guard {
+  0%,
+  30%,
+  100% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.08);
+  }
+  20% {
+    transform: scale(0.97);
+  }
+}

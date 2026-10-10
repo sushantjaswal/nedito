@@ -1,0 +1,95 @@
+/* Visual identity tokens. See CLAUDE.md "Visual identity tokens". */
+:root {
+  --nd-color-canvas: #f6f7f9;
+  --nd-color-grid-dot: #d8dce3;
+  --nd-color-ink: #1e2733;
+  --nd-color-muted: #66707d;
+  /* An edge left at its default colour, in Nedito's own look: the ink, black like shape
+     outlines (D96), and light in dark mode so it stays visible on the dark canvas. */
+  --nd-color-edge: #1e2733;
+
+  --nd-color-nest-accent: #6d5ae6;
+  --nd-color-nest-deep: #4b3bc4;
+  --nd-color-nest-soft-fill: #eeebfc;
+
+  --nd-color-topbar: #141a22;
+  --nd-color-topbar-ink: #f6f7f9;
+
+  /* The context bar over a selection (R1, D90): the top bar's dark in light mode. In dark mode
+     the canvas is nearly that dark itself, so the bar lifts a step and takes a hairline edge. */
+  --nd-context-bar-bg: #141a22;
+  --nd-context-bar-edge: transparent;
+
+  /* Attention/confirmation pair, used by the nesting overlay's "this parent connection isn't
+     linked yet" state and its resolved counterpart. Amber rather than red on purpose: an
+     unmapped port is unfinished work, not an error. */
+  --nd-warn: #c9820a;
+  /* Status (Health, D120): healthy, degraded, down — each also has its own symbol. */
+  --nd-status-ok: #1e8e5a;
+  --nd-status-warn: #c9820a;
+  --nd-status-bad: #c0392b;
+  /* The animated icons' accents (D124). Aliases, so dark mode follows the tokens they name; a
+     still export draws their light values (library/stencils/animatedBodies.ts, ICON_TOKEN_HEX). */
+  --nd-icon-accent: var(--nd-color-nest-accent);
+  --nd-icon-ok: var(--nd-status-ok);
+  --nd-icon-warn: var(--nd-status-warn);
+  --nd-icon-bad: var(--nd-status-bad);
+  /* The symbol on a status disc: white in both themes, as Health's badge is. */
+  --nd-icon-on: #ffffff;
+  --nd-warn-soft: #fdf3df;
+  --nd-warn-line: #efdcb0;
+  --nd-warn-ink: #7a5a08;
+
+  --nd-ok: #1e8e5a;
+  --nd-ok-soft: #f1faf5;
+  --nd-ok-line: #bbe3ce;
+  --nd-ok-ink: #146b44;
+
+  /* IBM Plex Sans, self-hosted (see src/main.tsx). Chosen for how it holds up at 11px — the
+     size the sidebar section headers, status bar and shape labels actually run at — and for
+     having a metrically compatible mono for keyboard shortcuts and other tabular text.
+     These are the only font stacks in the codebase; nothing else should declare its own. */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --nd-border-color: #d8dce3;
+  --nd-panel-bg: #ffffff;
+  --nd-status-bg: #edeff3;
+}
+
+/* Dark mode (Phase 2, View > Dark Mode): editor chrome + canvas only — never changes a
+   placed shape's own fill/stroke defaults (those are literal hex in
+   library/stencils/defaultStyle.ts, deliberately not var()-based, so they stay correct in
+   exported SVG/PNG regardless of the app's current theme) and never changes the fixed-dark
+   top bar tokens, which are already correct for both themes. */
+:root[data-theme="dark"] {
+  --nd-color-canvas: #1a1e24;
+  --nd-color-grid-dot: #333a44;
+  --nd-color-ink: #e6e9ee;
+  --nd-color-muted: #9099a6;
+  --nd-color-edge: #e6e9ee;
+
+  --nd-color-nest-accent: #8a7af0;
+  --nd-color-nest-deep: #a596ff;
+  --nd-color-nest-soft-fill: #2a2740;
+
+  --nd-warn: #e0a53a;
+  --nd-status-ok: #34b37b;
+  --nd-status-warn: #e0a733;
+  --nd-status-bad: #e0695e;
+  --nd-warn-soft: #3a2f18;
+  --nd-warn-line: #5c4a20;
+  --nd-warn-ink: #f0cd85;
+
+  --nd-ok: #3fb07c;
+  --nd-ok-soft: #16301f;
+  --nd-ok-line: #275e42;
+  --nd-ok-ink: #8fd8b4;
+
+  --nd-border-color: #333a44;
+  --nd-panel-bg: #20242b;
+  --nd-status-bg: #191d23;
+
+  --nd-context-bar-bg: #2b323d;
+  --nd-context-bar-edge: #454e5c;
+}

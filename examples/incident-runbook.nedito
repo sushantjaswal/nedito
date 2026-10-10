@@ -1,0 +1,1225 @@
+{
+  "format": "nedito",
+  "formatVersion": 2,
+  "meta": {
+    "title": "Incident runbook",
+    "created": "2026-09-23T00:00:00.000Z",
+    "modified": "2026-09-23T00:00:00.000Z",
+    "appVersion": "0.1.0"
+  },
+  "rootDiagramIds": [
+    "dTriage______________",
+    "dEscalation__________"
+  ],
+  "diagrams": {
+    "dDbChecks____________": {
+      "id": "dDbChecks____________",
+      "title": "Database checks",
+      "layers": [
+        {
+          "id": "LDbChecks____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "dbLag________________",
+          "type": "shape",
+          "shapeRef": "flowchart/process",
+          "position": {
+            "x": 60,
+            "y": 40
+          },
+          "size": {
+            "w": 200,
+            "h": 60
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Check replication lag",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "dbConn_______________",
+          "type": "shape",
+          "shapeRef": "flowchart/process",
+          "position": {
+            "x": 60,
+            "y": 150
+          },
+          "size": {
+            "w": 200,
+            "h": 60
+          },
+          "z": 2,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Check connection pool",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "dbHealthy____________",
+          "type": "shape",
+          "shapeRef": "flowchart/decision",
+          "position": {
+            "x": 50,
+            "y": 260
+          },
+          "size": {
+            "w": 220,
+            "h": 100
+          },
+          "z": 3,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Primary healthy?",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "dbFailover___________",
+          "type": "shape",
+          "shapeRef": "bpmn/task",
+          "position": {
+            "x": 360,
+            "y": 280
+          },
+          "size": {
+            "w": 200,
+            "h": 60
+          },
+          "z": 4,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Fail over to replica",
+            "align": "center",
+            "fontSize": 12,
+            "bold": true,
+            "color": "#C9820A"
+          }
+        },
+        {
+          "id": "dbDone_______________",
+          "type": "shape",
+          "shapeRef": "flowchart/terminator",
+          "position": {
+            "x": 60,
+            "y": 420
+          },
+          "size": {
+            "w": 200,
+            "h": 56
+          },
+          "z": 5,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Back to Diagnose",
+            "align": "center",
+            "fontSize": 12
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "dbE1_________________",
+          "source": {
+            "nodeId": "dbLag________________"
+          },
+          "target": {
+            "nodeId": "dbConn_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "dbE2_________________",
+          "source": {
+            "nodeId": "dbConn_______________"
+          },
+          "target": {
+            "nodeId": "dbHealthy____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "dbE3_________________",
+          "source": {
+            "nodeId": "dbHealthy____________"
+          },
+          "target": {
+            "nodeId": "dbFailover___________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "no",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "dbE4_________________",
+          "source": {
+            "nodeId": "dbHealthy____________"
+          },
+          "target": {
+            "nodeId": "dbDone_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          },
+          "label": {
+            "text": "yes",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "dbE5_________________",
+          "source": {
+            "nodeId": "dbFailover___________"
+          },
+          "target": {
+            "nodeId": "dbDone_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "right",
+            "look": "classic"
+          },
+          "waypoints": [
+            {
+              "x": 460,
+              "y": 448
+            }
+          ]
+        }
+      ]
+    },
+    "dDiagnose____________": {
+      "id": "dDiagnose____________",
+      "title": "Diagnose",
+      "layers": [
+        {
+          "id": "LDiagnose____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "gDash________________",
+          "type": "shape",
+          "shapeRef": "flowchart/process",
+          "position": {
+            "x": 60,
+            "y": 40
+          },
+          "size": {
+            "w": 220,
+            "h": 60
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Open service dashboards",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "gDeploy______________",
+          "type": "shape",
+          "shapeRef": "flowchart/decision",
+          "position": {
+            "x": 50,
+            "y": 150
+          },
+          "size": {
+            "w": 240,
+            "h": 110
+          },
+          "z": 2,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Deploy in the last hour?",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "gRollback____________",
+          "type": "shape",
+          "shapeRef": "bpmn/task",
+          "position": {
+            "x": 360,
+            "y": 170
+          },
+          "size": {
+            "w": 200,
+            "h": 60
+          },
+          "z": 3,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Roll back the deploy",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "nDbChecks____________",
+          "type": "nested",
+          "childDiagramId": "dDbChecks____________",
+          "position": {
+            "x": 340,
+            "y": 240
+          },
+          "size": {
+            "w": 240,
+            "h": 140
+          },
+          "z": 4,
+          "style": {},
+          "label": {
+            "text": "Database checks",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [],
+            "summary": "lag · pool · failover"
+          },
+          "ports": [
+            {
+              "id": "pDbIn________________",
+              "side": "left",
+              "offset": 0.5,
+              "innerNodeId": "dbLag________________",
+              "label": "suspect database"
+            },
+            {
+              "id": "pDbOut_______________",
+              "side": "bottom",
+              "offset": 0.5,
+              "innerNodeId": "dbDone_______________",
+              "label": "checked"
+            },
+            {
+              "id": "pDbEscalate__________",
+              "side": "right",
+              "offset": 0.3,
+              "label": "escalate"
+            }
+          ]
+        },
+        {
+          "id": "gNext________________",
+          "type": "shape",
+          "shapeRef": "flowchart/terminator",
+          "position": {
+            "x": 60,
+            "y": 460
+          },
+          "size": {
+            "w": 220,
+            "h": 56
+          },
+          "z": 5,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Back to Triage",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "gPager_______________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 660,
+            "y": 260
+          },
+          "size": {
+            "w": 200,
+            "h": 60
+          },
+          "z": 6,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Page the database owner",
+            "align": "center",
+            "fontSize": 12
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "gE1__________________",
+          "source": {
+            "nodeId": "gDash________________"
+          },
+          "target": {
+            "nodeId": "gDeploy______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "gE2__________________",
+          "source": {
+            "nodeId": "gDeploy______________"
+          },
+          "target": {
+            "nodeId": "gRollback____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "yes",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "gE3__________________",
+          "source": {
+            "nodeId": "gDeploy______________"
+          },
+          "target": {
+            "nodeId": "nDbChecks____________",
+            "portId": "pDbIn________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "look": "classic"
+          },
+          "label": {
+            "text": "no",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "gE4__________________",
+          "source": {
+            "nodeId": "nDbChecks____________",
+            "portId": "pDbOut_______________"
+          },
+          "target": {
+            "nodeId": "gNext________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "targetHandle": "right",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "gE5__________________",
+          "source": {
+            "nodeId": "nDbChecks____________",
+            "portId": "pDbEscalate__________"
+          },
+          "target": {
+            "nodeId": "gPager_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "not linked yet",
+            "fontSize": 11,
+            "color": "#C9820A",
+            "italic": true
+          }
+        },
+        {
+          "id": "gE6__________________",
+          "source": {
+            "nodeId": "gRollback____________"
+          },
+          "target": {
+            "nodeId": "gNext________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "top",
+            "look": "classic"
+          },
+          "waypoints": [
+            {
+              "x": 620,
+              "y": 200
+            },
+            {
+              "x": 620,
+              "y": 420
+            },
+            {
+              "x": 170,
+              "y": 420
+            }
+          ]
+        }
+      ]
+    },
+    "dEscalation__________": {
+      "id": "dEscalation__________",
+      "title": "Escalation",
+      "layers": [
+        {
+          "id": "LEscalation__________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "eT1__________________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 40,
+            "y": 80
+          },
+          "size": {
+            "w": 190,
+            "h": 70
+          },
+          "z": 1,
+          "style": {
+            "fill": "#EEEBFC",
+            "stroke": "#6D5AE6",
+            "strokeWidth": 1.25,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Tier 1\nOn-call engineer",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "eT2__________________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 300,
+            "y": 80
+          },
+          "size": {
+            "w": 190,
+            "h": 70
+          },
+          "z": 2,
+          "style": {
+            "fill": "#EEEBFC",
+            "stroke": "#6D5AE6",
+            "strokeWidth": 1.25,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Tier 2\nService owner",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "eIc__________________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 560,
+            "y": 80
+          },
+          "size": {
+            "w": 190,
+            "h": 70
+          },
+          "z": 3,
+          "style": {
+            "fill": "#EEEBFC",
+            "stroke": "#6D5AE6",
+            "strokeWidth": 1.25,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Incident commander",
+            "align": "center",
+            "fontSize": 12,
+            "bold": true
+          }
+        },
+        {
+          "id": "eExec________________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 820,
+            "y": 80
+          },
+          "size": {
+            "w": 190,
+            "h": 70
+          },
+          "z": 4,
+          "style": {
+            "fill": "#EEEBFC",
+            "stroke": "#6D5AE6",
+            "strokeWidth": 1.25,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Executive on call",
+            "align": "center",
+            "fontSize": 12
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "eE1__________________",
+          "source": {
+            "nodeId": "eT1__________________"
+          },
+          "target": {
+            "nodeId": "eT2__________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "15 min",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "eE2__________________",
+          "source": {
+            "nodeId": "eT2__________________"
+          },
+          "target": {
+            "nodeId": "eIc__________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "30 min",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "eE3__________________",
+          "source": {
+            "nodeId": "eIc__________________"
+          },
+          "target": {
+            "nodeId": "eExec________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dotted",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "customer data at risk",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        }
+      ]
+    },
+    "dTriage______________": {
+      "id": "dTriage______________",
+      "title": "Triage",
+      "layers": [
+        {
+          "id": "LTriage______________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        },
+        {
+          "name": "Annotations",
+          "visible": true,
+          "locked": true,
+          "id": "LTriage2_____________"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "tAlert_______________",
+          "type": "shape",
+          "shapeRef": "flowchart/terminator",
+          "position": {
+            "x": 320,
+            "y": 30
+          },
+          "size": {
+            "w": 200,
+            "h": 56
+          },
+          "z": 1,
+          "style": {
+            "fill": "#FDF3DF",
+            "stroke": "#C9820A",
+            "strokeWidth": 1.5,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Alert fires",
+            "align": "center",
+            "fontSize": 12,
+            "bold": true
+          }
+        },
+        {
+          "id": "tAck_________________",
+          "type": "shape",
+          "shapeRef": "flowchart/process",
+          "position": {
+            "x": 300,
+            "y": 130
+          },
+          "size": {
+            "w": 240,
+            "h": 60
+          },
+          "z": 2,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Acknowledge within 5 minutes",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "tFacing______________",
+          "type": "shape",
+          "shapeRef": "flowchart/decision",
+          "position": {
+            "x": 310,
+            "y": 230
+          },
+          "size": {
+            "w": 220,
+            "h": 100
+          },
+          "z": 3,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Customer-facing?",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "nDiagnose____________",
+          "type": "nested",
+          "childDiagramId": "dDiagnose____________",
+          "position": {
+            "x": 300,
+            "y": 380
+          },
+          "size": {
+            "w": 240,
+            "h": 140
+          },
+          "z": 5,
+          "style": {},
+          "label": {
+            "text": "Diagnose",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [],
+            "summary": "dashboards · deploys · database"
+          },
+          "ports": [
+            {
+              "id": "pDiagIn______________",
+              "side": "top",
+              "offset": 0.5,
+              "innerNodeId": "gDash________________",
+              "label": "customer-facing"
+            },
+            {
+              "id": "pDiagOut_____________",
+              "side": "bottom",
+              "offset": 0.5,
+              "innerNodeId": "gNext________________",
+              "label": "cause found"
+            }
+          ]
+        },
+        {
+          "id": "tResolve_____________",
+          "type": "shape",
+          "shapeRef": "flowchart/terminator",
+          "position": {
+            "x": 320,
+            "y": 600
+          },
+          "size": {
+            "w": 200,
+            "h": 56
+          },
+          "z": 8,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Resolved — write it up",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "tTicket______________",
+          "type": "shape",
+          "shapeRef": "flowchart/process",
+          "position": {
+            "x": 640,
+            "y": 250
+          },
+          "size": {
+            "w": 240,
+            "h": 60
+          },
+          "z": 9,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Open a ticket for business hours",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "gComms_______________",
+          "type": "group",
+          "position": {
+            "x": 20,
+            "y": 380
+          },
+          "size": {
+            "w": 260,
+            "h": 170
+          },
+          "z": 6,
+          "style": {},
+          "childIds": [
+            "tStatus______________",
+            "tLead________________"
+          ]
+        },
+        {
+          "id": "tStatus______________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 40,
+            "y": 395
+          },
+          "size": {
+            "w": 220,
+            "h": 56
+          },
+          "z": 7,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Post a status update",
+            "align": "center",
+            "fontSize": 12,
+            "bold": true
+          }
+        },
+        {
+          "id": "tLead________________",
+          "type": "shape",
+          "shapeRef": "general/rounded-rect",
+          "position": {
+            "x": 40,
+            "y": 480
+          },
+          "size": {
+            "w": 220,
+            "h": 56
+          },
+          "z": 7,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Page the incident lead",
+            "align": "center",
+            "fontSize": 12
+          }
+        },
+        {
+          "id": "tOwner_______________",
+          "type": "shape",
+          "shapeRef": "general/note",
+          "position": {
+            "x": 40,
+            "y": 30
+          },
+          "size": {
+            "w": 180,
+            "h": 80
+          },
+          "z": 10,
+          "style": {
+            "fill": "#FFF9DB",
+            "stroke": "#C9A20A",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Runbook v3\nOwner: SRE on-call",
+            "align": "left",
+            "fontSize": 11,
+            "italic": true
+          },
+          "layerId": "LTriage2_____________"
+        }
+      ],
+      "edges": [
+        {
+          "id": "tE1__________________",
+          "source": {
+            "nodeId": "tAlert_______________"
+          },
+          "target": {
+            "nodeId": "tAck_________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "tE2__________________",
+          "source": {
+            "nodeId": "tAck_________________"
+          },
+          "target": {
+            "nodeId": "tFacing______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "tE3__________________",
+          "source": {
+            "nodeId": "tFacing______________"
+          },
+          "target": {
+            "nodeId": "nDiagnose____________",
+            "portId": "pDiagIn______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "look": "classic"
+          },
+          "label": {
+            "text": "yes",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "tE4__________________",
+          "source": {
+            "nodeId": "tFacing______________"
+          },
+          "target": {
+            "nodeId": "tTicket______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "right",
+            "targetHandle": "left",
+            "look": "classic"
+          },
+          "label": {
+            "text": "no",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "tE5__________________",
+          "source": {
+            "nodeId": "nDiagnose____________",
+            "portId": "pDiagOut_____________"
+          },
+          "target": {
+            "nodeId": "tResolve_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "tE6__________________",
+          "source": {
+            "nodeId": "tFacing______________"
+          },
+          "target": {
+            "nodeId": "tStatus______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "sourceHandle": "left",
+            "targetHandle": "right",
+            "look": "classic"
+          },
+          "label": {
+            "text": "in parallel",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "tE7__________________",
+          "source": {
+            "nodeId": "tStatus______________"
+          },
+          "target": {
+            "nodeId": "tLead________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "sourceHandle": "bottom",
+            "targetHandle": "top",
+            "look": "classic"
+          }
+        }
+      ]
+    }
+  }
+}

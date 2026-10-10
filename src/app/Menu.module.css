@@ -1,0 +1,103 @@
+.wrapper {
+  position: relative;
+}
+
+.trigger {
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: default;
+  user-select: none;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  min-width: 230px;
+  margin-top: 4px;
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  border: 1px solid var(--nd-border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(30, 39, 51, 0.2);
+  padding: 4px;
+  font-size: 13px;
+}
+
+.item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 7px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--nd-color-ink);
+  white-space: nowrap;
+}
+
+.item:hover {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}
+
+.divider {
+  height: 1px;
+  background: var(--nd-border-color);
+  margin: 4px 2px;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Briefly ringed when the tour's "Show me" points at the export entries. */
+.highlight {
+  background: var(--nd-color-nest-soft-fill);
+  box-shadow: inset 2px 0 0 var(--nd-color-nest-accent);
+  font-weight: 600;
+}
+
+/* A menu that opens under a trigger at the right of the top bar keeps to the window. */
+.alignRight {
+  left: auto;
+  right: 0;
+}
+
+.item:focus-visible,
+.trigger:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 1px;
+}
+
+.item:disabled {
+  cursor: default;
+}
+
+.heading {
+  padding: 6px 10px 3px;
+  color: var(--nd-color-muted);
+  font-size: 11px;
+}
+
+.note {
+  padding: 4px 10px 7px;
+  color: var(--nd-color-muted);
+  font-size: 12px;
+}
+
+.sub {
+  margin-left: 12px;
+  color: var(--nd-color-muted);
+  font-size: 11px;
+}

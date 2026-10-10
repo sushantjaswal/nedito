@@ -1,0 +1,94 @@
+/* Bottom-right, but lifted clear of everything already living in that corner: the status bar
+   (~23px), the page tab strip (30px) and the canvas's own zoom controls, which sit 12px up
+   from the canvas floor and are ~28px tall. Landing on the zoom slider would make the reminder
+   cost the user a control they use constantly. */
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 104px;
+  z-index: 60;
+  width: 296px;
+  padding: 12px 14px 12px 16px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-border-color);
+  border-left: 4px solid var(--nd-color-nest-accent);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgb(30 39 51 / 18%);
+  color: var(--nd-color-ink);
+}
+
+.close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 5px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}
+
+.title {
+  margin: 0 18px 4px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.body {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--nd-color-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primary,
+.later {
+  padding: 5px 11px;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  border: 1px solid var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}
+
+.primary:hover {
+  background: var(--nd-color-nest-deep);
+  border-color: var(--nd-color-nest-deep);
+}
+
+.later {
+  border: 1px solid var(--nd-border-color);
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-muted);
+}
+
+.later:hover {
+  color: var(--nd-color-ink);
+}
+
+.primary:focus-visible,
+.later:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}

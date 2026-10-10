@@ -1,0 +1,130 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.ghost2,
+.ghost1 {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 8px;
+  background: var(--nd-color-nest-soft-fill);
+  pointer-events: none;
+}
+
+.ghost2 {
+  transform: translate(9px, 9px);
+  opacity: 0.5;
+  z-index: -2;
+}
+
+.ghost1 {
+  transform: translate(4.5px, 4.5px);
+  opacity: 0.75;
+  z-index: -1;
+}
+
+.body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--nd-panel-bg);
+  border: 1.5px solid var(--nd-color-nest-deep);
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--nd-color-nest-deep);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameEditor {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  height: 20px;
+}
+
+/* The live thumbnail (or the author's chosen icons) takes whatever height is left after the
+   header and optional summary line. */
+.preview {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.emptyNote {
+  font-size: 11px;
+  color: var(--nd-color-muted);
+}
+
+.badge {
+  font-size: 12px;
+  color: var(--nd-color-nest-deep);
+}
+
+.openBtn {
+  border: none;
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 3px 6px;
+}
+
+.openBtn:hover {
+  background: var(--nd-color-nest-accent);
+  color: #fff;
+}
+
+.iconsRow {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.iconGlyph {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.summary {
+  font-size: 11px;
+  color: var(--nd-color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Low detail, zoomed far out (P1, D115): the stacked box and its name band stay; the miniature,
+   which redraws a whole level, goes. */
+:global(.nd-lod) :global(.react-flow__node:not(.selected)) .preview {
+  visibility: hidden;
+}

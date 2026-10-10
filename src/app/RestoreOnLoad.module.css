@@ -1,0 +1,63 @@
+.banner {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--nd-panel-bg);
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(30, 39, 51, 0.2);
+  font-size: 13px;
+  color: var(--nd-color-ink);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.primaryBtn {
+  border: none;
+  background: var(--nd-color-nest-accent);
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.secondaryBtn {
+  border: 1px solid var(--nd-border-color);
+  background: none;
+  color: var(--nd-color-muted);
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* "Restored your last diagram" (R5, D94): quiet, and it fades on its own. */
+.note {
+  border-color: var(--nd-border-color);
+  transition: opacity 400ms ease;
+}
+
+.fading {
+  opacity: 0;
+}
+
+/* An autosave that could not be opened: it stays until dealt with. */
+.problem {
+  border-color: #d97706;
+}
+
+.primaryBtn:focus-visible,
+.secondaryBtn:focus-visible {
+  outline: 2px solid var(--nd-color-nest-accent);
+  outline-offset: 2px;
+}

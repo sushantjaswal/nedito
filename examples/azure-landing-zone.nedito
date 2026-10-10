@@ -1,0 +1,1869 @@
+{
+  "format": "nedito",
+  "formatVersion": 2,
+  "meta": {
+    "title": "Azure landing zone",
+    "created": "2026-09-23T00:00:00.000Z",
+    "modified": "2026-09-23T00:00:00.000Z",
+    "appVersion": "0.1.0"
+  },
+  "rootDiagramIds": [
+    "dMain________________"
+  ],
+  "diagrams": {
+    "dA2__________________": {
+      "id": "dA2__________________",
+      "title": "A2 subscription",
+      "layers": [
+        {
+          "id": "LA2__________________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "aBand________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 40,
+            "y": 40
+          },
+          "size": {
+            "w": 620,
+            "h": 330
+          },
+          "z": -994,
+          "style": {
+            "fill": "#F2F7FC",
+            "stroke": "#CFE0EF",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aBandCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 54,
+            "y": 48
+          },
+          "size": {
+            "w": 141,
+            "h": 25
+          },
+          "z": -993,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "A2 subscription",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "aVnet________________",
+          "type": "shape",
+          "shapeRef": "azure/networking/virtual-networks",
+          "position": {
+            "x": 300,
+            "y": 90
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 5,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aVnetCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 271,
+            "y": 160
+          },
+          "size": {
+            "w": 122,
+            "h": 21
+          },
+          "z": -992,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Virtual network",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "aBudget______________",
+          "type": "shape",
+          "shapeRef": "azure/general/cost-budgets",
+          "position": {
+            "x": 90,
+            "y": 260
+          },
+          "size": {
+            "w": 52,
+            "h": 52
+          },
+          "z": 6,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aBudgetCap___________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 84,
+            "y": 318
+          },
+          "size": {
+            "w": 64,
+            "h": 21
+          },
+          "z": -991,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Budget",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "aRole________________",
+          "type": "shape",
+          "shapeRef": "azure/identity/entra-identity-custom-roles",
+          "position": {
+            "x": 210,
+            "y": 260
+          },
+          "size": {
+            "w": 52,
+            "h": 52
+          },
+          "z": 7,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aRoleCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 175,
+            "y": 318
+          },
+          "size": {
+            "w": 122,
+            "h": 21
+          },
+          "z": -990,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Role assignment",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "aPolicy______________",
+          "type": "shape",
+          "shapeRef": "azure/management-governance/policy",
+          "position": {
+            "x": 330,
+            "y": 260
+          },
+          "size": {
+            "w": 52,
+            "h": 52
+          },
+          "z": 8,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aPolicyCap___________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 288,
+            "y": 318
+          },
+          "size": {
+            "w": 136,
+            "h": 21
+          },
+          "z": -989,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Policy assignment",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "aWatcher_____________",
+          "type": "shape",
+          "shapeRef": "azure/monitor/network-watcher",
+          "position": {
+            "x": 450,
+            "y": 260
+          },
+          "size": {
+            "w": 52,
+            "h": 52
+          },
+          "z": 9,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aWatcherCap__________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 415,
+            "y": 318
+          },
+          "size": {
+            "w": 122,
+            "h": 21
+          },
+          "z": -988,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Network Watcher",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "aDefender____________",
+          "type": "shape",
+          "shapeRef": "azure/security/microsoft-defender-for-cloud",
+          "position": {
+            "x": 570,
+            "y": 260
+          },
+          "size": {
+            "w": 52,
+            "h": 52
+          },
+          "z": 10,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "aDefenderCap_________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 525,
+            "y": 318
+          },
+          "size": {
+            "w": 143,
+            "h": 21
+          },
+          "z": -987,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Defender for Cloud",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": []
+    },
+    "dConnectivity________": {
+      "id": "dConnectivity________",
+      "title": "Connectivity subscription",
+      "layers": [
+        {
+          "id": "LConnectivity________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "cBand________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 40,
+            "y": 40
+          },
+          "size": {
+            "w": 520,
+            "h": 320
+          },
+          "z": -1000,
+          "style": {
+            "fill": "#F2F7FC",
+            "stroke": "#CFE0EF",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cBandCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 54,
+            "y": 48
+          },
+          "size": {
+            "w": 116,
+            "h": 25
+          },
+          "z": -999,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Regional hub",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "cHub_________________",
+          "type": "shape",
+          "shapeRef": "azure/networking/virtual-networks",
+          "position": {
+            "x": 250,
+            "y": 90
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 1,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cHubCap______________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 207,
+            "y": 160
+          },
+          "size": {
+            "w": 150,
+            "h": 21
+          },
+          "z": -998,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Regional hub virtual network",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cFirewall____________",
+          "type": "shape",
+          "shapeRef": "azure/networking/firewalls",
+          "position": {
+            "x": 90,
+            "y": 250
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 2,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cFirewallCap_________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 65,
+            "y": 320
+          },
+          "size": {
+            "w": 115,
+            "h": 21
+          },
+          "z": -997,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Azure Firewall",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cGateway_____________",
+          "type": "shape",
+          "shapeRef": "azure/networking/virtual-network-gateways",
+          "position": {
+            "x": 250,
+            "y": 250
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 3,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cGatewayCap__________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 207,
+            "y": 320
+          },
+          "size": {
+            "w": 150,
+            "h": 21
+          },
+          "z": -996,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "VPN / ExpressRoute gateway",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "cBastion_____________",
+          "type": "shape",
+          "shapeRef": "azure/networking/bastions",
+          "position": {
+            "x": 410,
+            "y": 250
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 4,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cBastionCap__________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 388,
+            "y": 320
+          },
+          "size": {
+            "w": 108,
+            "h": 21
+          },
+          "z": -995,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Azure Bastion",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "cE1__________________",
+          "source": {
+            "nodeId": "cHub_________________"
+          },
+          "target": {
+            "nodeId": "cFirewall____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cE2__________________",
+          "source": {
+            "nodeId": "cHub_________________"
+          },
+          "target": {
+            "nodeId": "cGateway_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "cE3__________________",
+          "source": {
+            "nodeId": "cHub_________________"
+          },
+          "target": {
+            "nodeId": "cBastion_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        }
+      ]
+    },
+    "dMain________________": {
+      "id": "dMain________________",
+      "title": "Landing zone organization",
+      "layers": [
+        {
+          "id": "LMain________________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "mOuter_______________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 40,
+            "y": 30
+          },
+          "size": {
+            "w": 1290,
+            "h": 720
+          },
+          "z": -980,
+          "style": {
+            "fill": "#F2F7FC",
+            "stroke": "#CFE0EF",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mOuterCap____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 54,
+            "y": 38
+          },
+          "size": {
+            "w": 399,
+            "h": 25
+          },
+          "z": -979,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Management group and subscription organization",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "mGroups______________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 70,
+            "y": 80
+          },
+          "size": {
+            "w": 1230,
+            "h": 320
+          },
+          "z": -978,
+          "style": {
+            "fill": "#EDEFF3",
+            "stroke": "#D8DCE3",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mGroupsCap___________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 84,
+            "y": 88
+          },
+          "size": {
+            "w": 149,
+            "h": 25
+          },
+          "z": -977,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Management group",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "mSubs________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 70,
+            "y": 420
+          },
+          "size": {
+            "w": 1230,
+            "h": 300
+          },
+          "z": -976,
+          "style": {
+            "fill": "#F2F7FC",
+            "stroke": "#CFE0EF",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mSubsCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 84,
+            "y": 428
+          },
+          "size": {
+            "w": 124,
+            "h": 25
+          },
+          "z": -975,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Subscriptions",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "mTenant______________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 600,
+            "y": 120
+          },
+          "size": {
+            "w": 220,
+            "h": 46
+          },
+          "z": 20,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Tenant root group",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mContoso_____________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 620,
+            "y": 190
+          },
+          "size": {
+            "w": 180,
+            "h": 46
+          },
+          "z": 21,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Contoso",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mPlatform____________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 180,
+            "y": 260
+          },
+          "size": {
+            "w": 200,
+            "h": 46
+          },
+          "z": 22,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Platform",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mLanding_____________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 560,
+            "y": 260
+          },
+          "size": {
+            "w": 220,
+            "h": 46
+          },
+          "z": 23,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Landing zones",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mSandbox_____________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 1040,
+            "y": 260
+          },
+          "size": {
+            "w": 180,
+            "h": 46
+          },
+          "z": 24,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Sandbox",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mIdentity____________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 100,
+            "y": 330
+          },
+          "size": {
+            "w": 170,
+            "h": 46
+          },
+          "z": 25,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Identity",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mConn________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 300,
+            "y": 330
+          },
+          "size": {
+            "w": 190,
+            "h": 46
+          },
+          "z": 26,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Connectivity",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mSap_________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 520,
+            "y": 330
+          },
+          "size": {
+            "w": 130,
+            "h": 46
+          },
+          "z": 27,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "SAP",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mCorp________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 680,
+            "y": 330
+          },
+          "size": {
+            "w": 130,
+            "h": 46
+          },
+          "z": 28,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Corp",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mOnline______________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 840,
+            "y": 330
+          },
+          "size": {
+            "w": 130,
+            "h": 46
+          },
+          "z": 29,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Online",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mSubIdentity_________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 100,
+            "y": 460
+          },
+          "size": {
+            "w": 190,
+            "h": 100
+          },
+          "z": 30,
+          "style": {
+            "fill": "#FDF3DF",
+            "stroke": "#C9820A",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Identity subscription",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mSubA1_______________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 620,
+            "y": 450
+          },
+          "size": {
+            "w": 190,
+            "h": 90
+          },
+          "z": 31,
+          "style": {
+            "fill": "#FDF3DF",
+            "stroke": "#C9820A",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "A1 subscription",
+            "align": "center"
+          }
+        },
+        {
+          "id": "mSubSandbox__________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 1060,
+            "y": 460
+          },
+          "size": {
+            "w": 200,
+            "h": 100
+          },
+          "z": 32,
+          "style": {
+            "fill": "#FDF3DF",
+            "stroke": "#C9820A",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "Sandbox subscription 1",
+            "align": "center"
+          }
+        },
+        {
+          "id": "nConnectivity________",
+          "type": "nested",
+          "childDiagramId": "dConnectivity________",
+          "position": {
+            "x": 320,
+            "y": 455
+          },
+          "size": {
+            "w": 240,
+            "h": 120
+          },
+          "z": 17,
+          "style": {},
+          "label": {
+            "text": "Connectivity subscription",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [
+              "azure/networking/virtual-networks"
+            ],
+            "summary": "hub · firewall · gateway"
+          },
+          "ports": [
+            {
+              "id": "pConnHub_____________",
+              "side": "right",
+              "offset": 0.5,
+              "innerNodeId": "cHub_________________",
+              "label": "Regional hub"
+            }
+          ]
+        },
+        {
+          "id": "nA2__________________",
+          "type": "nested",
+          "childDiagramId": "dA2__________________",
+          "position": {
+            "x": 620,
+            "y": 570
+          },
+          "size": {
+            "w": 240,
+            "h": 120
+          },
+          "z": 18,
+          "style": {},
+          "label": {
+            "text": "A2 subscription",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [
+              "azure/networking/virtual-networks"
+            ],
+            "summary": "vnet · budget · policy"
+          },
+          "ports": [
+            {
+              "id": "pA2Vnet______________",
+              "side": "left",
+              "offset": 0.4,
+              "innerNodeId": "aVnet________________",
+              "label": "Virtual network"
+            },
+            {
+              "id": "pA2Vend______________",
+              "side": "right",
+              "offset": 0.6,
+              "innerNodeId": "aVnet________________",
+              "label": "Vended by automation"
+            }
+          ]
+        },
+        {
+          "id": "nVending_____________",
+          "type": "nested",
+          "childDiagramId": "dVending_____________",
+          "position": {
+            "x": 1000,
+            "y": 820
+          },
+          "size": {
+            "w": 260,
+            "h": 130
+          },
+          "z": 19,
+          "style": {},
+          "label": {
+            "text": "Subscription vending automation",
+            "align": "center"
+          },
+          "collapsed": {
+            "icons": [
+              "azure/devops/azure-devops"
+            ],
+            "summary": "request · source · deploy"
+          },
+          "ports": [
+            {
+              "id": "pVendOut_____________",
+              "side": "left",
+              "offset": 0.5,
+              "innerNodeId": "vDeploy______________",
+              "label": "Deployment pipeline"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "mE1__________________",
+          "source": {
+            "nodeId": "mTenant______________"
+          },
+          "target": {
+            "nodeId": "mContoso_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE2__________________",
+          "source": {
+            "nodeId": "mContoso_____________"
+          },
+          "target": {
+            "nodeId": "mPlatform____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE3__________________",
+          "source": {
+            "nodeId": "mContoso_____________"
+          },
+          "target": {
+            "nodeId": "mLanding_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE4__________________",
+          "source": {
+            "nodeId": "mContoso_____________"
+          },
+          "target": {
+            "nodeId": "mSandbox_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE5__________________",
+          "source": {
+            "nodeId": "mPlatform____________"
+          },
+          "target": {
+            "nodeId": "mIdentity____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE6__________________",
+          "source": {
+            "nodeId": "mPlatform____________"
+          },
+          "target": {
+            "nodeId": "mConn________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE7__________________",
+          "source": {
+            "nodeId": "mLanding_____________"
+          },
+          "target": {
+            "nodeId": "mSap_________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE8__________________",
+          "source": {
+            "nodeId": "mLanding_____________"
+          },
+          "target": {
+            "nodeId": "mCorp________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE9__________________",
+          "source": {
+            "nodeId": "mLanding_____________"
+          },
+          "target": {
+            "nodeId": "mOnline______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE10_________________",
+          "source": {
+            "nodeId": "mIdentity____________"
+          },
+          "target": {
+            "nodeId": "mSubIdentity_________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE11_________________",
+          "source": {
+            "nodeId": "mConn________________"
+          },
+          "target": {
+            "nodeId": "nConnectivity________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE12_________________",
+          "source": {
+            "nodeId": "mCorp________________"
+          },
+          "target": {
+            "nodeId": "mSubA1_______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE13_________________",
+          "source": {
+            "nodeId": "mCorp________________"
+          },
+          "target": {
+            "nodeId": "nA2__________________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mE14_________________",
+          "source": {
+            "nodeId": "mSandbox_____________"
+          },
+          "target": {
+            "nodeId": "mSubSandbox__________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "none",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "mPeering_____________",
+          "source": {
+            "nodeId": "nConnectivity________",
+            "portId": "pConnHub_____________"
+          },
+          "target": {
+            "nodeId": "nA2__________________",
+            "portId": "pA2Vnet______________"
+          },
+          "style": {
+            "edgeStyle": "curved",
+            "stroke": "#4B3BC4",
+            "strokeWidth": 1.5,
+            "startArrow": "none",
+            "endArrow": "none",
+            "dash": "dashed",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Virtual network peering",
+            "fontSize": 11,
+            "color": "#4B3BC4"
+          }
+        },
+        {
+          "id": "mVendEdge____________",
+          "source": {
+            "nodeId": "nVending_____________",
+            "portId": "pVendOut_____________"
+          },
+          "target": {
+            "nodeId": "nA2__________________",
+            "portId": "pA2Vend______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#66707D",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "look": "classic"
+          },
+          "label": {
+            "text": "deploys",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        }
+      ]
+    },
+    "dVending_____________": {
+      "id": "dVending_____________",
+      "title": "Subscription vending automation",
+      "layers": [
+        {
+          "id": "LVending_____________",
+          "name": "Layer 1",
+          "visible": true,
+          "locked": false
+        }
+      ],
+      "nodes": [
+        {
+          "id": "vBand________________",
+          "type": "shape",
+          "shapeRef": "general/rect",
+          "position": {
+            "x": 40,
+            "y": 40
+          },
+          "size": {
+            "w": 780,
+            "h": 330
+          },
+          "z": -986,
+          "style": {
+            "fill": "#F4F5F7",
+            "stroke": "#D8DCE3",
+            "strokeWidth": 1,
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vBandCap_____________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 54,
+            "y": 48
+          },
+          "size": {
+            "w": 274,
+            "h": 25
+          },
+          "z": -985,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Subscription vending automation",
+            "align": "center",
+            "bold": true,
+            "color": "#445060",
+            "fontSize": 13
+          }
+        },
+        {
+          "id": "vCollect_____________",
+          "type": "shape",
+          "shapeRef": "azure/general/resource-groups",
+          "position": {
+            "x": 90,
+            "y": 210
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 11,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vCollectCap__________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 47,
+            "y": 280
+          },
+          "size": {
+            "w": 150,
+            "h": 21
+          },
+          "z": -984,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Data collection tool",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "vRequest_____________",
+          "type": "shape",
+          "shapeRef": "azure/devops/azure-devops",
+          "position": {
+            "x": 270,
+            "y": 210
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 12,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vRequestCap__________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 238,
+            "y": 280
+          },
+          "size": {
+            "w": 129,
+            "h": 21
+          },
+          "z": -983,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Request pipeline",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "vSource______________",
+          "type": "shape",
+          "shapeRef": "azure/general/tfs-vc-repository",
+          "position": {
+            "x": 450,
+            "y": 210
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 13,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vSourceCap___________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 425,
+            "y": 280
+          },
+          "size": {
+            "w": 115,
+            "h": 21
+          },
+          "z": -982,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Source control",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "vDeploy______________",
+          "type": "shape",
+          "shapeRef": "azure/devops/azure-devops",
+          "position": {
+            "x": 630,
+            "y": 210
+          },
+          "size": {
+            "w": 64,
+            "h": 64
+          },
+          "z": 14,
+          "style": {
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vDeployCap___________",
+          "type": "shape",
+          "shapeRef": "general/text",
+          "position": {
+            "x": 587,
+            "y": 280
+          },
+          "size": {
+            "w": 150,
+            "h": 21
+          },
+          "z": -981,
+          "style": {
+            "fill": "none",
+            "stroke": "none",
+            "look": "classic"
+          },
+          "label": {
+            "text": "Deployment pipeline",
+            "align": "center",
+            "bold": false,
+            "color": "#1E2733",
+            "fontSize": 11
+          }
+        },
+        {
+          "id": "vParams______________",
+          "type": "shape",
+          "shapeRef": "general/note",
+          "position": {
+            "x": 330,
+            "y": 80
+          },
+          "size": {
+            "w": 150,
+            "h": 70
+          },
+          "z": 15,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "JSON/YAML subscription parameter file",
+            "align": "center",
+            "fontSize": 10,
+            "italic": true
+          }
+        },
+        {
+          "id": "vModules_____________",
+          "type": "shape",
+          "shapeRef": "general/note",
+          "position": {
+            "x": 610,
+            "y": 80
+          },
+          "size": {
+            "w": 130,
+            "h": 70
+          },
+          "z": 16,
+          "style": {
+            "fill": "#FFFFFF",
+            "stroke": "#1E2733",
+            "strokeWidth": 1,
+            "look": "classic"
+          },
+          "label": {
+            "text": "IaC modules",
+            "align": "center",
+            "fontSize": 10,
+            "italic": true
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "vE1__________________",
+          "source": {
+            "nodeId": "vCollect_____________"
+          },
+          "target": {
+            "nodeId": "vRequest_____________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "look": "classic"
+          },
+          "label": {
+            "text": "trigger",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "vE2__________________",
+          "source": {
+            "nodeId": "vRequest_____________"
+          },
+          "target": {
+            "nodeId": "vSource______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "look": "classic"
+          },
+          "label": {
+            "text": "commit",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "vE3__________________",
+          "source": {
+            "nodeId": "vSource______________"
+          },
+          "target": {
+            "nodeId": "vDeploy______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "look": "classic"
+          },
+          "label": {
+            "text": "trigger",
+            "fontSize": 11,
+            "color": "#66707D"
+          }
+        },
+        {
+          "id": "vE4__________________",
+          "source": {
+            "nodeId": "vParams______________"
+          },
+          "target": {
+            "nodeId": "vSource______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "look": "classic"
+          }
+        },
+        {
+          "id": "vE5__________________",
+          "source": {
+            "nodeId": "vModules_____________"
+          },
+          "target": {
+            "nodeId": "vDeploy______________"
+          },
+          "style": {
+            "edgeStyle": "orthogonal",
+            "stroke": "#1E2733",
+            "strokeWidth": 1.25,
+            "startArrow": "none",
+            "endArrow": "classic",
+            "dash": "dashed",
+            "look": "classic"
+          }
+        }
+      ]
+    }
+  }
+}
