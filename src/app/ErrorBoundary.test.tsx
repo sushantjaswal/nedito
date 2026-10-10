@@ -1,7 +1,8 @@
 // D81: one broken region must not take the app, or autosave, down with it.
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { settleLazyLoads } from "../testLazyLoads";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 let shouldThrow = true;
@@ -96,3 +97,6 @@ describe("AppShell with a broken region", () => {
     }
   });
 });
+
+// Wait for the lazy loads rendering started, before Vitest tears the environment down.
+afterAll(settleLazyLoads);
