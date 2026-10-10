@@ -5,7 +5,8 @@
 # There is no run on main after a merge: branch protection requires a pull request to be up to date
 # with main before it merges, so what was tested here is exactly what lands.
 #
-# The browser tests are split across three machines, each still one test at a time, and the
+# The browser tests are split across four machines, each still one test at a time, the parts
+# balanced by each spec file's measured duration (scripts/e2e-shard.mjs, D151), and the
 # "End-to-end tests" job reports their combined result — that is the name branch protection
 # requires. A pull request that changes only documentation skips them; the unit tests, which
 # include the personal-data guard over every Markdown file, still run.
@@ -64,7 +65,7 @@ jobs:
       - run: npm run build
 
   e2e-shard:
-    name: End-to-end tests (part ${{ matrix.shard }} of 3)
+    name: End-to-end tests (part ${{ matrix.shard }} of 4)
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: windows-latest
@@ -72,7 +73,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -83,7 +84,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install chromium
-      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/3
+      - run: node scripts/e2e-shard.mjs ${{ matrix.shard }} 4
 
   e2e:
     name: End-to-end tests
@@ -92,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Combine the three parts
+      - name: Combine the four parts
         env:
           CODE: ${{ needs.changes.outputs.code }}
           CHANGES: ${{ needs.changes.result }}
