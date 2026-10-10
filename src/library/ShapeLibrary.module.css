@@ -68,6 +68,14 @@
   border: 1px solid var(--nd-border-color);
   border-radius: 4px;
   width: calc(100% - 16px);
+  /* Themed like the format panel's fields: left to the browser, it stayed white in dark mode. */
+  background: var(--nd-panel-bg);
+  color: var(--nd-color-ink);
+  font: inherit;
+}
+
+.search::placeholder {
+  color: var(--nd-color-muted);
 }
 
 .section {
