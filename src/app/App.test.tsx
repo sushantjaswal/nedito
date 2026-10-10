@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { settleLazyLoads } from "../testLazyLoads";
 import { saveAutosave } from "../file/autosave";
 import { writeCollapsedSections } from "../library/collapsedSections";
 import { useDocStore } from "../model/store";
@@ -180,3 +181,6 @@ describe("App — Edit a copy", () => {
     expect(useDocStore.getState().ui.onboarding.demoActive).toBe(false);
   });
 });
+
+// Wait for the lazy loads rendering started, before Vitest tears the environment down.
+afterAll(settleLazyLoads);
