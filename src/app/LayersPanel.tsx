@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDocStore } from "../model/store";
 import styles from "./LayersPanel.module.css";
 
-// draw.io's Layers panel: a per-diagram list of layers, each with a visibility toggle, a lock
+// The Layers panel: a per-diagram list of layers, each with a visibility toggle, a lock
 // toggle, and a name; clicking a layer makes it "active" (where new shapes land); one layer
 // always exists and can't be deleted. Rendered as a small floating panel over the canvas
 // (View > Layers toggles it) rather than a blocking modal, since toggling visibility/lock is

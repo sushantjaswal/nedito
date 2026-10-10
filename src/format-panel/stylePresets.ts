@@ -1,6 +1,6 @@
-// Style presets: draw.io's row of ready-made styles, a shape's fill and
+// Style presets: a row of ready-made styles, a shape's fill and
 // outline set together in one click. Our own palette — light fills with a deeper outline in the
-// same hue, plus a dark one — not draw.io's. A preset sets fill and outline only: the label's
+// same hue, plus a dark one. A preset sets fill and outline only: the label's
 // colour already follows the fill (D78), so text stays readable on every preset, the dark one
 // included. "Default" clears both, so the shape takes the standard look again.
 export interface StylePreset {

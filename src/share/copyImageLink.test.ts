@@ -5,7 +5,7 @@ const PNG = () => new Blob([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], { type: "
 const SHARE_URL = "https://example.test/app/#d=H4sIAAAA_payload&v=2";
 
 describe("buildClipboardPayload", () => {
-  // The acceptance criterion from docs/archive/portable-diagrams-spec.md item 2 (D56): one write, two flavours.
+  // The requirement: one clipboard write, two flavours.
   // Two separate writes would not add a flavour, it would replace the first one.
   it("carries both image/png and text/html", async () => {
     const payload = await buildClipboardPayload(PNG(), SHARE_URL, "My diagram");

@@ -123,7 +123,7 @@ export function pathPoints(d: string): Point[] {
   return pts;
 }
 
-/** The point halfway along a path's drawn length — where draw.io puts an edge label, on the line. */
+/** The point halfway along a path's drawn length — where an edge label sits, on the line. */
 /** The point `t` of the way along the path by length (0 at its start, 1 at its end). */
 export function pathPointAt(d: string, t: number): Point | null {
   if (t === 0.5) return pathMidpoint(d);

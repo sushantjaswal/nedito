@@ -48,7 +48,7 @@ export interface StencilDef {
    */
   defaultStyle?: StyleMap;
   /**
-   * Places a line instead of a shape: an edge with free ends (draw.io's dangling edge), which can
+   * Places a line instead of a shape: an edge with free ends, which can
    * then be bent, restyled and dropped onto shapes at either end. Points are in the stencil's
    * defaultSize box; the svgBody is only the picker's picture of it.
    */

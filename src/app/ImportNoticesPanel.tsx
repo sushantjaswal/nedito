@@ -6,8 +6,7 @@ import styles from "./ImportNoticesPanel.module.css";
 
 // What a best-effort import changed, kept on screen until the user is done with it.
 //
-// draw.io itself says nothing when it cannot map something it opens; Nedito promises to say
-// (a best-effort import says what it could not carry across). It used to say so in a window.alert, which could not be read
+// A best-effort import says what it could not carry across. It used to say so in a window.alert, which could not be read
 // again once dismissed and could not point at anything — "drew 12 shapes as plain rectangles"
 // left the user hunting for twelve rectangles by eye. This panel stays until closed, and each
 // notice can open its page and select the shapes it is about.

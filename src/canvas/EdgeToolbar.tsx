@@ -1,4 +1,4 @@
-// The small bar over a selected line, as draw.io shows one: buttons each opening a compact popup —
+// The small bar over a selected line: buttons each opening a compact popup —
 // how the line is drawn (pattern, width, colour), what its ends are (an arrowhead for each end,
 // picked by sight), how it runs (straight, elbow or curved; a line, a double line, a block arrow or
 // a wave), and its label's text. Since R1 (D90) it is a line's context bar: the same dark bar the
@@ -158,7 +158,7 @@ export function EdgeToolbar({ edge, at }: { edge: DEdge; at: { x: number; y: num
       ref={rootRef}
       className={`${styles.root} nodrag nopan nowheel`}
       // The bar sits just above the line at a fixed screen size, whatever the zoom; a popup opens
-      // under the bar, as draw.io's do, so it never runs off the top of the canvas.
+      // under the bar, so it never runs off the top of the canvas.
       style={{ transform: `translate(${at.x}px, ${at.y}px) scale(${1 / zoom}) translate(-50%, -52px)` }}
       onPointerDown={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}

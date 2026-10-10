@@ -136,7 +136,7 @@ function ShapeNodeComponent({ id, data, selected, width, height }: NodeProps<Flo
         isVisible={selected && !editing}
         minWidth={20}
         minHeight={20}
-        // A picture keeps its proportions unless Shift is held, as in draw.io.
+        // A picture keeps its proportions unless Shift is held.
         keepAspectRatio={isImage && !shiftHeld}
         onResizeStart={() => useDocStore.getState().setCanvasGesture(true)}
         onResizeEnd={onResizeEnd}
@@ -212,7 +212,7 @@ function ShapeNodeComponent({ id, data, selected, width, height }: NodeProps<Flo
 
 /**
  * The picture of an image node. Fills the node box: resizing keeps the proportions unless the
- * author holds Shift, in which case the picture stretches with the box, as in draw.io. A missing
+ * author holds Shift, in which case the picture stretches with the box. A missing
  * asset (only reachable mid-undo) shows an empty frame rather than a broken-image icon.
  */
 function ImageContent({ node, dataUrl }: { node: ShapeNodeModel; dataUrl: string | undefined }) {

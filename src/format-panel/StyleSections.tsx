@@ -5,7 +5,7 @@
 // Every section takes the whole selection and acts on what it applies to, as the Style tab did:
 // fill and line settings go to plain shapes (not groups or Nested Blocks, which draw their own
 // frame); edge settings go to the selected lines; a multi-selection is changed all at once, seeded
-// from the first item's current values — draw.io's bulk-edit model.
+// from the first item's current values.
 import { EDGE_SHAPES, edgeShapeOf } from "../canvas/edgeShapes";
 import { DEFAULT_EDGE_WIDTH } from "../canvas/edgeRouting";
 import { getStencil } from "../library/stencils";
@@ -33,7 +33,7 @@ function useShapeStyle(nodes: DNode[]) {
 }
 
 /**
- * Style presets (D99): a row of ready-made fill-and-outline pairs, as draw.io offers. Applied to
+ * Style presets: a row of ready-made fill-and-outline pairs. Applied to
  * the outline shapes in the selection; a pictogram or vendor icon keeps its own colours, which a
  * tint would only wash out.
  */

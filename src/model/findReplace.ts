@@ -1,4 +1,4 @@
-// Pure search logic for Find/Replace. draw.io's Find/Replace searches
+// Pure search logic for Find/Replace, which searches
 // shape and edge labels in the current diagram, lets you step through matches (selecting and
 // centering the canvas on each), and replace the current match or all of them. Kept as plain
 // functions over a Diagram so this is unit-testable without mounting the canvas.

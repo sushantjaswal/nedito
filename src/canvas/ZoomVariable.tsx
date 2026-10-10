@@ -14,7 +14,7 @@ export const LOW_DETAIL_CLASS = "nd-lod";
 /**
  * Publishes the canvas zoom to CSS as `--nd-inverse-zoom` on the React Flow element, for the
  * few on-canvas controls that should stay one size on screen however far the canvas is zoomed
- * — the ＋ handles (R3, D92), as draw.io's hover arrows do — and switches low detail on and off
+ * — the ＋ handles — and switches low detail on and off
  * at LOW_DETAIL_ZOOM. Written straight onto the element from a store subscription, so zooming
  * re-renders no node; crossing the threshold costs one style pass.
  */

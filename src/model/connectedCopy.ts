@@ -1,8 +1,7 @@
 // Connecting two nodes, and the ＋ handle's "add a connected copy".
 //
-// draw.io's hover arrows clone the shape on that side and connect the two when clicked (and
-// Alt+Shift+Arrow does the same from the keyboard). Nedito's ＋ handles keep that, with two
-// differences the Redesign spec sets: the copy takes the shape's *default* style rather than
+// Clicking a ＋ handle clones the shape on that side and connects the two (Alt+Shift+Arrow does
+// the same from the keyboard), with two differences: the copy takes the shape's *default* style rather than
 // the original's formatting, and its label opens for typing straight away.
 //
 // Both live here as pure document functions so the copy, its edge and any port the edge needs
@@ -61,13 +60,11 @@ export function connectNodes(
     source: { nodeId: sourceNodeId, portId: src.portId },
     target: { nodeId: targetNodeId, portId: tgt.portId },
     style: {
-      // Curved by default — a deliberate visual departure from draw.io's orthogonal
-      // default (curved is Nedito's default line style, chosen
-      // as a recognisable look). Straight/orthogonal remain
+      // Curved by default: Nedito's default line style, chosen as a recognisable look. Straight/orthogonal remain
       // one click away in the context bar.
       edgeStyle: "curved",
       startArrow: "none",
-      // Nedito's own look (R6, D95): an open chevron, where draw.io's default is a filled triangle.
+      // Nedito's own look: an open chevron.
       endArrow: "open",
       sourceHandle: sourceHandleId,
       targetHandle: targetHandleId,

@@ -218,7 +218,7 @@ src/
   templates/      the template catalogue
   styles/         design tokens, global styles, motion
 tests/e2e/        Playwright tests; unit tests sit next to the code they test
-docs/             the file format, specs, audits, and the README's pictures; docs/archive/ for delivered specs
+docs/             the file format, the About copy, audits, and the README's pictures
 examples/         worked example documents, rebuilt and checked by tests
 scripts/          icon generation, the performance measurement, the end-to-end split, the pictures
 public/           the app icons (the typeface comes from npm, @fontsource)
