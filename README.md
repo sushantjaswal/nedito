@@ -19,6 +19,7 @@
   <img src="https://img.shields.io/badge/licence-Apache%202.0-6D5AE6" alt="Licence: Apache 2.0">
   <img src="https://img.shields.io/badge/runs%20in-your%20browser-4B3BC4" alt="Runs in your browser">
   <img src="https://img.shields.io/badge/account-none%20needed-1E2733" alt="No account needed">
+  <img src="https://img.shields.io/badge/uploads-none-1E2733" alt="Uploads: none">
   <img src="https://img.shields.io/badge/file%20format-open%20JSON-66707D" alt="File format: open JSON">
 </p>
 
@@ -35,8 +36,10 @@ breadcrumb to climb back out — as many levels deep as the subject needs. Aroun
 diagram editor you would expect: shapes, lines, pages, layers, templates, and the official Azure,
 AWS and Google Cloud icons.
 
-It runs in the browser at **[nedito.app](https://nedito.app)**, with nothing to install and no
-account.
+Nedito was built around one idea, nested diagrams, and one commitment: **your diagrams are
+yours.** No sign-up, no account, no password to hand over. Whether you draw at
+**[nedito.app](https://nedito.app)** or on your own copy, the diagram never leaves your machine
+unless you send it somewhere yourself.
 
 ## See it
 
@@ -80,16 +83,23 @@ print, and the Animated image export turns a level into a GIF — this one was m
 | **Share** | A link that opens the diagram read-only, and a copied image that opens the full diagram when clicked. |
 | **Import** | `.nedito` files, editable PNGs, Word exports, and draw.io files as a best-effort import that says what it could not carry across. |
 
-## Where your work lives
+## Your diagrams are yours
 
-Nothing is uploaded. There is no account and no server holding your diagrams: the page is served as
-static files, and the diagram you are working on is kept in this browser's local storage, saved as
-you go. A share link carries the diagram inside the part of the URL after `#`, which browsers do not
-send to the server.
+- **No sign-up, no account, no credentials.** Open the app and draw. There is nothing to register
+  and nothing to log in to.
+- **Nothing is uploaded.** nedito.app serves the app's own files and nothing else, and it never
+  receives a diagram. The one you are working on is kept in this browser's storage, saved as you go.
+  The app contains no analytics, trackers or telemetry.
+- **Sharing happens only when you choose.** An export is a file you put where you like. A share
+  link carries the whole diagram inside the link, in the part after `#`, which browsers never send
+  to a server.
+- **Online or on your own machine: the same app.** Use it at nedito.app, or run your own copy from
+  this repository (see [Running it locally](#running-it-locally)). A local copy has no connection to
+  nedito.app at all.
 
-The flip side is that nobody else has a copy. Clearing this browser's data, or switching browser or
+The flip side: nobody else holds a copy. Clearing this browser's data, or switching browser or
 machine, leaves your work behind, and it cannot be recovered for you. Download your file (app menu ›
-Save a copy, or Export) to keep it, and to move or share it.
+Save a copy, or Export) to keep it, move it or share it.
 
 ## The file format
 
@@ -160,13 +170,17 @@ there. Only the level being viewed is drawn, so depth costs nothing.
 
 ## Running it locally
 
-You need Node.js and npm. Commands work in PowerShell as written; the project is developed on
-Windows.
+This is also the way to have Nedito entirely on your own machine: the same app as nedito.app,
+served from your computer, with no connection to anything else. You need Node.js and npm. Commands
+work in PowerShell as written; the project is developed on Windows.
 
 ```powershell
 npm install
-npm run dev          # the app, with hot reload, at http://localhost:5173
+npm run build        # the app, as static files in dist/
+npm run preview      # serves them at http://localhost:4173
 ```
+
+For working on Nedito itself, `npm run dev` runs it with hot reload at http://localhost:5173.
 
 | Task | Command |
 |---|---|
