@@ -1,10 +1,11 @@
 {
-  // The worker keeps its original name although the product is now Nedito (D100): renaming it
-  // would make Cloudflare deploy a second, new worker and leave this one, with its custom domains
-  // and build history, behind. Domains are attached to this worker in the Cloudflare dashboard —
+  // The worker is named for the product since D148. D100 had kept the original name, because a
+  // new name makes Cloudflare deploy to a different worker; Workers Builds' preview uploads failed
+  // on the old name once the repository moved, and the author chose the rename. Domains are
+  // attached to the worker in the Cloudflare dashboard —
   // nedito.app as the canonical host, www.nedito.app as an alias the app itself redirects from
   // (src/app/originGuard.ts) — not declared here. myconifer.app is no longer served (D106).
-  "name": "deepdraw",
+  "name": "nedito",
   "compatibility_date": "2026-08-25",
   "workers_dev": false,
   "assets": {
