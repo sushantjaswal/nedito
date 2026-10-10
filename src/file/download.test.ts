@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { downloadBlob, downloadText } from "./download";
 
 describe("downloadBlob", () => {
-  let clickSpy: ReturnType<typeof vi.fn>;
+  let clickSpy: ReturnType<typeof vi.fn<() => void>>;
 
   beforeEach(() => {
     vi.stubGlobal("URL", {
@@ -10,7 +10,7 @@ describe("downloadBlob", () => {
       createObjectURL: vi.fn(() => "blob:mock-url"),
       revokeObjectURL: vi.fn(),
     });
-    clickSpy = vi.fn();
+    clickSpy = vi.fn<() => void>();
     const originalCreateElement = document.createElement.bind(document);
     vi.spyOn(document, "createElement").mockImplementation((tag: string) => {
       const el = originalCreateElement(tag);

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
+import { settleLazyLoads } from "../testLazyLoads";
 import { writeCollapsedSections } from "../library/collapsedSections";
 import { AppShell } from "./AppShell";
 
@@ -23,3 +24,6 @@ describe("AppShell", () => {
     expect(await screen.findByTestId("nd-stencil-general/rect")).toBeInTheDocument();
   });
 });
+
+// Wait for the lazy loads rendering started, before Vitest tears the environment down.
+afterAll(settleLazyLoads);
