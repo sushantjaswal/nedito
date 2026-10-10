@@ -79,7 +79,7 @@ describe("loadSection", () => {
   });
 });
 
-// Slice 4 of the icon library sweep (CLAUDE_HISTORY.md D54). Every pictogram in Misc/Arrows/
+// Slice 4 of the icon library sweep. Every pictogram in Misc/Arrows/
 // Network/Business was originally labelled with Google's internal Material Symbols id,
 // title-cased. Most of those read fine; a handful did not describe the drawing at all, and
 // four sections shipped the same glyph twice under two different Google names. These tests

@@ -32,10 +32,10 @@ function onDragStart(event: React.DragEvent, item: ScratchpadItem) {
   event.dataTransfer.effectAllowed = "copy";
 }
 
-// CLAUDE.md: "Scratchpad section (drag shapes in to reuse; persists in localStorage)".
+// The Scratchpad section (shown as Favorites): shapes kept to reuse, persisted in localStorage.
 // Native HTML5 drag-and-drop FROM a React-Flow-managed canvas node risks conflicting with
 // React Flow's own pointer-capture-based node dragging (the same class of fragility already
-// documented for d3-drag elsewhere in this project — see CLAUDE_HISTORY.md). "Add to
+// documented for d3-drag elsewhere in this project). "Add to
 // Scratchpad" on a shape's right-click context menu captures it instead; dragging OUT of the
 // scratchpad onto the canvas reuses the existing, already-proven sidebar-to-canvas DnD path.
 export function ScratchpadSection() {

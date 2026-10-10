@@ -1,4 +1,4 @@
-// Lines with free ends (EdgeEnd.point, formatVersion 4, CLAUDE_HISTORY D86): drawn from the Lines
+// Lines with free ends (EdgeEnd.point, formatVersion 4): drawn from the Lines
 // section or let go on open canvas, attached and detached by dragging an end, and carried through
 // every place that used to assume an edge always joins two shapes.
 import { beforeEach, describe, expect, it } from "vitest";

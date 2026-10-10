@@ -14,8 +14,7 @@ interface NestedFormatSectionProps {
   nestedNode: NestedNode;
 }
 
-// CLAUDE.md: "For a nested node, Style tab gains a 'Nested' section: edit collapsed design,
-// manage ports, open child." The full Style/Text/Arrange tab shell is M5 scope; this renders
+// A Nested Block's own section: its collapsed design, its ports, and opening its child. The full Style/Text/Arrange tab shell is M5 scope; this renders
 // as the panel's whole content for a single-nested-node selection in the meantime.
 export function NestedFormatSection({ nestedNode }: NestedFormatSectionProps) {
   const childDiagram = useDocStore((s) => s.doc.diagrams[nestedNode.childDiagramId]);

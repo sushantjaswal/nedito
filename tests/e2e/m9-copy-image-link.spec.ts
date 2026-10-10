@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { gotoFresh } from "./helpers";
 
-// Copy image with live link (CLAUDE_HISTORY.md D56). The clipboard payload's shape is unit-tested in
+// Copy image with live link. The clipboard payload's shape is unit-tested in
 // src/share/copyImageLink.test.ts; what only a real browser proves is that the menu item
 // actually reaches the system clipboard with both flavours intact, and that the link it
 // embeds opens the diagram at the other end.

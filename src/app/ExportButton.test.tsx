@@ -1,4 +1,4 @@
-// The Export split button (R2, CLAUDE_HISTORY.md D91): the main part repeats the last format used,
+// The Export split button: the main part repeats the last format used,
 // PNG until the first export, and the arrow lists every format.
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

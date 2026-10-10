@@ -1,5 +1,5 @@
 // The GIF export's two choices, remembered per browser as the last export format is.
-//   - Size (G3, CLAUDE_HISTORY.md D141): the longest side of the picture, in three steps. Large
+//   - Size: the longest side of the picture, in three steps. Large
 //     until changed. A GIF stores only what changes between frames — mostly the moving lines — so
 //     its file grows with the picture's side more than its area (measured: Small ≈ 42% of Large).
 //   - Frame rate (G4, D142): Smooth, 25 frames a second, or a Lighter file at 12.5 — measured a

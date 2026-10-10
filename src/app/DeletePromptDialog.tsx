@@ -1,4 +1,4 @@
-// The deletion prompts (N7, CLAUDE_HISTORY.md D138): asked only when a deletion would take a
+// The deletion prompts: asked only when a deletion would take a
 // level's contents or a parent's links with it. Esc or Cancel keeps everything; the choice taken
 // is one undo entry either way, which the dialog says.
 import { useEffect, useRef } from "react";

@@ -1,4 +1,4 @@
-// The shape library's purpose groups (R4, CLAUDE_HISTORY.md D93).
+// The shape library's purpose groups.
 import { beforeEach, describe, expect, it } from "vitest";
 import { readCollapsedSections } from "./collapsedSections";
 import { groupOf, LIBRARY_GROUPS, readCollapsedGroups, revealEssentialsOnce, writeCollapsedGroups } from "./libraryGroups";

@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { currentDiagramId, getDoc, gotoFresh } from "./helpers";
 
-// M2 exit test (CLAUDE_HISTORY.md): edge styles/arrowheads, waypoint dragging reroutes an
+// M2 exit test: edge styles/arrowheads, waypoint dragging reroutes an
 // orthogonal edge, label editing, z-order, undo/redo across edge operations.
 //
 // Edge SETUP goes through the store's connect() action directly (window.__ddStore) rather
 // than driving the hover-to-reveal-handle-then-drag gesture — that exact interaction was
-// flagged as fragile under synthetic/automated pointer events during M2 development
-// (see CLAUDE_HISTORY.md). The interactions this spec exercises for real (waypoint drag,
+// flagged as fragile under synthetic/automated pointer events during M2 development.
+// The interactions this spec exercises for real (waypoint drag,
 // label edit) don't share that fragility.
 test.describe("M2 — edges", () => {
   test.beforeEach(async ({ page }) => {

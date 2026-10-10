@@ -13,7 +13,7 @@ type State =
   | { kind: "restored" }
   | { kind: "unreadable"; error: string; text: string };
 
-// Autosaved work comes back on its own (R5, CLAUDE_HISTORY.md D94), where the app used to ask
+// Autosaved work comes back on its own, where the app used to ask
 // "Unsaved diagram found — restore?": nearly everyone said yes, and the one who said no lost
 // their work. A short note says what happened and offers Start new, which never discards the
 // restored diagram silently (see startNewKeepingRestored).

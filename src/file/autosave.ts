@@ -1,5 +1,5 @@
 // localStorage autosave. Keyed under BRAND.storagePrefix so a future rename can migrate the
-// key once on first launch (see CLAUDE.md brand indirection rename policy) without ever
+// key once on first launch (the rename policy: earlier storage prefixes are read and migrated, never dropped) without ever
 // orphaning a user's in-progress diagram.
 import { BRAND } from "../app/brand";
 import { encodeDoc } from "./documentFormat";
@@ -10,7 +10,7 @@ const AUTOSAVE_KEY = `${BRAND.storagePrefix}:autosave`;
 // localStorage can throw (quota exceeded, private browsing, disabled storage) — autosave is
 // strictly best-effort and must never crash the app. But it must never fail *silently* either:
 // it used to, so a document that outgrew browser storage simply stopped being autosaved, and the
-// user found out only by losing work. Pictures made that easy to reach (CLAUDE_HISTORY.md D79),
+// user found out only by losing work. Pictures made that easy to reach,
 // so the outcome is now published and the status bar says when autosave is off.
 export function saveAutosave(doc: DiagramDocument): boolean {
   let ok = true;

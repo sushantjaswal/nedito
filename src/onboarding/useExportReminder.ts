@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDocStore } from "../model/store";
 
 // Counts mutating actions for the export reminder by watching `doc` identity, the same trick
-// useDemoDiagram uses to notice the sample being edited: CLAUDE.md's command pattern means
+// useDemoDiagram uses to notice the sample being edited: the store's command pattern means
 // every named action replaces `doc` with a new object, so one subscription here covers all
 // sixty-odd of them and can't drift out of date when a new action is added.
 //

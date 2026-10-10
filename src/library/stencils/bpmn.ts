@@ -20,7 +20,7 @@
 // with the shape — at 14% a full-width lane had a 150px band with the name stranded in the
 // middle of the diagram, on top of the first task.
 //
-// Original SVG geometry per CLAUDE.md's provenance guardrail.
+// Original SVG geometry, drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 import type { StencilSection } from "./types";
 
 const section: StencilSection = {

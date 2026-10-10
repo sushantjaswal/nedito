@@ -4,7 +4,7 @@
 
 **Scope rule.** A diagram type is in scope if it can be expressed with shapes, edges, text, groups and Nested Blocks, with no data binding and no time-scaled axis. Charts are out (see Exclusions).
 
-Ship as the batches below, each on its own branch and PR, one PR open at a time, per CLAUDE.md. Add all batches to PROGRESS.md as a new group before starting T1. User-facing noun is **Templates**.
+Ship as the batches below, each on its own branch and PR, one PR open at a time, per the project's workflow. Add all batches to the work queue as a new group before starting T1. User-facing noun is **Templates**.
 
 ---
 
@@ -15,7 +15,7 @@ A template may only reference stencils that exist in the sidebar library, are vi
 - If a template needs a shape that doesn't exist yet, **add it to the library first**, in the most fitting existing section or a new section (see "New stencil sections" below), with a clear label and `keywords`. Then use it in the template.
 - **Enforced by a unit test**, not by review: for every template, every node's `shapeRef` must resolve in the stencil registry, must not be in `RETIRED_STENCIL_IDS`, and must not be hidden from the picker. A template that references a missing or picker-hidden stencil fails the build.
 - The same applies to **edge features**. If a template needs an arrowhead the Style panel doesn't offer (e.g. crow's-foot ends), add it to the Style panel's arrowhead list first, so users can apply it to their own edges.
-- Any new icon pack pulled in for templates follows the existing provenance rule in CLAUDE.md: official or openly licensed sources only, recorded in NOTICE, never from the drawio repos.
+- Any new icon pack pulled in for templates follows the existing provenance rule: official or openly licensed sources only, recorded in NOTICE, never from the drawio repos.
 
 ---
 
@@ -136,7 +136,7 @@ Out of scope for this feature, each for a stated reason:
 - **RACI and other matrix/table diagrams** — need a table primitive.
 - **UI wireframes, floor plans, circuit and P&ID diagrams** — each needs a large specialist stencil set; candidates for future sections.
 
-Add these to the PROGRESS.md Inbox as individual items so they stay visible.
+Add these to the work queue's Inbox as individual items so they stay visible.
 
 ---
 

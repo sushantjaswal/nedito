@@ -1,4 +1,4 @@
-// Copy image with live link (CLAUDE_HISTORY.md D56): copy the diagram as an image that is still a way
+// Copy image with live link: copy the diagram as an image that is still a way
 // back to the real thing.
 //
 // The trick is one clipboard write carrying two flavours. Word, PowerPoint, Excel and Outlook

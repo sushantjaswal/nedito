@@ -1,4 +1,4 @@
-// Business/non-technical shapes (people, org, process) per CLAUDE.md's sidebar spec.
+// Business/non-technical shapes (people, org, process) for the People & Business group.
 // Sourced from Google's Material Symbols (Apache 2.0) — see NOTICE at repo root. Icons are
 // single-color glyphs re-themed via the node's own fill/stroke, same as General/Flowchart/
 // Network, not the unthemed `raw` path used for Azure/AWS/GCP's official brand-color icons.

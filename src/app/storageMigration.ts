@@ -1,4 +1,4 @@
-// Carrying a user's browser storage across a rename (D100; CLAUDE.md "Brand indirection": "migrates
+// Carrying a user's browser storage across a rename (D100; the rename policy: "migrates
 // old storagePrefix keys to the new prefix once on first launch. No user file or autosave is ever
 // orphaned by a rename").
 //

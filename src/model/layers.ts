@@ -1,4 +1,4 @@
-// Pure doc-transform functions for per-diagram layers (CLAUDE.md Phase 2: "layers panel").
+// Pure doc-transform functions for per-diagram layers (the Layers panel).
 // draw.io's Layers panel: a per-diagram, top-to-bottom-ordered list of layers, each with a
 // visibility toggle, a lock toggle, a name, and every shape/edge belongs to exactly one layer.
 // Hidden layers don't render; locked layers render but can't be selected/moved. New objects

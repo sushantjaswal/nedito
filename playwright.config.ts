@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// E2E of critical flows per CLAUDE.md tech stack. Automates the M1-M4 exit-test scenarios
-// that were manually verified live during each milestone (see CLAUDE_HISTORY.md).
+// End-to-end tests of the critical flows. Automates the scenarios
+// that were manually verified live during each milestone.
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false, // each spec drives the same single-document app; keep them serial

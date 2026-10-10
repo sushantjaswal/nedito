@@ -1,4 +1,4 @@
-// Draw in (A5, CLAUDE_HISTORY.md D121): a one-shot. When a share link first opens on a diagram
+// Draw in: a one-shot. When a share link first opens on a diagram
 // with Draw in set, its lines trace themselves once and the diagram settles. Only in the viewer —
 // the author would see it on every level change — only on the first level shown, never on a later
 // one, and never when the reader's motion is off.

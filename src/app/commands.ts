@@ -1,4 +1,4 @@
-// Every command the app offers, in one registry (R2, CLAUDE_HISTORY.md D91). The command palette
+// Every command the app offers, in one registry. The command palette
 // lists these; the app menu, the Export button and the context bar are shorter surfaces onto the
 // same actions. Labels are the ones the old menus used, so a command is recognisable by name, and
 // each one's enablement is the rule its menu item followed.

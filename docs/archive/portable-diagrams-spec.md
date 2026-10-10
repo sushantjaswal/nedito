@@ -4,7 +4,7 @@
 
 **Constraint that shapes everything below:** DeepDraw has no backend and must keep its "nothing is uploaded" claim literally true. Every mechanism here is client-side. No diagram data is ever sent to a server, including ours.
 
-Ship as five items, in order, each on its own branch and PR, one PR open at a time, per CLAUDE.md's workflow. Add all five to PROGRESS.md as a Phase 3 group before starting item 1.
+Ship as five items, in order, each on its own branch and PR, one PR open at a time, per the project's workflow. Add all five to the work queue as a Phase 3 group before starting item 1.
 
 ---
 
@@ -140,5 +140,5 @@ Self-contained document, click-to-travel navigation.
 - **No changes to `formatVersion`** for items 1 through 3. Items 4 and 5 add no model fields either; if either turns out to need one, stop and raise it rather than bumping the format silently.
 - Every new user-facing string reads the product name from `BRAND`.
 - The privacy wording rule from the onboarding spec applies to all copy added here.
-- Items 4 and 5 add dependencies; list each with a reason in PROGRESS.md under the item that introduced it.
+- Items 4 and 5 add dependencies; list each with a reason in the work queue under the item that introduced it.
 - Prototype the Slide Zoom XML before committing to item 4's full scope.

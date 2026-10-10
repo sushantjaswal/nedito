@@ -644,8 +644,7 @@ describe("useDocStore", () => {
     const groupId = useDocStore.getState().groupSelection()!;
 
     // The bug this covers: including the group's own id alongside its children broke the old
-    // "every selected id is a child" check, since the group id is not itself a child (see
-    // CLAUDE_HISTORY D33's follow-up fix).
+    // "every selected id is a child" check, since the group id is not itself a child.
     useDocStore.getState().setSelection([groupId, a, b]);
     useDocStore.getState().ungroupSelection();
 
@@ -661,7 +660,7 @@ describe("useDocStore", () => {
     const groupId = useDocStore.getState().groupSelection()!;
 
     // Simulate rubber-band selecting the group's children individually rather than its id —
-    // the real repro this covers (see CLAUDE_HISTORY D32).
+    // the real repro this covers.
     useDocStore.getState().setSelection([a, b]);
     useDocStore.getState().ungroupSelection();
 

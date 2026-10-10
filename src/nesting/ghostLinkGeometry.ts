@@ -1,6 +1,5 @@
 // Pure computation for ghost links: read-only markers inside a child diagram showing edges
 // that cross the nesting boundary in the parent, derived from the parent's port mappings.
-// See CLAUDE.md "Ghost links".
 import type { DiagramDocument, NestedNode, Port } from "../model/types";
 
 export interface GhostLinkInfo {

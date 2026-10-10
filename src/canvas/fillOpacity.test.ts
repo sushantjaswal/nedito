@@ -4,7 +4,7 @@
 // The distinction is the point. Whole-node opacity fades the shape, its border and its label
 // together; fill opacity fades only the interior. A Venn diagram needs the second — the overlaps
 // have to blend while the outlines and the text stay crisp — and the Style panel had only the
-// first (CLAUDE_HISTORY.md D71).
+// first.
 //
 // Added here rather than only in the Venn templates because it is now a style any shape can
 // carry, and the canvas/export pair has drifted three times already (D67, D69, D70).

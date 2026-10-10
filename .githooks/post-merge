@@ -1,0 +1,9 @@
+#!/bin/sh
+# After a pull or merge brings new commits into main, back up the local working notes to the
+# private notes repository (npm run notes:backup; see scripts/notes-backup.mjs). Enable once per
+# clone: git config core.hooksPath .githooks
+#
+# It never blocks or undoes the merge: if the backup cannot run, it says why and the merge stands.
+[ "$(git rev-parse --abbrev-ref HEAD)" = "main" ] || exit 0
+node scripts/notes-backup.mjs || echo "notes:backup did not finish; run npm run notes:backup by hand."
+exit 0

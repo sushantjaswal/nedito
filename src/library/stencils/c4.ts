@@ -6,7 +6,7 @@
 // and a description line — drawn as the divider rules that suggest it, so a user dropping one
 // on the canvas gets a box already shaped like a C4 element.
 //
-// Original SVG geometry per CLAUDE.md's provenance guardrail. Every shape carries keywords, so
+// Original SVG geometry, drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE). Every shape carries keywords, so
 // a search for "person", "actor" or "boundary" finds the right one.
 import type { StencilSection } from "./types";
 

@@ -92,8 +92,8 @@ export function link(
     id: tid(slug),
     source: { nodeId: tid(from) },
     target: { nodeId: tid(to) },
-    // Left unset, every edge anchors at its node's top (React Flow's first-handle fallback,
-    // CLAUDE_HISTORY.md D67) — which in a topology drawing means every link loops overhead.
+    // Left unset, every edge anchors at its node's top (React Flow's first-handle
+    // fallback) — which in a topology drawing means every link loops overhead.
     style: sides ? { ...style, sourceHandle: sides[0], targetHandle: sides[1] } : style,
   };
   if (text) edge.label = { text, fontSize: 10, color: MUTED };

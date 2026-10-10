@@ -1,4 +1,4 @@
-// R2 (CLAUDE_HISTORY.md D91): the top bar's app menu, command palette, Export split button and
+// R2: the top bar's app menu, command palette, Export split button and
 // Share, in a real browser — the palette's Go to across nesting levels, the Export button
 // remembering its format across a reload, Recent bringing back a diagram that New replaced,
 // Preferences, and the Ctrl+K / Ctrl+S shortcuts.

@@ -1,5 +1,5 @@
 // Generic network-diagram vocabulary. The first 6 shapes below (server, database, cloud,
-// router, firewall, switch) are original SVG geometry per CLAUDE.md's provenance guardrail.
+// router, firewall, switch) are original SVG geometry, drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 // The rest are single-color glyphs sourced from Google's Material Symbols (Apache 2.0) — see
 // NOTICE at repo root — giving broader device/server/network variety (multiple server-like
 // concepts: DNS/rack, storage, database, hub, device hub; plus routers, wifi, VPN, endpoints).

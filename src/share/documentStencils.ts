@@ -6,8 +6,8 @@
 // ever had to think about it. The share viewer doesn't mount the library, and the result was
 // shapes rendering as bare labels with no geometry at all.
 //
-// Loading all thirteen sections would fix it and undo the reason they are split up (CLAUDE.md:
-// "Never inline thousands of stencils into the main bundle" — Azure alone is 714 icons). So
+// Loading all thirteen sections would fix it and undo the reason they are split up (thousands of
+// stencils never go into the main bundle — Azure alone is 714 icons). So
 // this loads only the sections the document actually refers to: a diagram of rectangles and
 // flowchart symbols pulls two modules, not the whole library.
 import { cacheStencils, loadSection, resolveStencilId, SECTION_IDS, type SectionId } from "../library/stencils";

@@ -56,7 +56,7 @@ export function useDemoDiagram(enabled = true): void {
   }, [demoActive]);
 
   // The sample retires the moment the user changes anything. Every mutation goes through a
-  // named store action that replaces `doc` with a new object (CLAUDE.md's command pattern), so
+  // named store action that replaces `doc` with a new object (the store's command pattern), so
   // an identity change against the document we loaded *is* "they edited it" — no need to
   // instrument each action individually.
   useEffect(() => {

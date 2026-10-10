@@ -1,4 +1,4 @@
-// Diagram-in-URL codec. See CLAUDE_HISTORY.md D51.
+// Diagram-in-URL codec.
 //
 // PRIVACY — the reason this is a fragment and not a query string:
 // everything after "#" is stripped by the browser before the request goes out. It is never in
@@ -141,7 +141,7 @@ export async function createShareLink(
   return { url, ...classifyShareUrl(url) };
 }
 
-/** "Link size: 4.2 KB of 16 KB", the indicator the share dialog shows (CLAUDE_HISTORY.md D57). */
+/** "Link size: 4.2 KB of 16 KB", the indicator the share dialog shows. */
 export function formatShareSize(chars: number): string {
   const kb = (chars / SHARE_CHARS_PER_KB).toFixed(1);
   const limit = Math.round(SHARE_URL_MAX_CHARS / SHARE_CHARS_PER_KB);

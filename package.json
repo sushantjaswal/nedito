@@ -14,6 +14,7 @@
     "perf": "node scripts/perf-pan.mjs",
     "social-preview": "node scripts/social-preview.mjs",
     "readme-images": "node scripts/readme-images.mjs",
+    "notes:backup": "node scripts/notes-backup.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

@@ -1,4 +1,4 @@
-// Diagram motion (A1, CLAUDE_HISTORY.md D116): a saved, optional property of a shape, a line, a
+// Diagram motion: a saved, optional property of a shape, a line, a
 // Nested Block or a whole diagram — never a playback mode. Absent means exactly as before motion
 // existed, and a document that uses none is written exactly as before (format v5); one that uses
 // any is format v6 (file/documentFormat.ts), so an older app refuses it instead of opening it,

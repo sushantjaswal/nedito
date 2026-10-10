@@ -3,7 +3,7 @@
 //
 // Most of what docs/archive/portable-diagrams-spec.md asks to drop here — undo history, transient UI state,
 // per-level viewport memory — is not in the document at all. It lives in the Zustand store
-// alongside `doc` and never reaches `.nedito` either (CLAUDE.md's state rules), so there is
+// alongside `doc` and never reaches `.nedito` either (session state stays out of the document), so there is
 // nothing to strip. That leaves two things that really are in the document.
 import type { DiagramDocument, Diagram } from "../model/types";
 
@@ -41,7 +41,7 @@ function reachableFrom(doc: DiagramDocument, roots: string[]): Set<string> {
  *    diagram record in the payload. The last page always survives — a document with no pages
  *    is not a document.
  * 2. **Unreachable diagrams.** Deleting a nested node can detach its child "to an unused pool"
- *    (CLAUDE.md's delete prompt), leaving a diagram in the map that nothing points at. It is
+ *    (the delete prompt), leaving a diagram in the map that nothing points at. It is
  *    worth keeping in the user's own file; it is dead weight in a link.
  */
 export function slimDocForShare(doc: DiagramDocument): DiagramDocument {

@@ -1,6 +1,6 @@
 // Standard "Basic" diagramming shapes (square, cylinder, cube, document, card, etc.) — generic
 // geometric conventions owned by no vendor, same as General/Flowchart/Network. Original SVG
-// geometry per CLAUDE.md's provenance guardrail.
+// geometry, drawn for Nedito, not copied or traced from any other tool's stencils (see NOTICE).
 import type { StencilSection } from "./types";
 
 const section: StencilSection = {

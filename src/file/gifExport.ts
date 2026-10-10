@@ -1,4 +1,4 @@
-// Animated GIF export (G1, CLAUDE_HISTORY.md D131): the diagram as it moves on the canvas, as a
+// Animated GIF export: the diagram as it moves on the canvas, as a
 // picture that plays anywhere an image can go — a web page, a social post, a chat.
 //
 // Each frame is the ordinary SVG export drawn at one moment of the motion (svgExport's `frame`):

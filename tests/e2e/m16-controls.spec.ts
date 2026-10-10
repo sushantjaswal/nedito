@@ -1,5 +1,5 @@
 // Every control in the format panel and the top bar, driven as a user drives it, checked against
-// what it says it does (CLAUDE_HISTORY D84). The unit tests cover each decision; what a browser
+// what it says it does. The unit tests cover each decision; what a browser
 // adds is the real focus, keystrokes, clicks and native inputs between the user and the model.
 import { expect, test, type Page } from "@playwright/test";
 import { gotoFresh, openPalette, runCommand } from "./helpers";
