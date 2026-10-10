@@ -1,0 +1,50 @@
+name: Bug report
+description: Something in Nedito does not work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. A security problem should not be reported here: see SECURITY.md in the repository and report it privately.
+        Issues are public, so leave out anything personal, in the text and in any file you attach.
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you did
+      description: Step by step, from opening the app.
+      placeholder: |
+        1. Opened the Azure landing zone template
+        2. Opened the Retail spoke
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: A screenshot or a short screen recording helps a lot.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Nedito version
+      description: The footer of the About dialog (app menu › About), for example "Version 0.1.0 · File format v6".
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: Chrome 140 on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: diagram
+    attributes:
+      label: The diagram, if the bug depends on it
+      description: Nothing in the app sends us your work. Export it (app menu › Save a copy) and attach the .nedito file here, after removing anything you would not want public.
