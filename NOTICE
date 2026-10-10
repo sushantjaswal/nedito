@@ -1,7 +1,7 @@
 Nedito
 Copyright the Nedito contributors.
 
-This product includes third-party icon assets, used under each vendor's own published terms.
+This product includes third-party icon assets and the IBM Plex typeface, used under each vendor's own published terms.
 Nedito does not claim ownership of these icons; all trademarks and icon artwork remain the
 property of their respective owners.
 
@@ -53,6 +53,19 @@ Files used: general.ts (16 UI-element icons), misc.ts (35 icons — full section
             brand-color icons).
 Terms:   Apache License, Version 2.0 — full text at
          https://github.com/google/material-design-icons/blob/master/LICENSE
+
+--------------------------------------------------------------------------------
+IBM Plex Sans and IBM Plex Mono (typeface)
+--------------------------------------------------------------------------------
+Source:  https://github.com/IBM/plex, installed from npm as @fontsource/ibm-plex-sans and
+         @fontsource/ibm-plex-mono
+Copyright: IBM Plex Sans, Copyright 2019 IBM Corp.; IBM Plex Mono, Copyright 2017 IBM Corp.
+Files used: the app's interface typeface (the @fontsource packages' WOFF2 files, bundled into
+         the build), and IBM Plex Sans's regular and bold Latin faces embedded in every
+         exported SVG (src/file/exportFonts.ts).
+         Used unmodified.
+Terms:   SIL Open Font License, Version 1.1 — full text, with IBM's copyright notices, in
+         licenses/IBM-Plex-OFL-1.1.txt.
 
 --------------------------------------------------------------------------------
 All other stencils (Basic, Advanced, Flowchart, UML, Entity Relation, General's 7 drawing

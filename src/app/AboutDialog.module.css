@@ -232,6 +232,18 @@
   text-underline-offset: 2px;
 }
 
+.link {
+  color: var(--nd-color-nest-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--nd-color-nest-deep);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .crumbSep {
   color: var(--nd-color-muted);
 }

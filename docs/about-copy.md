@@ -31,6 +31,10 @@ Email {BRAND.contact} with bugs, suggestions, criticism, or a screenshot of some
 
 Your diagram stays on your machine either way. Nothing here sends us your work, so if a bug involves a specific diagram, export it and attach it yourself.
 
+### Open source
+
+{BRAND.name} is open source under the Apache 2.0 licence. The code and the documented file format live [on GitHub]({BRAND.repository}).
+
 ### The name
 
 Nedito is short for Nested Diagram Tool. We spent considerably longer on the nesting than on the name.
@@ -47,3 +51,4 @@ Version {app version} · File format v{formatVersion}
 - Reachable from the app menu and from the command palette by typing "about".
 - Closes with Esc, fully keyboard-accessible, and uses the existing dialog style.
 - The contact address is `BRAND.contact` (`hello@nedito.app`), shown as plain, selectable text and nothing more. There is no `mailto:` link: it did nothing on machines without a mail client set up, so people copy the address into whatever they use for email (user request, 2026-10-08).
+- "on GitHub" links to `BRAND.repository`, opening in a new tab (`rel="noopener noreferrer"`). It is the dialog's only link (D149). The link text names the site, not the address, because the address carries the owner's GitHub handle, which the dialog's own text never shows.
