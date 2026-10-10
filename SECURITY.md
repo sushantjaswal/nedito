@@ -18,8 +18,8 @@ supported. There are no maintained older releases: a fix lands on `main` and is 
 
 ## What is in scope
 
-The app is static files with no server-side code, accounts or storage (see `README.md`, "Where your
-work lives"), so most of what matters happens in the browser:
+The app is static files with no server-side code, accounts or storage (see `README.md`, "Your diagrams
+are yours"), so most of what matters happens in the browser:
 
 - anything that runs script or loads content from a file or link someone else made: opening a
   `.nedito` or `.deepdraw` file, an editable PNG, a Word export or a draw.io file, and opening a

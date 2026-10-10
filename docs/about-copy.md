@@ -17,7 +17,14 @@ Every architecture diagram hits the same wall. You start with five boxes. Then s
 ### What else is different
 
 - **Diagrams that stay alive.** Paste one into Word or PowerPoint, and clicking the picture brings back the full, explorable version.
-- **Nothing is uploaded.** No account, no server, no copy anywhere except this browser. Which also means: download your file. We genuinely can't recover it for you.
+
+### Your diagrams are yours
+
+We built {BRAND.name} around one idea, nesting, and one promise: your diagrams stay with you.
+
+No sign-up, no account, no password to hand over. Nothing you draw is sent to us. It stays in this browser, whether you use {BRAND.host} or run your own copy, which the open source code lets you do.
+
+Which also means: download your file. We genuinely can't recover it for you.
 
 ### Who made this
 
