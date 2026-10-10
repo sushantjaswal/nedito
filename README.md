@@ -41,6 +41,7 @@ npm run dev          # the app, with hot reload
 | Format (Prettier) | `npm run format` |
 | Regenerate the PNG app icons from their SVG | `npm run icons` |
 | Measure pan and zoom frame times | `npm run perf` (see the header of `scripts/perf-pan.mjs`) |
+| Regenerate the repository's social preview image | `npm run social-preview`, with `npm run dev` running (see `docs/social-preview/`) |
 
 `wrangler.jsonc` serves the built `dist/` from a Cloudflare Worker.
 
