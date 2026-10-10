@@ -1,4 +1,5 @@
-// Model invariants from CLAUDE.md "Invariants (enforce in a validation module, test heavily)".
+// The document's invariants, checked whenever a document is read: opening a file, restoring
+// the autosave, importing (README, "How a document is put together").
 import { motionProblems } from "./motion";
 import { assetProblem, isImageNode } from "./assets";
 import type { DiagramDocument, Diagram, DNode, EdgeEnd, NestedNode } from "./types";
@@ -118,7 +119,7 @@ function checkUniqueIds(doc: DiagramDocument): ValidationError[] {
       record(edge.id, diagram.id);
     }
   }
-  // Asset ids share the document's one id space, like every other id (CLAUDE.md invariants).
+  // Asset ids share the document's one id space, like every other id.
   for (const assetId of Object.keys(doc.assets ?? {})) record(assetId);
 
   return errors;
@@ -227,7 +228,7 @@ function checkPortsReferenceRealNodes(doc: DiagramDocument): ValidationError[] {
       for (const port of node.ports) {
         // An absent innerNodeId is a legitimate "unmapped, waiting to be linked" port (see
         // types.ts's Port), not a dangling reference — only a *set* id that points at nothing
-        // is a real violation of CLAUDE.md's "every port.innerNodeId exists in the child".
+        // is a real violation: every set port.innerNodeId must exist in the child.
         if (port.innerNodeId === undefined) continue;
         if (!innerIds.has(port.innerNodeId)) {
           errors.push({

@@ -1,13 +1,10 @@
 # `.nedito` file format
 
-The `.nedito` format is open, documented, and just pretty-printed UTF-8 JSON — the same
-philosophy as draw.io's `.drawio` XML. Nothing about the file is locked; Nedito is the
-natural choice to open it because it's currently the only renderer that understands nesting,
-not because the format is proprietary.
+The `.nedito` format is open, documented, and just pretty-printed UTF-8 JSON. Nothing about the
+file is locked: any program can read and write it from this description.
 
-**Formerly `.deepdraw`.** The app was called DeepDraw until 2026-10-06 (CLAUDE_HISTORY.md D100)
-and wrote `.deepdraw` files with `"format": "deepdraw"`. It was renamed because another live
-product, deepdraw.app, writes `.deepdraw.json`, `.deepdraw.html` and `.deepdraw.png` files. The
+**Formerly `.deepdraw`.** The app was called DeepDraw until 2026-10-06
+and wrote `.deepdraw` files with `"format": "deepdraw"`. The
 document itself did not change: a `.deepdraw` file is the same JSON with the old `format` id,
 and every one ever written still opens — see *Names and identifiers* below.
 
@@ -32,7 +29,7 @@ byte-identical output.
   `"deepdraw"`; both are read forever (`src/file/migrations/index.ts`'s `KNOWN_FORMAT_IDS`), and
   only the current one is ever written. The id is not part of the schema, so changing it is not a
   `formatVersion` bump: an app that predates the rename refuses a `"nedito"` file on its id
-  whatever its version, so a bump could not give it a better message (D100).
+  whatever its version, so a bump could not give it a better message.
 - `formatVersion` — an integer, bumped only on breaking schema changes. The app writes the **lowest** version that can describe the document: 5 when any shape or edge is drawn in the app's own look (see *The `look` key*), else 4 when an edge has a free end, else 3 when it contains an image, else 2, so a diagram that uses neither still opens in an app that predates them. A file with a
   version newer than the running app supports is rejected with an upgrade message, never
   guessed at.
@@ -98,10 +95,10 @@ Every node shares this base shape, then adds fields per `type`:
 - `layerId` — which of the diagram's `layers` this node belongs to. Omitted means the
   diagram's first layer (see the Diagram section above). `DEdge` has the same optional field
   with the same fallback.
-- `style` is a loose `Record<string, string | number | boolean>` — draw.io-like presentation
+- `style` is a loose `Record<string, string | number | boolean>` — presentation
   keys (`fill`, `stroke`, `edgeStyle`, `startArrow`, `endArrow`, `dash`, …) plus a couple of
   Nedito-specific ones documented below. New style keys never require a schema bump.
-  Where a shape's label sits uses draw.io's own keys, read the same way: `verticalAlign`
+  Where a shape's label sits uses three keys: `verticalAlign`
   (`"top" | "middle" | "bottom"`, default middle), `horizontal` (`false`/`0` turns the text to
   read bottom to top) and `verticalLabelPosition` (`"top" | "bottom"` hangs the label outside
   the shape, above or below it). An app that does not know a key draws the label centred. `shadow` (`1`/`true`) draws a soft drop shadow under a shape, and `dash` (`"dashed"` or `"dotted"`) its outline pattern, as on edges.
@@ -177,7 +174,7 @@ never allowed to reach the network.
 
 ### `type: "group"`
 
-Adds `childIds: string[]` — a flat draw.io-style group (Ctrl+G), unrelated to nesting.
+Adds `childIds: string[]` — a flat group (Ctrl+G) of shapes on the same level, unrelated to nesting.
 
 ## Edges (`DEdge`)
 
@@ -201,28 +198,28 @@ Adds `childIds: string[]` — a flat draw.io-style group (Ctrl+G), unrelated to 
 
 - `source`/`target` (`EdgeEnd`) — attached to a node by `nodeId`, or (**v4**) free at a
   `point: {x, y}` in diagram coordinates — a line drawn from the Lines section, or a connection
-  let go on open canvas, as draw.io's dangling edges are. Exactly one of `nodeId` and `point` is
+  let go on open canvas. Exactly one of `nodeId` and `point` is
   set; `{ "point": { "x": 120, "y": 80 } }` is a whole free end. `portId` is set only when the edge is
   attached to a specific port on a nested node (rather than the node generically); an
   optional `anchor: {x, y}` (each 0..1 across the node's box) pins a fixed connection point,
-  as draw.io's exitX/exitY do: the end is exactly there, not moved to the outline.
+  so the end is exactly there, not moved to the outline.
   `waypoints` and `label` are omitted when unset.
 - `labelPosition` (optional) — where the label sits once it has been dragged:
   `{ "t": 0.25, "dx": 0, "dy": 30 }` is a quarter of the way along the line from the source (by
   length, 0..1), then 30 units below it. Relative to the line, so the label keeps its place as the
-  shapes move, as draw.io's edge labels do. Omitted, the label sits at the middle of the line.
+  shapes move. Omitted, the label sits at the middle of the line.
   Purely additive, so it carries no `formatVersion` bump: an app that predates it shows the label
   in the middle.
 - `style.edgeStyle` — `"straight" | "orthogonal" | "curved"`. `startArrow`/`endArrow` are
   `"none" | "open" | "classic"`. `sourceHandle`/`targetHandle` record which of the node's
   connection points the edge renders from — a plain side name (`"right"`) for a generic
   handle, or `"port:<portId>"` for a specific port. These two are a rendering detail kept in
-  the loose `style` bag rather than on the authoritative `EdgeEnd` type (see
-  `CLAUDE_HISTORY.md` decision D11). A free end has no handle; it leaves toward its neighbour on
+  the loose `style` bag rather than on the authoritative `EdgeEnd` type, so the
+  model stays independent of how the canvas draws connection points. A free end has no handle; it leaves toward its neighbour on
   the line.
 - `style.edgeShape` — what the line is drawn as: `"line"` (default; omitted), `"double"` (two
-  parallel strokes — draw.io's `link`), `"arrow"` (a hollow block arrow along the route, its heads
-  drawn wherever `startArrow`/`endArrow` is not `"none"` — draw.io's `flexArrow`) or `"wavy"` (a
+  parallel strokes), `"arrow"` (a hollow block arrow along the route, its heads
+  drawn wherever `startArrow`/`endArrow` is not `"none"`) or `"wavy"` (a
   wave along the line's stretches, keeping its ordinary arrowheads). A new style key, so no bump.
 
 ## Motion (v6, optional)
@@ -301,9 +298,9 @@ it does **not** carry a `formatVersion` bump — same as `background` and `layer
 
 ## `.nedito.png` — editable image export
 
-`Export ▾ › Editable image` (`.nedito.png`; `.deepdraw.png` before D100, still opened) produces an ordinary PNG (the same raster a plain "Export as
+`Export ▾ › Editable image` (`.nedito.png`; `.deepdraw.png` before the rename, still opened) produces an ordinary PNG (the same raster a plain "Export as
 PNG" would) with the full document embedded inside it, so a shared image is also the editable
-file — the same trick draw.io uses for its own PNG export. The PNG is valid and opens normally
+file. The PNG is valid and opens normally
 in any image viewer; Nedito additionally reads it back via `File > Open…` or drag-and-drop.
 
 The document is embedded as a standard [iTXt chunk](https://www.w3.org/TR/png/#11iTXt)

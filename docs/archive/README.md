@@ -2,8 +2,8 @@
 
 Specs that have been fully delivered, kept as the record of what was originally asked for.
 
-They are not the authority on what shipped. Where a build departed from its spec, the decision that
-says so is in the Decision Log in [`CLAUDE_HISTORY.md`](../../CLAUDE_HISTORY.md), and that entry wins.
+They are not the authority on what shipped. Where a build departed from its spec, the
+code, its tests and [`docs/FORMAT.md`](../FORMAT.md) describe what shipped, and they win.
 
 | File | What it asked for | Decisions |
 |---|---|---|

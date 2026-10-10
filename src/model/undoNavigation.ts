@@ -1,5 +1,5 @@
 // Cross-level undo/redo: "undoing while viewing a child can affect the parent (e.g., undo
-// 'convert to nested'); in that case navigate the user to where the change happened" (CLAUDE.md).
+// 'convert to nested'); in that case navigate the user to where the change happened".
 import { useDocStore } from "./store";
 import { findDiagramPath } from "./nesting";
 import type { DiagramDocument } from "./types";

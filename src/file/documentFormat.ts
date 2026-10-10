@@ -1,4 +1,4 @@
-// .nedito encode/decode. See CLAUDE.md ".nedito file format (open format)": pretty-printed
+// .nedito encode/decode, the open file format (docs/FORMAT.md): pretty-printed
 // UTF-8 JSON, self-identifying via "format"/"formatVersion", stable key order for clean Git
 // diffs, validated against the model invariants on open, never throws on a bad file.
 import { BRAND } from "../app/brand";
@@ -20,17 +20,17 @@ import { KNOWN_FORMAT_IDS, migrate } from "./migrations";
 // "created with a newer version, please update" message instead of a confusing validation
 // failure. See docs/FORMAT.md and file/migrations/.
 //
-// v3 (2026-09-28): images of the user's own — an `assets` table and `ShapeNode.imageId`
-// (CLAUDE_HISTORY.md D79). A document is written as v3 *only when it contains an image*: v3 adds
+// v3 (2026-09-28): images of the user's own — an `assets` table and `ShapeNode.imageId`.
+// A document is written as v3 *only when it contains an image*: v3 adds
 // nothing a v2 document can hold, so a diagram without images stays v2 and still opens in an app
 // that predates images. The bump exists so that an older app shown an image says "newer
 // version" instead of drawing blank shapes.
 //
 // v4 (2026-10-03): an edge end may be free at a `point` instead of on a node — a line drawn from the
-// Lines section, or a connection let go on open canvas (CLAUDE_HISTORY.md D86). Written as v4 *only
+// Lines section, or a connection let go on open canvas. Written as v4 *only
 // when a document has such an end*: an older app would read it as a missing node and lose the line,
 // and the bump turns that into its "newer version" message instead.
-// v5 (2026-10-05): Nedito's own default look (R6, CLAUDE_HISTORY.md D95). Shapes and edges drawn
+// v5 (2026-10-05): Nedito's own default look. Shapes and edges drawn
 // before it carry `style.look = "classic"`; an unmarked one is drawn in the new look. Written as v5
 // whenever anything unmarked exists: an older app would draw it in the classic look, and worse, a
 // v4 file read back here is migrated by marking everything classic — which would silently restyle
@@ -70,7 +70,7 @@ function sortedDiagrams(diagrams: Record<string, Diagram>): Record<string, Diagr
 }
 
 // Key order matters here (not just for humans): JSON.stringify visits object keys in
-// insertion order, and CLAUDE.md requires "format"/"formatVersion" first so a file
+// insertion order, and "format"/"formatVersion" must come first so a file
 // self-identifies from its opening bytes.
 export function encodeDoc(doc: DiagramDocument): string {
   // Only the pictures some node still shows: a deleted image's asset stays in memory for undo,

@@ -1,4 +1,4 @@
-// Style presets (CLAUDE_HISTORY.md D99).
+// Style presets.
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";

@@ -1,4 +1,4 @@
-// PowerPoint export with native Slide Zoom (CLAUDE_HISTORY.md D58).
+// PowerPoint export with native Slide Zoom.
 //
 // One slide per diagram, depth-first. Every nested block on a parent slide gets a navigation
 // object sitting exactly over its box, targeting that child's slide:

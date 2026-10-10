@@ -1,5 +1,5 @@
-// Which shape-library sections are visible, per CLAUDE.md's "More Shapes… dialog to
-// enable/disable sections". A local per-browser preference, not part of the document —
+// Which shape-library sections are visible, set in the Browse all libraries dialog, which
+// enables and disables sections. A local per-browser preference, not part of the document —
 // stored directly in localStorage rather than the doc store (no undo history, no autosave
 // coupling needed for a UI-only setting).
 //

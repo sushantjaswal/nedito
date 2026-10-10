@@ -77,6 +77,6 @@ Six work items below. Ship them **in the order listed**, each on its own branch 
 
 ## Documentation
 
-- Update CLAUDE.md: the layout is **no longer** draw.io parity. Behaviour and keyboard parity remain the reference; visual layout and default styling are DeepDraw's own. Remove any instruction that says to match draw.io's four-region layout or format panel.
-- Log one decision per item in CLAUDE_HISTORY.md, and in the first one record that this supersedes the draw.io layout-parity principle from the original CLAUDE.md.
-- Add R1–R6 to PROGRESS.md as a new "Redesign" group before starting R1.
+- Update the project rules: the layout is **no longer** draw.io parity. Behaviour and keyboard parity remain the reference; visual layout and default styling are DeepDraw's own. Remove any instruction that says to match draw.io's four-region layout or format panel.
+- Log one decision per item in the decision log, and in the first one record that this supersedes the draw.io layout-parity principle from the original project rules.
+- Add R1–R6 to the work queue as a new "Redesign" group before starting R1.

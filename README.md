@@ -103,6 +103,61 @@ Every older version still opens, migrated on load (`src/file/migrations/`), and 
 before the product was renamed from DeepDraw: the `.deepdraw` extension and its editable
 `.deepdraw.png` images (`LEGACY_BRANDS` in [`src/app/brand.ts`](src/app/brand.ts)).
 
+## How a document is put together
+
+A document is a flat map of diagrams, and nesting is by reference: a Nested Block names the diagram
+it holds, rather than containing it. That keeps every level a full diagram of its own, opened on its
+own canvas, however deep it sits.
+
+```typescript
+interface DiagramDocument {
+  formatVersion: number;
+  meta: { title: string; created: string; modified: string; appVersion: string };
+  rootDiagramIds: string[];             // one per page
+  diagrams: Record<string, Diagram>;    // every diagram, on every level, by id
+}
+
+interface Diagram { id: string; title: string; nodes: DNode[]; edges: DEdge[] }
+
+type DNode = ShapeNode | NestedNode | GroupNode;   // each with id, position, size, z, style, label
+
+interface NestedNode {
+  type: "nested";
+  childDiagramId: string;               // the diagram this block opens into
+  collapsed: { icons: string[]; summary?: string };
+  ports: Port[];
+}
+
+interface Port {
+  side: "top" | "right" | "bottom" | "left";
+  offset: number;                       // 0..1 along that side
+  innerNodeId?: string;                 // the shape inside it leads to; unset while waiting
+}
+
+interface DEdge { source: EdgeEnd; target: EdgeEnd; waypoints?: { x: number; y: number }[]; style: StyleMap }
+```
+
+The full model, with layers, images, page settings and motion, is in
+[`src/model/types.ts`](src/model/types.ts) and documented version by version in
+[`docs/FORMAT.md`](docs/FORMAT.md).
+
+**What always holds.** Every document is checked against these whenever it is read — opening a
+file, restoring the autosave, importing (`src/model/validate.ts`) — and a file that breaks one is refused with a clear message rather than
+loaded half-broken:
+
+- every Nested Block's `childDiagramId` names a diagram in the document, and no diagram contains
+  itself, directly or further down;
+- a line that reaches a Nested Block attaches to one of its ports, and a port's `innerNodeId`,
+  when set, names a shape inside that block's diagram. A port with no `innerNodeId` is waiting to
+  be linked, shown inside the block as an amber ghost, never silently dropped;
+- every id — diagrams, shapes, lines, ports, images — is unique across the whole document.
+
+Changes keep them true. Deleting a shape that a port leads to asks whether to keep the link
+waiting or remove it; deleting a Nested Block that holds shapes asks whether to delete what is
+inside or lift it onto the current level. Every change is a named action in the store, one undo
+step each, and undo works across levels: undoing something made on another level takes you
+there. Only the level being viewed is drawn, so depth costs nothing.
+
 ## Running it locally
 
 You need Node.js and npm. Commands work in PowerShell as written; the project is developed on
@@ -126,6 +181,20 @@ npm run dev          # the app, with hot reload, at http://localhost:5173
 | Measure pan and zoom frame times | `npm run perf` (see the header of `scripts/perf-pan.mjs`) |
 | Regenerate the README's pictures | `npm run readme-images`, with `npm run dev` running |
 | Regenerate the repository's social preview image | `npm run social-preview`, with `npm run dev` running (see `docs/social-preview/`) |
+| Back up the maintainer's local working notes to their private repository | `npm run notes:backup` (see below) |
+
+**Git hooks.** The repository keeps its hooks in `.githooks/`, which a clone does not use until
+you point Git at it — once per clone:
+
+```powershell
+git config core.hooksPath .githooks
+```
+
+Its one hook, `post-merge`, runs `npm run notes:backup` whenever a pull or merge brings new commits
+into `main`. That backs up the maintainer's local working notes, which are not part of this
+repository, to a private one; the clone is found through the `NEDITO_NOTES_REPO` environment
+variable, or a `nedito-notes` folder beside the project. In a clone without those notes it does
+nothing, and it never blocks or undoes a merge.
 
 Built with React 18, TypeScript, Vite, [React Flow](https://reactflow.dev) and Zustand. The
 production build is static files, served from a Cloudflare Worker (`wrangler.jsonc`).
@@ -178,14 +247,30 @@ end-to-end tests split across four machines, and must be up to date with `main` 
 it merges. Commits use conventional messages (`feat(canvas): …`), and new dependencies need a
 stated reason.
 
-[`CLAUDE.md`](CLAUDE.md) holds the full working agreements and the product rules,
-[`PROGRESS.md`](PROGRESS.md) the work queue, and [`CLAUDE_HISTORY.md`](CLAUDE_HISTORY.md) every
-past decision and why.
+[`CONTRIBUTING.md`](CONTRIBUTING.md) has the rules review holds every change to.
 
 ## Security
 
 Please report a security problem privately, as [`SECURITY.md`](SECURITY.md) describes, not in a
 public issue.
+
+## Where the shapes come from
+
+Every shape in the library is one of two things, and the source of each section is recorded in
+[`NOTICE`](NOTICE):
+
+- **drawn for Nedito**: the general shapes, flowchart, UML, entity relation, data flow, C4 and the
+  rest are original SVG, following the published notations (ISO 5807, UML, Chen) rather than any
+  other product's artwork;
+- **taken from an official or openly licensed set**: the Azure, AWS and Google Cloud architecture
+  icons, from each vendor's own published icon package under its usage terms, and Google's Material
+  Symbols under the Apache License 2.0.
+
+Nothing else goes in. Icons, stencils and templates are never taken from other diagram tools'
+libraries, in any form — copied, converted or traced — because those carry their own terms and
+chains of third-party copyright that an open-source project cannot pass on. A new icon set comes
+from its owner's official release or an open licence, with its source and terms added to
+`NOTICE`.
 
 ## Licence and attribution
 

@@ -1,4 +1,4 @@
-// What a presentation mode does to the open level right now (A6, CLAUDE_HISTORY.md D123).
+// What a presentation mode does to the open level right now.
 //
 //   - Walkthrough: numbered badges, readers' and the author's alike, and a dot travelling the path
 //     between steps while motion is allowed. It hides nothing, so it runs in the editor too.

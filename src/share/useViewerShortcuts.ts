@@ -13,7 +13,6 @@ export function useViewerShortcuts(): void {
       const key = e.key.toLowerCase();
 
       // Esc ends a trace first (D117), then leaves a nested diagram, matching the editor and
-      // CLAUDE.md's nesting navigation.
       if (e.key === "Escape") {
         const store = useDocStore.getState();
         if (store.trace) store.setTrace(null);

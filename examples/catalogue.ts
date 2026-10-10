@@ -9,7 +9,7 @@ export interface Example {
   load: () => Promise<{ default: DiagramDocument }>;
 }
 
-// The examples were drawn before Nedito's own look (R6, CLAUDE_HISTORY.md D95) and keep the look
+// The examples were drawn before Nedito's own look and keep the look
 // they were designed in, as the templates do: every shape and edge is marked classic.
 const classic =
   (load: () => Promise<{ default: DiagramDocument }>) =>

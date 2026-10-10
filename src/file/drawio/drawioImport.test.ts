@@ -88,7 +88,7 @@ describe("decodeDrawio", () => {
     const nodeIds = new Set(page.nodes.map((n) => n.id));
     expect(nodeIds.has(edge.source.nodeId!)).toBe(true);
     expect(nodeIds.has(edge.target.nodeId!)).toBe(true);
-    // draw.io's ids ("2", "3") must not survive: CLAUDE.md requires nanoid ids unique across
+    // draw.io's ids ("2", "3") must not survive: ids are nanoids unique across
     // the whole document, and two pages would otherwise both claim id "1".
     expect(edge.source.nodeId).not.toBe("2");
 

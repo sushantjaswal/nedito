@@ -1,4 +1,4 @@
-// The ＋ handles' connected copy (R3, CLAUDE_HISTORY.md D92).
+// The ＋ handles' connected copy.
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { cacheStencils, getStencil, loadSection } from "../library/stencils";
 import { newShapeStyle } from "../library/stencils/defaultStyle";

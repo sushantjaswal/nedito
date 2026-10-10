@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { gotoShareLink, openShareLink, sharedDoc, shareUrlFor } from "./shareLink";
 import { gotoFresh } from "./helpers";
 
-// Phase 3.1 (CLAUDE_HISTORY.md D51): a diagram travels inside the URL fragment and
+// Phase 3.1: a diagram travels inside the URL fragment and
 // opens in a read-only viewer that can still be navigated, including into nested blocks.
 test.describe("Phase 3.1 — share link viewer", () => {
   test("opens a shared diagram read-only, with no editing chrome", async ({ page }) => {
@@ -33,7 +33,7 @@ test.describe("Phase 3.1 — share link viewer", () => {
     await expect(page.getByText("Ledger")).toBeVisible();
 
     // Arriving at the child's own 100% view, not stranded at whatever zoom the dive-in
-    // animation reached — the failure CLAUDE_HISTORY D44 describes, re-checked here because
+    // animation reached — a failure seen before, re-checked here because
     // the viewer runs that same transition without the editor's chrome around it.
     await expect
       .poll(() => page.evaluate(() => window.__rf!.getViewport!().zoom), { timeout: 5000 })
@@ -135,7 +135,7 @@ test.describe("Phase 3.1 — a link that cannot be read", () => {
   });
 });
 
-// Phase 3.3 (CLAUDE_HISTORY.md D57). The dialog's own behaviour is unit-tested in
+// Phase 3.3. The dialog's own behaviour is unit-tested in
 // src/share/ShareDialog.test.tsx; the acceptance criterion that needs a browser is that the
 // &p= parameter really does land the reader at the right nesting level.
 test.describe("Phase 3.3 — share dialog and 'Open at this level'", () => {

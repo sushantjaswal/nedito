@@ -1,4 +1,4 @@
-/* The nesting trail (CLAUDE.md "breadcrumb trail"). Extracted from TopBar so the read-only
+/* The nesting trail. Extracted from TopBar so the read-only
    share viewer can show the same trail without pulling in the editor's menus. Both hosts sit
    on the dark top bar, so the colours are the top-bar tokens in both. */
 .breadcrumbs {

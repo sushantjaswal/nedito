@@ -1,4 +1,4 @@
-// Step badges (A6, CLAUDE_HISTORY.md D123): a presentation's step numbers. Walkthrough shows them
+// Step badges: a presentation's step numbers. Walkthrough shows them
 // to readers and rests as them in every still export — a numbered path is still a path when
 // nothing moves. Build and Spotlight show them only to the author, in the editor, as an outline,
 // so the order can be seen while it is set; readers and exports never see those.

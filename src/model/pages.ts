@@ -1,5 +1,5 @@
 // Pure doc-transform functions for multi-page documents. "Pages are siblings; nesting is
-// orthogonal to pages" (CLAUDE.md) — a page is just a rootDiagramIds entry. Deleting one
+// orthogonal to pages" — a page is just a rootDiagramIds entry. Deleting one
 // cascades through its nested-diagram subtree the same way deleting a nested node does.
 import { nanoid } from "nanoid";
 import { createDefaultLayers } from "./layers";

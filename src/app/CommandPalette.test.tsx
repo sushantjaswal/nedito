@@ -1,4 +1,4 @@
-// The command palette (R2, CLAUDE_HISTORY.md D91). The Edit, View, Arrange and Extras menus' tests
+// The command palette. The Edit, View, Arrange and Extras menus' tests
 // moved here with their commands: each case checks the same thing it did on its menu — an item
 // greyed out there is offered but disabled here — plus what only a palette does: filtering,
 // Enter and Esc, and going to a shape by name.

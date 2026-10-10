@@ -16,4 +16,4 @@
 - [ ] The product's name and hosts come from `src/app/brand.ts`
 - [ ] Nothing copied from draw.io; any new icons or assets are recorded in `NOTICE`
 - [ ] A file-format change bumps `formatVersion`, adds a migration and updates `docs/FORMAT.md`
-- [ ] A decision has its entry in `CLAUDE_HISTORY.md`; a new dependency has its reason in `PROGRESS.md`
+- [ ] Any design decision, and the reason for any new dependency, is explained above

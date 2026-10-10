@@ -1,5 +1,4 @@
-// Nedito's own default look, and the classic look every earlier document keeps (R6,
-// CLAUDE_HISTORY.md D95).
+// Nedito's own default look, and the classic look every earlier document keeps.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";

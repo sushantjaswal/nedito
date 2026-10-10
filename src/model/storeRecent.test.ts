@@ -1,4 +1,4 @@
-// Replacing the document keeps the outgoing one under Recent (R2, CLAUDE_HISTORY.md D91), so New,
+// Replacing the document keeps the outgoing one under Recent, so New,
 // Open and a template can never lose work.
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

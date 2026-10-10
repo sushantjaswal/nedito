@@ -4,7 +4,7 @@
 // That happened while building D80: the status bar threw, and the entire shell went — the canvas,
 // the menus, and the autosave hook that lives in AppShell — with nothing on screen to say so. In
 // a release build the same class of bug would silently stop autosave. So each region of the shell
-// sits in its own boundary (CLAUDE_HISTORY.md D81): a region that fails shows a small notice with
+// sits in its own boundary: a region that fails shows a small notice with
 // a way to retry, and everything else, autosave included, keeps working.
 //
 // A class component because React offers error boundaries no other way.

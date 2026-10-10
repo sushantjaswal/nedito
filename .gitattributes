@@ -13,6 +13,9 @@
 # whose bytes are compared rather than parsed.
 *.svg text eol=lf
 
+# Git hooks run under sh, which stops at a carriage return on the first line.
+.githooks/* text eol=lf
+
 # Never touched: these are containers whose CRC/offsets a line-ending rewrite would corrupt.
 *.png binary
 *.pptx binary

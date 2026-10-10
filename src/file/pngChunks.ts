@@ -1,7 +1,7 @@
 // Minimal, dependency-free PNG chunk read/write — just enough to embed and recover a single
 // iTXt (UTF-8 text) chunk carrying the full .nedito document, the same "editable image"
-// trick draw.io uses for its own PNG export (CLAUDE.md: "PNG with the JSON embedded in a
-// metadata chunk"). Pure Uint8Array in and out, so this is unit-testable under Node/jsdom
+// trick draw.io uses for its own PNG export (a PNG with the document's JSON
+// embedded in a metadata chunk). Pure Uint8Array in and out, so this is unit-testable under Node/jsdom
 // without a real <canvas>; see editablePngFormat.ts for the browser-only glue that actually
 // rasterizes a diagram and calls these.
 
@@ -9,7 +9,7 @@
 // user-facing text, and must stay stable across a product rename so a PNG exported before the
 // rename can still be read after it. The actual format identification and version live inside
 // the embedded JSON's own "format"/"formatVersion" fields, which decodeDoc() already checks.
-// Matches the project's established `dd-` neutral-prefix convention (CLAUDE.md) used for
+// Matches the project's established `dd-` neutral-prefix convention used for
 // exactly this rename-indirection purpose.
 const CHUNK_KEYWORD = "dd-doc";
 

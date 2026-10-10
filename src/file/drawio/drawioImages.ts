@@ -1,4 +1,4 @@
-// draw.io's pictures, read into Nedito's own (CLAUDE_HISTORY.md D82).
+// draw.io's pictures, read into Nedito's own.
 //
 // draw.io draws a picture as a vertex styled `shape=image` (or with the bare name `image`) whose
 // `image=` key holds the picture itself. Before Nedito had images these arrived as plain

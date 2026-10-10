@@ -1,4 +1,4 @@
-// An edge's colour when its style leaves it unset (R6, CLAUDE_HISTORY.md D95).
+// An edge's colour when its style leaves it unset.
 //
 // Nedito's own look draws new edges in the ink, black like shape outlines (D96; slate in D95); an edge marked `look: "classic"` (made before
 // R6, or from a template — see model/look.ts) keeps the theme's muted grey, which follows dark

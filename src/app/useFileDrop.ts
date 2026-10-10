@@ -1,8 +1,8 @@
 // Drag-and-drop onto the app window: a document opens, a picture is placed.
 //
-// A .nedito, .drawio/.xml or .docx file opens as the document (CLAUDE.md: "open via file picker
-// and drag-and-drop onto the app window"). An image is inserted where it was dropped — several at
-// once, staggered (CLAUDE_HISTORY.md D79). The one overlap is a PNG: a .nedito.png carries a
+// A .nedito, .drawio/.xml or .docx file opens as the document (a file opens
+// from the file picker or by dropping it onto the app window). An image is inserted where it was dropped — several at
+// once, staggered. The one overlap is a PNG: a .nedito.png carries a
 // whole diagram, and by the user's decision it still opens as that diagram, while any other PNG is
 // a picture to insert. Before D79 every dropped .png was tried as a document, so an ordinary photo
 // failed with an error.

@@ -1,6 +1,6 @@
 // The command palette (Ctrl+K, or the "Search or run a command" button): every command the app has,
 // filtered as you type and run with Enter — and every named shape and Nested Block in the document,
-// at any page or level, which it jumps to (R2, CLAUDE_HISTORY.md D91). With the menu bar gone this
+// at any page or level, which it jumps to. With the menu bar gone this
 // is where Edit, View and Arrange live, so nothing the menus offered is out of reach.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDocStore } from "../model/store";

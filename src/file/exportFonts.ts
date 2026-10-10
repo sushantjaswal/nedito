@@ -4,7 +4,7 @@
 // svgExport kept its own "Segoe UI, system-ui, sans-serif" stack and was exempted from
 // fontTokens.test.ts. The result was worse than the problem: node labels came out in whatever
 // the viewer had, and edge labels, which named no family at all, fell back to serif. Embedding
-// the face removes the reason for the exemption entirely (CLAUDE_HISTORY.md D67).
+// the face removes the reason for the exemption entirely.
 //
 // Only the two weights labels can actually use are embedded (RichLabel.bold picks 400 or 700),
 // from the latin subsets the app already ships — about 45 KB of woff2, ~60 KB once base64'd.

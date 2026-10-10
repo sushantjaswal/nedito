@@ -1,6 +1,6 @@
 // What an import that worked, but changed something along the way, tells the user.
 //
-// "Best-effort" import (CLAUDE.md) has to mean *stated* effort: a diagram that came across with
+// "Best-effort" import has to mean *stated* effort: a diagram that came across with
 // six shapes quietly turned into rectangles, and no mention of it, is the failure this exists to
 // prevent. It used to be said in a `window.alert` — honest and unmissable, but it vanished the
 // moment it was dismissed and could not point at anything, so a user told "drew 12 shapes as
