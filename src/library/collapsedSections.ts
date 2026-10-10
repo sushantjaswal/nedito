@@ -6,7 +6,7 @@ import { SECTION_IDS, type SectionId } from "./stencils";
 const KEY = `${BRAND.storagePrefix}:collapsedSections`;
 
 // A first-ever visit (nothing saved yet) opens General and keeps every other section collapsed,
-// as draw.io does: a dozen fully-expanded shape grids at once is overwhelming, but a sidebar of
+// because a dozen fully-expanded shape grids at once is overwhelming, but a sidebar of
 // nothing but closed headers leaves a newcomer with no shape in sight to start from (D87). Once the
 // user has expanded/collapsed anything, that explicit choice (however sparse) is respected
 // verbatim from then on.

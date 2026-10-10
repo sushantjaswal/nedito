@@ -2,7 +2,7 @@
 // picture, so the line ends that carry UML's meaning are all visible at once.
 //
 // Each class is three stacked compartments — name, attributes, operations — grouped so it moves
-// as one, the way draw.io builds a class. A single label cannot be made to sit inside three
+// as one. A single label cannot be made to sit inside three
 // compartments (the first version tried, and its text ran across the divider lines); three
 // shapes can, and each compartment is then edited on its own, which is how people fill these in.
 // Inheritance is drawn as UML's shared-arrow tree: both subclasses join one hollow triangle.

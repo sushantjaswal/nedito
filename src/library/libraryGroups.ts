@@ -1,5 +1,5 @@
 // The shape library organised by purpose: the sidebar shows these
-// groups, named for what is being drawn, instead of draw.io's list of sections.
+// groups, named for what is being drawn, rather than one long list of sections.
 //
 // Groups are presentation only. Underneath, every section keeps its id, its stencils keep
 // theirs, and everything stored about sections — Favorites, which are open, which are enabled,

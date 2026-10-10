@@ -138,7 +138,7 @@ export function duplicateNodes(doc: DiagramDocument, diagramId: string, nodeIds:
 }
 
 // Removes nodes and edges together in a single doc transform so a mixed selection commits
-// as one undo entry, matching draw.io's single Delete-key press behavior.
+// as one undo entry: one Delete press, one step.
 export function removeSelection(doc: DiagramDocument, diagramId: string, nodeIds: string[], edgeIds: string[]): DiagramDocument {
   const removedNodes = new Set(nodeIds);
   const removedEdges = new Set(edgeIds);

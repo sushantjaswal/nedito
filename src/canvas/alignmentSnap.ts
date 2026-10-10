@@ -1,4 +1,4 @@
-// Figma/draw.io-style smart guides: while dragging a single node, snap its edges/center to
+// Smart guides: while dragging a single node, snap its edges/center to
 // the nearest matching edge/center of any other node on the canvas, within a small threshold.
 export interface Box {
   x: number;

@@ -1,7 +1,7 @@
 // Share-slimming: strip everything a *viewer* of the diagram will never need, so the payload
 // that has to survive inside a URL is as small as we can honestly make it.
 //
-// Most of what docs/archive/portable-diagrams-spec.md asks to drop here — undo history, transient UI state,
+// Most of what a share link could drop here — undo history, transient UI state,
 // per-level viewport memory — is not in the document at all. It lives in the Zustand store
 // alongside `doc` and never reaches `.nedito` either (session state stays out of the document), so there is
 // nothing to strip. That leaves two things that really are in the document.

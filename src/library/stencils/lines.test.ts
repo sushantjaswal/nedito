@@ -41,7 +41,7 @@ describe("the Lines section", () => {
     }
   });
 
-  // draw.io's sidebar lines are lines, not boxes with a line drawn in them: free at both ends,
+  // The sidebar's lines are lines, not boxes with a line drawn in them: free at both ends,
   // ready to be bent or dropped onto a shape (D86).
   it("places a real line with free ends, not a box, styled as the entry shows", async () => {
     await lines();

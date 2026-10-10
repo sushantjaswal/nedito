@@ -1,5 +1,5 @@
-// What a line is drawn as, besides a single stroke: draw.io's "link" (a double line) and its
-// "flexArrow" (a hollow block arrow that follows the line's route). Picked in the line toolbar's
+// What a line is drawn as, besides a single stroke: a double line, and a hollow block arrow
+// that follows the line's route. Picked in the line toolbar's
 // Connection popup; stored as `style.edgeShape`.
 //
 // Both are drawn the same way, by laying a stroke of the page colour down the middle of a wider
@@ -120,7 +120,7 @@ export function shapeEdge(
 ): ShapedEdge {
   if (shape === "line") return { path: buildEdgePath(input).path, heads: [], outer: 0, inner: 0 };
   // A wavy line keeps an ordinary stroke and arrowheads; only its path changes. It runs straight
-  // between its bends whatever the route, as draw.io's sketchy/wavy lines do.
+  // between its bends whatever the route.
   if (shape === "wavy") {
     const pts = [{ x: input.sourceX, y: input.sourceY }, ...input.waypoints, { x: input.targetX, y: input.targetY }];
     return { path: wavePath(pts, 3 + strokeWidth, 26), heads: [], outer: 0, inner: 0 };

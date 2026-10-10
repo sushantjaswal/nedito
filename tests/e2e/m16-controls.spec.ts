@@ -175,7 +175,7 @@ test.describe("Formatting controls (the context bar's popovers, once the format 
   });
 });
 
-// The draw.io menu bar's commands, from where they live since R2 (D91): the command palette, the
+// The commands a menu bar would hold, from where they live: the command palette, the
 // app menu and the Export menu.
 test.describe("Top bar commands", () => {
   test.beforeEach(async ({ page }) => gotoFresh(page));

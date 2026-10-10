@@ -24,7 +24,7 @@ interface ConnectionHandlesProps {
 }
 
 // The hover affordance: a ＋ just outside the middle of each side,
-// where draw.io shows four arrows, plus the 4 corner perimeter points. connectionMode="loose"
+// plus the 4 corner perimeter points. connectionMode="loose"
 // on <ReactFlow> lets any of these act as either end of a connection despite all being
 // declared type="source".
 //

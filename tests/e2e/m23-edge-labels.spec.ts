@@ -1,4 +1,4 @@
-// Draggable edge labels: drag a line's label along or off it, as in draw.io;
+// Draggable edge labels: drag a line's label along or off it;
 // it keeps its place relative to the line as the shapes move.
 import { expect, test, type Page } from "@playwright/test";
 import { getDoc, gotoFresh } from "./helpers";

@@ -30,7 +30,7 @@ describe("verticalAlignOf", () => {
   });
 });
 
-describe("draw.io's label style keys", () => {
+describe("the label style keys", () => {
   it("turns text to read bottom to top with horizontal=0, on any shape", () => {
     expect(labelArea(undefined, 40, 200, { horizontal: false }).vertical).toBe(true);
     expect(labelArea(undefined, 40, 200, { horizontal: "0" }).vertical).toBe(true);

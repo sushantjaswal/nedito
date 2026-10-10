@@ -1,7 +1,7 @@
 // The invisible anchor a free line end hangs from.
 //
 // React Flow draws an edge only between two nodes, and a line from the sidebar's Lines section has
-// no node at one end or either (draw.io's dangling edge; model/types.ts EdgeEnd.point). Each free
+// no node at one end or either (a free line; model/types.ts EdgeEnd.point). Each free
 // end therefore gets one of these: a one-pixel node at the end's point, carrying the single handle
 // the edge is attached to. It is never selected, dragged or connected to, and is not part of the
 // document — DiagramCanvas makes it from the edges each render, and DiagramEdge draws the line from

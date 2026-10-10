@@ -52,8 +52,8 @@ frame (~340 ms) appears as a burst of nodes mounts at the edge of the view.
 **P1 — Level of detail when zoomed far out.** Below roughly 35% zoom, where labels are
 unreadable anyway, draw each node as its outline and fill only — no label text, handles or
 shadow — and skip arrowheads, switching back as soon as the zoom rises. It is the standard
-remedy (map and CAD tools all do it) and targets exactly where the time goes. draw.io does not do
-it, and it changes how a zoomed-out diagram looks, so it is the user's call. Smaller, safe items
+remedy (map and CAD tools all do it) and targets exactly where the time goes. It
+changes how a zoomed-out diagram looks, so it is the user's call. Smaller, safe items
 that could ride along: no hover styling on nodes while a pan gesture is running.
 
 ## Update — P1 shipped (D115)

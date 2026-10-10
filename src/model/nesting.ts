@@ -222,7 +222,7 @@ function respaceSide(ports: Port[], side: Port["side"]): Port[] {
   return ports.map((p) => (p.side === side ? { ...p, offset: ++i / (onSide.length + 1) } : p));
 }
 
-// draw.io has no equivalent concept: dropping an edge on a nested node's *body* (its generic
+// Dropping an edge on a nested node's *body* (its generic
 // hover handles) rather than on an existing port dot used to produce a plain node-level edge
 // with no portId at all — which the ghost-link overlay then had no way to show inside the
 // child, so the connection silently vanished from the author's point of view (the bug behind

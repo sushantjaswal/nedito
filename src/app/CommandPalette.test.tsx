@@ -206,7 +206,7 @@ describe("the palette's View commands (once the View menu)", () => {
 describe("the palette's Arrange commands (once the Arrange menu)", () => {
   beforeEach(resetStore);
 
-  // D79: draw.io's Arrange ▸ Insert ▸ Image…, which needs no selection.
+  // Insert image… needs no selection.
   it("offers Insert image… with nothing selected, and not in the read-only viewer", () => {
     renderPalette();
     expect(isDisabled(option("Insert image"))).toBe(false);

@@ -14,6 +14,6 @@
 
 - [ ] No personal or machine-specific details in files or commit messages (names, addresses, handles, local paths)
 - [ ] The product's name and hosts come from `src/app/brand.ts`
-- [ ] Nothing copied from draw.io; any new icons or assets are recorded in `NOTICE`
+- [ ] Nothing copied from another diagram tool; any new icons or assets are recorded in `NOTICE`
 - [ ] A file-format change bumps `formatVersion`, adds a migration and updates `docs/FORMAT.md`
 - [ ] Any design decision, and the reason for any new dependency, is explained above

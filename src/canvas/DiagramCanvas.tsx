@@ -152,7 +152,7 @@ function toFlowNode(
     height: node.size.h,
     zIndex: node.z,
     // A locked layer's shapes still render and connect, but can't be selected, moved, or
-    // resized — matches draw.io's "lock layer" behavior (protect its content from edits).
+    // resized — a locked layer protects its content from edits.
     selectable: !locked,
     draggable: !locked,
     // parentId alone (no `extent: "parent"`) is deliberate: React Flow's extent clamp confines
@@ -410,7 +410,7 @@ function DiagramCanvasInner() {
     // React Flow requires a parent node to appear before its children in the nodes array;
     // groups (only ever parents, never nested inside another group — flat groups stay flat)
     // go first. A hidden layer's nodes are dropped entirely rather than rendered-but-invisible
-    // (matches draw.io: hidden layer content doesn't participate in the canvas at all).
+    // (hidden layer content doesn't take part in the canvas at all).
     const childToGroup = buildChildToGroup(diagram);
     const groupFlowNodes: FlowNode[] = [];
     const otherFlowNodes: FlowNode[] = [];
@@ -558,8 +558,8 @@ function DiagramCanvasInner() {
     [connect],
   );
 
-  // A connection let go short of a handle. draw.io attaches it to the shape it was dropped on,
-  // anywhere on that shape, and leaves it as a dangling line when dropped on open canvas; both
+  // A connection let go short of a handle attaches to the shape it was dropped on, anywhere
+  // on that shape, and is left as a free line when dropped on open canvas; both
   // used to be silently discarded here. (Dragging an existing edge's ends is DiagramEdge's own
   // endpoint handles, which do the same for a line already drawn.)
   const onConnectEnd = useCallback(

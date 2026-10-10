@@ -1,8 +1,8 @@
-// draw.io's shortcut map (arrow nudge, Ctrl+Z/Y undo/redo, Ctrl+C/V/X/D, Delete, F2, Esc,
+// The keyboard shortcuts (arrow nudge, Ctrl+Z/Y undo/redo, Ctrl+C/V/X/D, Delete, F2, Esc,
 // Ctrl+A select all, Ctrl+G/Ctrl+Shift+U group/ungroup, Ctrl+Shift+F/B front/back,
 // Ctrl+=/Ctrl+- zoom, Ctrl+Shift+H fit page, Ctrl+Shift+K shortcuts cheat sheet, Ctrl+F
-// find/replace — Ctrl+F rather than draw.io's own Ctrl+Shift+F, which this codebase already
-// binds to Bring to Front; Ctrl+F is the near-universal "find" convention everywhere else.
+// find/replace — Ctrl+F, since Ctrl+Shift+F is already bound to
+// Bring to Front; Ctrl+F is the near-universal "find" convention everywhere else.
 // The label editor stops propagation on every keydown while active, so it never reaches
 // here — native text-field undo/copy/paste behave normally while editing.
 import { useEffect } from "react";
@@ -204,8 +204,7 @@ export function useGlobalShortcuts(): void {
         return;
       }
 
-      // Alt+Shift+Arrow: draw.io's clone-and-connect, which the ＋ handles' click also does
-      // (R3, D92) — a connected copy of the one selected shape on that side.
+      // Alt+Shift+Arrow: clone-and-connect, which the ＋ handles' click also does — a connected copy of the one selected shape on that side.
       if (e.key in ARROW_SIDES && e.altKey && e.shiftKey && !mod && store.selection.nodeIds.length === 1 && !store.ui.viewerMode) {
         e.preventDefault();
         addConnectedCopyAndReveal(store.selection.nodeIds[0], ARROW_SIDES[e.key]);

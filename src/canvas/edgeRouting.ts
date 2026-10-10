@@ -111,8 +111,8 @@ export function resolveHandleAnchor(
 }
 
 /**
- * A fixed connection point (`EdgeEnd.anchor`, 0..1 across the node's box), like draw.io's
- * exitX/exitY: the end is exactly there, not moved to the outline — a sequence message meets a
+ * A fixed connection point (`EdgeEnd.anchor`, 0..1 across the node's box): the end is
+ * exactly there, not moved to the outline — a sequence message meets a
  * lifeline's stem at its own height, which the outline (the head box) would never give. It leaves
  * through the nearest side.
  */
@@ -193,7 +193,7 @@ export function endHandle(end: { portId?: string }, styleHandle: unknown): strin
 /**
  * Which way a free end (a line's end left on open canvas) leaves: toward the other end, along
  * whichever axis it mostly lies on. A curved or elbowed line then bends the way it was drawn,
- * the way a draw.io dangling edge does, instead of always leaving upward like an unnamed handle.
+ * instead of always leaving upward like an unnamed handle.
  */
 export function freeEndPosition(at: Point, toward: Point): Position {
   const dx = toward.x - at.x;
@@ -203,7 +203,7 @@ export function freeEndPosition(at: Point, toward: Point): Position {
 }
 
 /**
- * How wide a line is drawn when its style says nothing: 1pt, as draw.io's are. It was 1.75, which
+ * How wide a line is drawn when its style says nothing: 1pt. It was 1.75, which
  * read heavy next to shapes' 1px outlines (D88). Canvas, panels and exports all read this.
  */
 export const DEFAULT_EDGE_WIDTH = 1;

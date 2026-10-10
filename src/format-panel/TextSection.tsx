@@ -17,14 +17,14 @@ const ALIGN_OPTIONS: { value: NonNullable<RichLabel["align"]>; icon: ReactNode }
   { value: "right", icon: <TextAlignRight /> },
 ];
 
-// draw.io's Text tab offers Top / Middle / Bottom too: a container's title belongs at its head.
+// Top / Middle / Bottom: a container's title belongs at its head.
 const VALIGN_OPTIONS: { value: VerticalAlign; icon: ReactNode }[] = [
   { value: "top", icon: <LabelTop /> },
   { value: "middle", icon: <LabelMiddle /> },
   { value: "bottom", icon: <LabelBottom /> },
 ];
 
-// draw.io's Text tab controls bold/italic/font size/color/align for the selected shape(s) or
+// The Text controls: bold/italic/font size/color/align for the selected shape(s) or
 // edge label(s); the text content itself stays edited inline (double-click / F2), same as
 // here. Multi-selection applies one formatting change to every selected label at once.
 export function TextSection({ nodes, edges }: TextSectionProps) {
