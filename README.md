@@ -114,6 +114,8 @@ files (and the older `.deepdraw`), editable PNGs, Word exports and draw.io files
 3. Open the pull request with what changed and the verification results, and wait for review.
 4. One pull request open at a time: the next branch starts after the last one merges.
 
+The same checks run in GitHub Actions on every pull request (`.github/workflows/ci.yml`). Report a security problem privately, as `SECURITY.md` describes, not in an issue.
+
 Commits use conventional messages (`feat(canvas): …`). New dependencies need a stated reason.
 [`CLAUDE.md`](CLAUDE.md) holds the full working agreements and the product rules,
 [`PROGRESS.md`](PROGRESS.md) the work queue, and [`CLAUDE_HISTORY.md`](CLAUDE_HISTORY.md) every
