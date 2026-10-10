@@ -60,8 +60,11 @@ const section: StencilSection = {
       id: "general/half-circle",
       keywords: ["semicircle", "arch", "dome", "gauge"],
       label: "Half Circle",
-      defaultSize: { w: 100, h: 55 },
-      svgBody: '<path d="M2,98 A48,48 0 0 1 98,98 Z" />',
+      // The arc spans the box's full height (radii 48 across, 96 down), so a box twice as wide
+      // as it is tall — the default — draws a true semicircle. It used to sit in the lower half of
+      // its box (radius 48 both ways), which stretched it into a flat half-ellipse.
+      defaultSize: { w: 100, h: 50 },
+      svgBody: '<path d="M2,98 A48,96 0 0 1 98,98 Z" />',
     },
     {
       id: "general/diamond",
