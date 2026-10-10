@@ -12,6 +12,7 @@
     "test:e2e": "playwright test",
     "icons": "node scripts/generate-icons.mjs",
     "perf": "node scripts/perf-pan.mjs",
+    "social-preview": "node scripts/social-preview.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
