@@ -1,4 +1,4 @@
-// Template catalogue types. See docs/DeepDraw_Templates_Spec_20260923_v1.0.md.
+// Template catalogue types.
 //
 // A template *is* a DiagramDocument — the same thing a user saves — so it gets the same validation,
 // the same renderer and the same nesting. Nothing about a template is a special case at the

@@ -1,6 +1,6 @@
 // Where a shape's label goes, shared by the canvas and every export so they cannot disagree.
 //
-// A label normally fills the whole shape, centred. Two things move it, both as in draw.io:
+// A label normally fills the whole shape, centred. Two things move it:
 //   - the stencil's own label area, for shapes with a part the text belongs in — a C4 person's
 //     body rather than across its head, a UML package's tab-less body (StencilDef.labelBox);
 //   - the node's `verticalAlign` style, "top" for a container or lane whose title belongs at its
@@ -48,21 +48,21 @@ export function verticalAlignOf(style: StyleMap): VerticalAlign {
 
 /**
  * Whether the label hangs below the shape instead of sitting on it: a picture, a vendor icon or a
- * pictogram, where text across the drawing would hide it. draw.io captions icons the same way.
+ * pictogram, where text across the drawing would hide it.
  */
 export function labelHangsBelow(shapeRef: string | undefined, stencil: StencilDef | undefined, style?: StyleMap): boolean {
   if (shapeRef === IMAGE_SHAPE_REF) return true;
-  // draw.io's verticalLabelPosition hangs any shape's label outside it, above or below.
+  // verticalLabelPosition hangs any shape's label outside it, above or below.
   if (style && (style.verticalLabelPosition === "bottom" || style.verticalLabelPosition === "top")) return true;
   return !!stencil && (!!stencil.raw || stencil.labelBox === "below" || isIconStyleStencil(stencil));
 }
 
-/** A hung caption goes above the shape instead of below it (draw.io's verticalLabelPosition=top). */
+/** A hung caption goes above the shape instead of below it (verticalLabelPosition=top). */
 export function captionAbove(style: StyleMap): boolean {
   return style.verticalLabelPosition === "top";
 }
 
-/** Text turned to read bottom to top, as draw.io's horizontal=0 turns it. */
+/** Text turned to read bottom to top (horizontal=0). */
 export function textVertical(style: StyleMap): boolean {
   return style.horizontal === false || style.horizontal === 0 || style.horizontal === "0";
 }

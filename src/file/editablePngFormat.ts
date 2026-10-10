@@ -1,7 +1,6 @@
 // .nedito.png: the same PNG "Export as PNG" produces, plus the full document embedded as a
-// PNG iTXt chunk (see pngChunks.ts) — draw.io's "editable PNG" trick, so a shared image is also
-// the editable file (a shared .nedito.png image is also
-// the editable document). Opening one re-parses the embedded JSON through the exact same decodeDoc()
+// PNG iTXt chunk (see pngChunks.ts), so a shared .nedito.png image is also the editable document.
+// Opening one re-parses the embedded JSON through the exact same decodeDoc()
 // a plain .nedito file goes through, so it gets identical validation/migration guarantees.
 // Needs a real Blob/ArrayBuffer pipeline shared with pngExport.ts's rasterization, so this is
 // browser-only and verified live rather than under jsdom (pngChunks.ts's pure chunk logic is

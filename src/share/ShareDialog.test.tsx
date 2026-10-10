@@ -60,7 +60,7 @@ describe("ShareDialog", () => {
     expect(screen.getByTestId("nd-share-privacy")).toHaveTextContent("Nothing is uploaded");
   });
 
-  // The accuracy rule from docs/archive/onboarding-spec.md, applied to the copy that makes the privacy
+  // The copy accuracy rule (never "secure", "encrypted" or "private by design"), applied to the copy that makes the privacy
   // claim: browser storage and a URL are neither secure nor private, and saying so would be a
   // promise this app cannot keep. "Nothing is uploaded" is true and checkable.
   it("never claims the link is secure, encrypted or private", async () => {

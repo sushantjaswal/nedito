@@ -26,7 +26,7 @@ describe("LocalOnlyBadge", () => {
     expect(screen.getByTestId("nd-local-only-popover")).toBeInTheDocument();
   });
 
-  // The accuracy rule from docs/archive/onboarding-spec.md (D47), enforced rather than trusted: browser storage is
+  // The copy accuracy rule, enforced rather than trusted: browser storage is
   // neither secure nor permanent, so any copy implying otherwise would be a false claim about
   // the user's data. "Nothing is uploaded" is the claim this app can actually stand behind.
   it("never claims the data is secure, encrypted, or private", () => {

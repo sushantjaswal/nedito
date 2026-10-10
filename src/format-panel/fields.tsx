@@ -1,4 +1,4 @@
-// A number field that behaves the way draw.io's do.
+// A number field that commits on Enter and on leaving it, and steps with the arrow keys.
 //
 // The plain inputs it replaces wrote `Number(e.target.value)` on every keystroke, so clearing the
 // field to type a new width set the width to 0 first (Number("") is 0) — the shape collapsed

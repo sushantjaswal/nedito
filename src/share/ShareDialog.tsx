@@ -7,7 +7,7 @@ import styles from "./ShareDialog.module.css";
 // The share link dialog: the share link on its own, for when an image isn't
 // what's wanted.
 //
-// Copy accuracy rule, inherited from docs/archive/onboarding-spec.md and enforced by a test: never say
+// Copy accuracy rule, enforced by a test: never say
 // "secure", "encrypted" or "private". The true and checkable claim is that nothing is uploaded
 // — the diagram travels inside the link itself.
 export function ShareDialog() {

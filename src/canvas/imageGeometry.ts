@@ -1,4 +1,4 @@
-// Where an image node's label goes: below the picture, as in draw.io.
+// Where an image node's label goes: below the picture.
 // Shared by the canvas, the SVG exporter and diagram bounds, so all three put it in the same
 // place. The label never wraps: the exporter draws exactly one line per line the author typed,
 // and a wrapping canvas label would disagree with it on any long caption.
@@ -16,7 +16,7 @@ export function imageLabelBox(
   above = false,
 ): { top: number; bottom: number; lineHeight: number } {
   const lineHeight = fontSize * LABEL_LINE_HEIGHT;
-  // Above, as draw.io's verticalLabelPosition=top puts it: for a shape whose lines leave
+  // Above, with verticalLabelPosition=top: for a shape whose lines leave
   // downward, where a caption below would sit across them.
   const top = above ? -IMAGE_LABEL_GAP - lineCount * lineHeight : h + IMAGE_LABEL_GAP;
   return { top, bottom: top + lineCount * lineHeight, lineHeight };

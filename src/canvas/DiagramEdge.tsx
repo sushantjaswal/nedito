@@ -99,7 +99,7 @@ function DiagramEdgeComponent({
   const editing = useDocStore((s) => s.editingEdgeId === id);
   const setEditingEdgeId = useDocStore((s) => s.setEditingEdgeId);
   const viewerMode = useDocStore((s) => s.ui.viewerMode);
-  // The toolbar shows for a line selected on its own, as draw.io's does.
+  // The toolbar shows for a line selected on its own.
   const soleSelection = useDocStore((s) => s.selection.edgeIds.length === 1 && s.selection.nodeIds.length === 0);
   const pageColor = useDocStore((s) => s.doc.diagrams[s.currentDiagramId()]?.background) ?? "var(--nd-color-canvas)";
   const { screenToFlowPosition } = useReactFlow();
@@ -159,7 +159,7 @@ function DiagramEdgeComponent({
   const pathRef = useRef(path);
   pathRef.current = path;
 
-  // Dragging a label moves it along or off its line, as in draw.io (D97). Where it lands is kept
+  // Dragging a label moves it along or off its line. Where it lands is kept
   // relative to the line, so it follows the shapes from then on. A press that does not move is a
   // click — it selects the line — so double-click to edit is untouched.
   const onLabelPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -229,8 +229,8 @@ function DiagramEdgeComponent({
     [id, savedWaypoints],
   );
 
-  // Dragging the line itself. A line with nothing at either end moves as a whole, as a drawn line
-  // does in draw.io; a connection between shapes gets a new bend where it was pulled instead.
+  // Dragging the line itself. A line with nothing at either end moves as a whole; a
+  // connection between shapes gets a new bend where it was pulled instead.
   const onLinePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (viewerMode) return;
@@ -277,7 +277,7 @@ function DiagramEdgeComponent({
     [commitDrag, edge, id, points, screenToFlowPosition, viewerMode],
   );
 
-  // Dragging an end: onto a shape attaches it there (anywhere on the shape, as in draw.io), and
+  // Dragging an end: onto a shape attaches it there (anywhere on the shape), and
   // anywhere else leaves it free at that point.
   const onEndPointerDown = useCallback(
     (name: EndName) => (e: React.PointerEvent) => {
@@ -340,7 +340,7 @@ function DiagramEdgeComponent({
   const shaped = shape === "line" ? null : shapeEdge(input, shape, baseWidth, { start: (edge.style.startArrow ?? "none") !== "none", end: (edge.style.endArrow ?? "none") !== "none" });
 
   const showHandles = selected && !viewerMode;
-  // A faint dot halfway along each stretch: drag it to bend the line there (draw.io's virtual bends).
+  // A faint dot halfway along each stretch: drag it to bend the line there.
   const bendSpots = showHandles && !dragState && !endDrag && !moveBy
     ? waypoints.length === 0
       ? [{ index: 0, at: midPos }]

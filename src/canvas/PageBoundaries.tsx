@@ -8,8 +8,8 @@ interface PageBoundariesProps {
   pageSize: PageSize;
 }
 
-// draw.io draws the printable page as a white sheet behind the drawing, with page breaks once
-// content spills past one sheet. Same idea here: an unobtrusive layer under the nodes showing
+// The printable page, drawn as a sheet behind the drawing, with page breaks once content
+// spills past one sheet: an unobtrusive layer under the nodes showing
 // exactly what a PDF/print will cut at, so "fits on the page" is answerable while drawing
 // rather than after exporting.
 export function PageBoundaries({ diagram, pageSize }: PageBoundariesProps) {

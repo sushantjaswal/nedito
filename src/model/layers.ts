@@ -1,5 +1,5 @@
 // Pure doc-transform functions for per-diagram layers (the Layers panel).
-// draw.io's Layers panel: a per-diagram, top-to-bottom-ordered list of layers, each with a
+// The Layers panel: a per-diagram, top-to-bottom-ordered list of layers, each with a
 // visibility toggle, a lock toggle, a name, and every shape/edge belongs to exactly one layer.
 // Hidden layers don't render; locked layers render but can't be selected/moved. New objects
 // land on whichever layer is "active" (a UI concept, not a document field — see store.ts's
@@ -87,8 +87,8 @@ export function setLayerLocked(doc: DiagramDocument, diagramId: string, layerId:
 
 // No-op if this would remove the diagram's only layer — a diagram always keeps at least one.
 // Nodes/edges on the removed layer merge onto its neighbor (the layer above it in the list, or
-// the new top layer if it was first) rather than being deleted, matching draw.io's "delete
-// layer" behavior of keeping the shapes and only removing the grouping.
+// the new top layer if it was first) rather than being deleted: deleting a
+// layer keeps the shapes and only removes the grouping.
 export function removeLayer(doc: DiagramDocument, diagramId: string, layerId: string): DiagramDocument {
   return updateDiagram(doc, diagramId, (diagram) => {
     const layers = getLayers(diagram);

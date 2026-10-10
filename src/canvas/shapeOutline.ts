@@ -3,8 +3,7 @@
 // User-reported: arrows stopped short of the shapes they connect. Two causes. Every edge ended at
 // its *handle* — the hover arrow drawn 7px outside the box — rather than at the shape; and a
 // triangle, diamond or ellipse was met at its bounding box, so the arrow stopped in mid-air
-// beside a slanted or curved side. draw.io ends a connector on the shape's own perimeter, and so
-// does this now.
+// beside a slanted or curved side. A connector now ends on the shape's own perimeter.
 //
 // Each authored stencil is drawn in a 0..100 box, and its first element is its outer outline (a
 // rect, circle, ellipse, polygon, or path). That is read once into a polygon. An edge end then

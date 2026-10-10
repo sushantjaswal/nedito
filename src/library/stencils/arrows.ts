@@ -10,8 +10,8 @@ const section: StencilSection = {
   name: "Arrows",
   shapes: [
 
-    // Block arrows: fillable, resizable outlines, the diagramming staple draw.io's Arrows section is built
-    // around. Original geometry. The line pictograms below them are for small annotation.
+    // Block arrows: fillable, resizable outlines, a diagramming staple.
+    // Original geometry. The line pictograms below them are for small annotation.
     {
       id: "arrows/arrow-right",
       label: "Arrow Right",

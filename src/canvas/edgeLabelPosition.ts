@@ -1,6 +1,6 @@
 // Where a dragged edge label is kept: the nearest point on its line, how
-// far along the line that is, and the label's offset from it — draw.io's model for an edge label,
-// so the label keeps its place relative to the line as the shapes it joins move.
+// far along the line that is, and the label's offset from it, so
+// the label keeps its place relative to the line as the shapes it joins move.
 import type { EdgeLabelPosition } from "../model/types";
 import { nearestOnPath, type Point } from "./edgeGeometry";
 

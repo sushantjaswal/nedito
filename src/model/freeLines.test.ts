@@ -173,7 +173,7 @@ describe("exporting lines", () => {
     const svg = diagramToSvg(page(), { fontCss: "" });
     expect(svg).toMatch(/<path d="M ?40[ ,]40/);
     expect(svg).toContain('marker-end="url(#nd-arrow-classic)"');
-    // A line with no width of its own is drawn 1pt wide, as draw.io's are (D88).
+    // A line with no width of its own is drawn 1pt wide.
     expect(svg).toMatch(/<path d="[^"]+" fill="none" stroke="[^"]+" stroke-width="1" marker-end/);
   });
 

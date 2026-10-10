@@ -39,7 +39,7 @@ export function hasFreeEnd(edge: DEdge): boolean {
 }
 
 /**
- * The edges a copy takes with it, as draw.io's copy does: every selected line whose attached ends
+ * The edges a copy takes with it: every selected line whose attached ends
  * are all among the copied shapes (free ends go anywhere), and every connection between copied
  * shapes, selected or not — copying two connected boxes without their arrow loses the diagram.
  */

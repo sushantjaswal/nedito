@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  /* One size on screen at any zoom, as draw.io's arrows are (ZoomVariable.tsx), growing out
+  /* One size on screen at any zoom (ZoomVariable.tsx), growing out
      from the side it sits on. */
   transform: scale(var(--nd-inverse-zoom, 1));
 }

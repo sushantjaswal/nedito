@@ -19,7 +19,7 @@ interface StencilGlyphProps {
   // Picker/preview contexts (sidebar, scratchpad, format-panel chips) default to preserving the
   // shape's own proportions — a fixed-size preview slot has no reason to distort it. The one
   // exception is the actual canvas ShapeNode, which passes "none": a placed shape is meant to
-  // stretch to fill whatever box the user resizes it to, same as draw.io.
+  // stretch to fill whatever box the user resizes it to.
   preserveAspectRatio?: string;
   // Outline shapes (Rectangle, Parallelogram, ...) are all authored as a path filling the same
   // square 0-100 viewBox — the canvas is what gives them their real proportions, by stretching

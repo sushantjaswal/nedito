@@ -1,6 +1,6 @@
 // What a line end is being dropped on: the shape under the pointer, and which of its handles.
 //
-// draw.io attaches a dragged line end to whatever shape it is let go over, not only when it lands
+// A dragged line end attaches to whatever shape it is let go over, not only when it lands
 // exactly on a connection point; anywhere else it stays where it was dropped, as a free end. Both
 // a line's endpoint drag (DiagramEdge) and a new connection let go short of a handle
 // (DiagramCanvas's onConnectEnd) ask this the same question.
