@@ -1,10 +1,10 @@
-# draw.io import audit — 2026-10-07 (Q2, CLAUDE_HISTORY.md D112)
+# draw.io import audit — 2026-10-07
 
 What happens to a real draw.io file when Nedito imports it, ranked by how much it hurts the
 people most likely to import one: cloud architects, data modellers, and anyone with swimlanes.
 
 **Method.** Five fixtures in `src/file/drawio/fixtures/audit/`, hand-written in draw.io's own
-file format (nothing copied from draw.io's repositories — CLAUDE.md's provenance rule), covering
+file format (nothing copied from draw.io's repositories — the provenance rule), covering
 what draw.io actually writes: HTML labels, the common shapes, text cells, rotation, gradients,
 eleven arrowheads, connection anchors, waypoints, extra edge labels, an edge ending on another
 edge, loose ends, swimlanes, groups, a container, a collapsed container, `<UserObject>` and
@@ -38,7 +38,7 @@ Every fixture imported and validated.
 
 ## Proposed fixes (each its own item, awaiting approval)
 
-All six were approved and shipped on 2026-10-08 (CLAUDE_HISTORY.md D132–D137); the fixtures below
+All six were approved and shipped on 2026-10-08; the fixtures below
 are now the import's regression suite.
 
 Grouped so each PR is small and testable against these fixtures:

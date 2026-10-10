@@ -1,7 +1,7 @@
 // Zoom in/out steps through clean 25% increments (25%-400%) instead of a freeform
 // multiplicative factor, so the zoom badge always lands on a round number after a click or
 // Ctrl+=/Ctrl+-. Free-form zoom (scroll wheel, pinch) is untouched and still continuous
-// within CLAUDE.md's mandated 10%-400% range — this only governs the discrete step controls.
+// within the 10%-400% zoom range — this only governs the discrete step controls.
 export const ZOOM_STEP_PERCENT = 25;
 export const MIN_STEP_ZOOM_PERCENT = 25;
 export const MAX_STEP_ZOOM_PERCENT = 400;

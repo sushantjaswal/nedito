@@ -1,4 +1,4 @@
-// The context bar and canvas chip (R1, CLAUDE_HISTORY.md D90): every control the right panel had
+// The context bar and canvas chip: every control the right panel had
 // is reachable from them, offered for the same selections, acting the same way.
 import { act, fireEvent, renderHook, screen } from "@testing-library/react";
 import { useImageActions } from "../format-panel/selectionKinds";

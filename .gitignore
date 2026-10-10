@@ -38,3 +38,9 @@ yarn-debug.log*
 yarn-error.log*
 .claude/worktrees/
 .claude/scheduled_tasks.lock
+
+# Local working notes (the project rules, the work queue and the decision log), kept out of the
+# public repository. Backed up to a private repository by `npm run notes:backup`.
+CLAUDE.md
+PROGRESS.md
+CLAUDE_HISTORY.md

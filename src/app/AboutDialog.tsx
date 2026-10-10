@@ -1,4 +1,4 @@
-// About (N4, CLAUDE_HISTORY.md D103), from the app menu and the palette ("about"). The words are
+// About, from the app menu and the palette ("about"). The words are
 // docs/about-copy.md's, exactly (AboutDialog.test.tsx holds them to it); the name comes from
 // BRAND, the version from package.json and the file format's version from the format code — none
 // of them written out here. The contact address is BRAND.contact, shown as text to copy — no

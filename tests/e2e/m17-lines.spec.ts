@@ -1,4 +1,4 @@
-// Lines the way draw.io does them (CLAUDE_HISTORY D86): a line from the Lines section is a real
+// Lines the way draw.io does them: a line from the Lines section is a real
 // line, not a box with a line drawn in it. Its ends drag onto shapes and off them again, it bends
 // where it is pulled, it moves as a whole while free, and a small bar over it changes its pattern,
 // its arrowheads and its route — each driven here as a person would drive it.

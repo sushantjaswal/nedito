@@ -1,7 +1,5 @@
-// Section order per CLAUDE.md "Left sidebar — shape library". General shipped in M1;
-// Flowchart/Network/Azure/AWS/GCP shipped in M5; Business/Misc/Advanced/Basic/Arrows/UML/
-// Entity Relation shipped in Phase 2 (see PROGRESS.md/CLAUDE_HISTORY.md D21-D23). Every
-// section now has a loader — loadSection no longer resolves to null for any known id.
+// Section order: the order the sections were added; the sidebar groups them by purpose
+// (libraryGroups.ts). Every section has a loader — loadSection no longer resolves to null for any known id.
 import type { StencilDef, StencilSection } from "./types";
 
 export const SECTION_IDS = [
@@ -118,7 +116,7 @@ const stencilCache = new Map<string, StencilDef>();
 // used to be read synchronously and never announced anything. A node rendered before its section
 // arrived therefore stayed blank for the whole session: the Azure section was in the cache within
 // a second or so, and a node drawn in that second never showed its icon, while an export made a
-// moment later drew it perfectly (CLAUDE_HISTORY.md D72). So filling the cache now bumps a
+// moment later drew it perfectly. So filling the cache now bumps a
 // revision that components can subscribe to, via useStencil / useStencilCacheRevision.
 let cacheRevision = 0;
 const cacheListeners = new Set<() => void>();

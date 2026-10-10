@@ -1,4 +1,4 @@
-// Trace (A2, CLAUDE_HISTORY.md D117): click a shape and see what it touches — its lines and the
+// Trace: click a shape and see what it touches — its lines and the
 // shapes at their other ends; everything else dims. Session state only: never saved, never on the
 // undo stack. Pure functions here; the store holds the current trace and the canvas draws it.
 //

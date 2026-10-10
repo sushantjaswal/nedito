@@ -1,4 +1,4 @@
-// Turning a file the user picked, dropped or pasted into an ImageAsset (CLAUDE_HISTORY.md D79).
+// Turning a file the user picked, dropped or pasted into an ImageAsset.
 //
 // The format is read from the bytes, never from the file name or the browser's guess: a file is
 // data from anywhere, and an asset that claims to be a PNG must be one (model/assets.ts checks

@@ -1,5 +1,5 @@
 // The formatting fields: what typing, clearing and dragging actually write, and how many undo
-// steps an edit leaves (CLAUDE_HISTORY D84). Driven through the context bar's popovers, where the
+// steps an edit leaves. Driven through the context bar's popovers, where the
 // right panel's fields now live (R1, D90).
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

@@ -1,11 +1,11 @@
-// The deletion prompts D12 deferred (N7, CLAUDE_HISTORY.md D138). CLAUDE.md asks that deleting a
-// Nested Block offer to delete what is inside it or keep it, and that deleting a shape a parent's
+// The deletion prompts. Deleting a
+// Nested Block offers to delete what is inside it or keep it, and deleting a shape a parent's
 // link enters through offer to keep or remove that link. v1 had no dialogs and cascaded silently;
 // these are the choices the prompts offer, as pure document transforms the store applies in one
 // undo entry.
 //
 // "Keep" for a Nested Block means its contents come up onto this level where the block was — the
-// "unused pool" CLAUDE.md first imagined had nowhere to be seen or reattached from, so a lifted
+// "unused pool" first planned had nowhere to be seen or reattached from, so a lifted
 // level is the honest form of keeping it (approved 2026-10-08).
 import { updateDiagram } from "./actions";
 import { cascadeGroupCleanup } from "./groups";

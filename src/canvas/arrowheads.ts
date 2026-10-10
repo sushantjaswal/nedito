@@ -152,7 +152,7 @@ export function markerDefs(background = "#FFFFFF"): string {
  * it as an id and wraps it as `url('#…')` itself. It was once handed `markerUrl`'s already-wrapped
  * value, which produced `url('#url(#nd-arrow-classic)')` — a reference to nothing — so from T2
  * until the render-parity sweep caught it, the canvas drew no arrowheads at all while every export
- * drew them correctly (CLAUDE_HISTORY.md D72).
+ * drew them correctly.
  */
 export function markerId(kind: unknown): string | undefined {
   if (typeof kind !== "string") return undefined;

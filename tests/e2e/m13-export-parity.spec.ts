@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { getDoc, gotoFirstVisit, gotoFresh } from "./helpers";
 
-// The export bug that started this (CLAUDE_HISTORY.md D67) could only be caught by comparing
+// The export bug that started this could only be caught by comparing
 // the two renderers against each other, and the unit tests under src/file/ can only see one of
 // them: they assert what the exporter produces, not that the canvas still agrees. The canvas
 // side is React Flow, in a real browser, resolving real handles — so it gets checked here.

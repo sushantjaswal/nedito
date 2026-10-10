@@ -1,6 +1,5 @@
 // Recent diagrams: the last few documents this browser has had open, kept so that replacing one
-// (New, Open, a template, a Recent entry, R5's "Start new") never loses it (R2, CLAUDE_HISTORY.md
-// D91). A browser cannot reopen a file from disk without asking for it again, so Recent keeps the
+// (New, Open, a template, a Recent entry, R5's "Start new") never loses it. A browser cannot reopen a file from disk without asking for it again, so Recent keeps the
 // documents themselves rather than file paths.
 //
 // Stored in the browser's own IndexedDB — not localStorage, whose ~5 MB would hold only a couple

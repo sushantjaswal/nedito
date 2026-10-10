@@ -1,4 +1,4 @@
-// The rule for when the "save a copy" toast may appear (CLAUDE_HISTORY.md D53). Kept as a
+// The rule for when the "save a copy" toast may appear. Kept as a
 // pure function of a snapshot rather than living inside the store, because every interesting
 // part of this feature is a decision about numbers and clocks, and this way the thresholds,
 // the re-arm and all four suppressions are testable without mounting anything.

@@ -3,7 +3,7 @@
 // Same reasoning as pngChunks.ts and svgExport.ts before it: the one thing we need from PDF is
 // "one page, one image", which is a couple of hundred bytes of object boilerplate — far less
 // than the ~350KB a PDF library would add to the bundle for features this app doesn't use
-// (CLAUDE.md's no-new-dependencies-without-a-reason rule).
+// (a new dependency needs a reason, and this one didn't have one).
 //
 // Deliberately pure: the caller supplies image bytes that are *already* zlib-compressed, so
 // this module has no dependency on CompressionStream/canvas and can be unit-tested under jsdom.

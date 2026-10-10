@@ -1,4 +1,4 @@
-// Word export with a diagram appendix (CLAUDE_HISTORY.md D59).
+// Word export with a diagram appendix.
 //
 // The parent diagram is a captioned figure; every diagram below it becomes a numbered heading
 // and figure in a "Diagram Appendix", depth-first, under real Heading styles so Word's own

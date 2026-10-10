@@ -1,4 +1,4 @@
-// Preferences, from the app menu (R2, CLAUDE_HISTORY.md D91). For now one setting — dark mode,
+// Preferences, from the app menu. For now one setting — dark mode,
 // which was View ▸ Dark Mode — with room for more. Each is a per-browser preference, never part of
 // a document.
 import { useEffect, useRef } from "react";

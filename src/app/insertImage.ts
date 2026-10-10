@@ -1,6 +1,5 @@
 // The one path every way of adding a picture goes through — Arrange ▸ Insert image…, the canvas
-// menu, dropping files, pasting from the system clipboard and Replace image… (CLAUDE_HISTORY.md
-// D79). Each reads its files through file/imageImport.ts and reports the outcome the same way:
+// menu, dropping files, pasting from the system clipboard and Replace image…. Each reads its files through file/imageImport.ts and reports the outcome the same way:
 // what was resized or flattened, and what was refused and why.
 import { viewCenter } from "../canvas/canvasApi";
 import { importImageFile } from "../file/imageImport";
