@@ -44,3 +44,6 @@ yarn-error.log*
 CLAUDE.md
 PROGRESS.md
 CLAUDE_HISTORY.md
+
+# Security audits stay local: they describe weaknesses, sometimes before they are fixed.
+docs/security-audit-*.md

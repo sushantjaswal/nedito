@@ -10,6 +10,7 @@
 // document. Anything a canvas component and this file could disagree about belongs in a shared
 // module, not here: when the two drifted apart, exports drew lines and labels differently from
 // the canvas.
+import { escapeMarkup as escapeXml, escapeMarkup as q } from "../model/escapeMarkup";
 import { edgeDashArray, edgeStrokeWidth, flowClass, flowVars, packetPointAt, packetRadius, packetRestPoint } from "../canvas/motionStyle";
 import { frameCss } from "./motionFrameCss";
 import { healthBadgeSvg, healthCentre } from "../canvas/healthStatus";
@@ -248,14 +249,11 @@ export function computeDiagramBounds(diagram: Diagram, padding = DEFAULT_PADDING
   };
 }
 
-function escapeXml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
 
 const markerRef = markerUrl;
 
 function fontAttrs(label: { fontSize?: number; bold?: boolean; italic?: boolean }, fallbackSize: number): string {
-  return `font-family="${EXPORT_FONT_STACK}" font-size="${label.fontSize ?? fallbackSize}" font-weight="${label.bold ? 700 : 400}" font-style="${label.italic ? "italic" : "normal"}"`;
+  return `font-family="${EXPORT_FONT_STACK}" font-size="${q(label.fontSize ?? fallbackSize)}" font-weight="${q(label.bold ? 700 : 400)}" font-style="${q(label.italic ? "italic" : "normal")}"`;
 }
 
 /**
@@ -278,7 +276,7 @@ function renderLabel(
     const turned = { x: cx - area.h / 2, y: cy - area.w / 2, w: area.h, h: area.w };
     // The turn goes on the <text> itself rather than a wrapping group, so the label stays the
     // node's own direct child, where every other label is.
-    return renderLabel(label, turned, defaultColor, "middle").replace(/^<text /, `<text transform="rotate(-90 ${cx} ${cy})" `);
+    return renderLabel(label, turned, defaultColor, "middle").replace(/^<text /, `<text transform="rotate(-90 ${q(cx)} ${q(cy)})" `);
   }
   const align = label.align ?? "center";
   const anchor = align === "left" ? "start" : align === "right" ? "end" : "middle";
@@ -296,9 +294,9 @@ function renderLabel(
         ? area.y + area.h - 6 - lineHeight / 2 - block
         : area.y + area.h / 2 - block / 2;
   const tspans = lines
-    .map((line, i) => `<tspan x="${x}" y="${top + i * lineHeight}">${escapeXml(line)}</tspan>`)
+    .map((line, i) => `<tspan x="${q(x)}" y="${q(top + i * lineHeight)}">${escapeXml(line)}</tspan>`)
     .join("");
-  return `<text text-anchor="${anchor}" dominant-baseline="middle" ${fontAttrs(label, 12)} fill="${label.color ?? defaultColor}">${tspans}</text>`;
+  return `<text text-anchor="${q(anchor)}" dominant-baseline="middle" ${fontAttrs(label, 12)} fill="${q(label.color ?? defaultColor)}">${tspans}</text>`;
 }
 
 /**
@@ -320,14 +318,14 @@ function renderNestedNode(
 
   const ghosts = GHOST_OFFSETS.map(
     (g) =>
-      `<rect x="${g.d}" y="${g.d}" width="${w}" height="${h}" rx="8" fill="${NEST_SOFT}" stroke="${NEST_ACCENT}" stroke-width="1" opacity="${g.opacity}" />`,
+      `<rect x="${q(g.d)}" y="${q(g.d)}" width="${q(w)}" height="${q(h)}" rx="8" fill="${NEST_SOFT}" stroke="${NEST_ACCENT}" stroke-width="1" opacity="${q(g.opacity)}" />`,
   ).join("");
 
   // Header band: badge + title, laid out to match NestedNode.module.css's 6px/8px padding.
   const headerY = 6 + 11.5;
   const header =
-    `<text x="8" y="${headerY}" font-family="${EXPORT_FONT_STACK}" font-size="12" fill="${NEST_DEEP}">⧉</text>` +
-    `<text x="24" y="${headerY}" font-family="${EXPORT_FONT_STACK}" font-size="11.5" font-weight="600" fill="${NEST_DEEP}">${escapeXml(name)}</text>`;
+    `<text x="8" y="${q(headerY)}" font-family="${EXPORT_FONT_STACK}" font-size="12" fill="${NEST_DEEP}">⧉</text>` +
+    `<text x="24" y="${q(headerY)}" font-family="${EXPORT_FONT_STACK}" font-size="11.5" font-weight="600" fill="${NEST_DEEP}">${escapeXml(name)}</text>`;
 
   const summaryH = node.collapsed.summary ? 15 : 0;
   const previewTop = 6 + 20;
@@ -340,21 +338,21 @@ function renderNestedNode(
         const stencil = getStencil(ref);
         if (!stencil || stencil.raw) return "";
         const defaults = getStencilDefaultStyle(stencil);
-        return `<g transform="translate(${8 + i * 20} ${previewTop + previewH / 2 - 8}) scale(0.16)" fill="${defaults.fill}" stroke="${defaults.stroke}" stroke-width="${defaults.strokeWidth}">${stencil.svgBody}</g>`;
+        return `<g transform="translate(${q(8 + i * 20)} ${q(previewTop + previewH / 2 - 8)}) scale(0.16)" fill="${q(defaults.fill)}" stroke="${q(defaults.stroke)}" stroke-width="${q(defaults.strokeWidth)}">${stencil.svgBody}</g>`;
       })
       .join("");
   } else if (childDiagram) {
     const mini = buildMiniatureSvg(childDiagram, undefined, assets);
     if (mini && previewH > 0) {
-      preview = `<svg x="8" y="${previewTop}" width="${Math.max(0, w - 16)}" height="${previewH}" viewBox="${mini.viewBox}" preserveAspectRatio="xMidYMid meet">${mini.body}</svg>`;
+      preview = `<svg x="8" y="${q(previewTop)}" width="${q(Math.max(0, w - 16))}" height="${q(previewH)}" viewBox="${q(mini.viewBox)}" preserveAspectRatio="xMidYMid meet">${mini.body}</svg>`;
     }
   }
   if (!preview && previewH > 0) {
-    preview = `<text x="${w / 2}" y="${previewTop + previewH / 2}" text-anchor="middle" dominant-baseline="middle" font-family="${EXPORT_FONT_STACK}" font-size="11" fill="${MUTED}">Empty</text>`;
+    preview = `<text x="${q(w / 2)}" y="${q(previewTop + previewH / 2)}" text-anchor="middle" dominant-baseline="middle" font-family="${EXPORT_FONT_STACK}" font-size="11" fill="${MUTED}">Empty</text>`;
   }
 
   const summary = node.collapsed.summary
-    ? `<text x="8" y="${h - 8}" font-family="${EXPORT_FONT_STACK}" font-size="11" fill="${MUTED}">${escapeXml(node.collapsed.summary)}</text>`
+    ? `<text x="8" y="${q(h - 8)}" font-family="${EXPORT_FONT_STACK}" font-size="11" fill="${MUTED}">${escapeXml(node.collapsed.summary)}</text>`
     : "";
 
   const ports = node.ports
@@ -364,13 +362,13 @@ function renderNestedNode(
       const cy = port.side === "top" ? 0 : port.side === "bottom" ? h : h * along;
       const unmapped = port.innerNodeId === undefined;
       const dash = unmapped ? ` stroke-dasharray="2 2"` : "";
-      return `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${PANEL}" stroke="${unmapped ? WARN : NEST_ACCENT}" stroke-width="2"${dash} />`;
+      return `<circle cx="${q(cx)}" cy="${q(cy)}" r="4.5" fill="${PANEL}" stroke="${q(unmapped ? WARN : NEST_ACCENT)}" stroke-width="2"${dash} />`;
     })
     .join("");
 
-  return `<g transform="translate(${pos.x},${pos.y})">
+  return `<g transform="translate(${q(pos.x)},${q(pos.y)})">
 ${ghosts}
-<rect x="0" y="0" width="${w}" height="${h}" rx="8" fill="${PANEL}" stroke="${NEST_DEEP}" stroke-width="1.5" />
+<rect x="0" y="0" width="${q(w)}" height="${q(h)}" rx="8" fill="${PANEL}" stroke="${NEST_DEEP}" stroke-width="1.5" />
 ${header}
 ${preview}
 ${summary}
@@ -388,18 +386,18 @@ function renderImageNode(node: ShapeNode, pos: { x: number; y: number }, asset: 
   const rotation = node.rotation ?? 0;
   const opacity = (node.style.opacity as number) ?? 1;
   const picture = asset
-    ? `<image x="0" y="0" width="${w}" height="${h}" href="${assetDataUrl(asset)}" preserveAspectRatio="none" />`
-    : `<rect x="0.5" y="0.5" width="${w - 1}" height="${h - 1}" fill="none" stroke="${MUTED}" stroke-dasharray="4 3" />`;
+    ? `<image x="0" y="0" width="${q(w)}" height="${q(h)}" href="${q(assetDataUrl(asset))}" preserveAspectRatio="none" />`
+    : `<rect x="0.5" y="0.5" width="${q(w - 1)}" height="${q(h - 1)}" fill="none" stroke="${MUTED}" stroke-dasharray="4 3" />`;
   const stroke = node.style.stroke as string | undefined;
   const border =
     stroke && stroke !== "none"
       ? (() => {
           const sw = (node.style.strokeWidth as number | undefined) ?? 1;
-          return `<rect x="${sw / 2}" y="${sw / 2}" width="${w - sw}" height="${h - sw}" fill="none" stroke="${stroke}" stroke-width="${sw}" />`;
+          return `<rect x="${q(sw / 2)}" y="${q(sw / 2)}" width="${q(w - sw)}" height="${q(h - sw)}" fill="none" stroke="${q(stroke)}" stroke-width="${q(sw)}" />`;
         })()
       : "";
   const label = labelBelowMarkup(node.label, w, h, captionAbove(node.style));
-  return `<g transform="translate(${pos.x},${pos.y}) rotate(${rotation},${w / 2},${h / 2})" opacity="${opacity}">
+  return `<g transform="translate(${q(pos.x)},${q(pos.y)}) rotate(${q(rotation)},${q(w / 2)},${q(h / 2)})" opacity="${q(opacity)}">
 ${picture}
 ${border}
 ${label}
@@ -413,9 +411,9 @@ function labelBelowMarkup(label: RichLabel | undefined, w: number, h: number, ab
   const lines = label.text.split("\n");
   const box = imageLabelBox(h, lines.length, size, above);
   const tspans = lines
-    .map((line, i) => `<tspan x="${w / 2}" y="${box.top + (i + 0.5) * box.lineHeight}">${escapeXml(line)}</tspan>`)
+    .map((line, i) => `<tspan x="${q(w / 2)}" y="${q(box.top + (i + 0.5) * box.lineHeight)}">${escapeXml(line)}</tspan>`)
     .join("");
-  return `<text text-anchor="middle" dominant-baseline="middle" ${fontAttrs(label, 12)} fill="${label.color ?? INK}">${tspans}</text>`;
+  return `<text text-anchor="middle" dominant-baseline="middle" ${fontAttrs(label, 12)} fill="${q(label.color ?? INK)}">${tspans}</text>`;
 }
 
 function renderShapeNode(node: ShapeNode, pos: { x: number; y: number }, moving = false): string {
@@ -439,8 +437,8 @@ function renderShapeNode(node: ShapeNode, pos: { x: number; y: number }, moving 
   // authored shapes, and skip the fill/stroke wrapper since they're never themed.
   const dash = shapeDash(node.style);
   const glyph = stencil?.raw
-    ? `<svg x="0" y="0" width="${w}" height="${h}">${stencil.raw}</svg>`
-    : `<g transform="scale(${w / 100},${h / 100})" fill="${fill}"${stencil?.pictogram ? ` color="${fill}"` : ""}${fillOpacity === undefined ? "" : ` fill-opacity="${fillOpacity}"`} stroke="${stroke}" stroke-width="${strokeWidth}"${dash ? ` stroke-dasharray="${dash}"` : ""}>${movingBody(fitStencilBody(stencil ? (moving ? stencilBody(stencil, classic) : stillBody(stencilBody(stencil, classic))) : "", w, h, { stroke, strokeWidth }), moving && stencil?.animated !== undefined)}</g>`;
+    ? `<svg x="0" y="0" width="${q(w)}" height="${q(h)}">${stencil.raw}</svg>`
+    : `<g transform="scale(${q(w / 100)},${q(h / 100)})" fill="${q(fill)}"${stencil?.pictogram ? ` color="${q(fill)}"` : ""}${fillOpacity === undefined ? "" : ` fill-opacity="${q(fillOpacity)}"`} stroke="${q(stroke)}" stroke-width="${q(strokeWidth)}"${dash ? ` stroke-dasharray="${dash}"` : ""}>${movingBody(fitStencilBody(stencil ? (moving ? stencilBody(stencil, classic) : stillBody(stencilBody(stencil, classic))) : "", w, h, { stroke, strokeWidth }), moving && stencil?.animated !== undefined)}</g>`;
   const drawn = hasShadow(node.style) ? `<g filter="url(#nd-shadow)">${glyph}</g>` : glyph;
   // Same rule as the canvas, from the same module: contrast with the fill behind the label (D78).
   const labelDefault = defaultLabelColor(labelBackdrop(node.style.fill, stencil, classic), fillOpacity) ?? INK;
@@ -449,7 +447,7 @@ function renderShapeNode(node: ShapeNode, pos: { x: number; y: number }, moving 
     : labelHangsBelow(node.shapeRef, stencil, node.style)
       ? labelBelowMarkup(node.label, w, h, captionAbove(node.style))
       : renderLabel(node.label, labelArea(stencil, w, h, node.style), labelDefault, verticalAlignOf(node.style));
-  return `<g transform="translate(${pos.x},${pos.y}) rotate(${rotation},${w / 2},${h / 2})" opacity="${opacity}">
+  return `<g transform="translate(${q(pos.x)},${q(pos.y)}) rotate(${q(rotation)},${q(w / 2)},${q(h / 2)})" opacity="${q(opacity)}">
 ${drawn}
 ${label}
 </g>`;
@@ -459,7 +457,7 @@ function renderNode(node: DNode, offsetX: number, offsetY: number, options: SvgE
   const pos = { x: node.position.x + offsetX, y: node.position.y + offsetY };
   // A Health badge rests as itself, on top of the shape (A4, D120); in a frame, it blinks.
   let health = node.motion?.health ? healthBadgeSvg(node.motion.health, healthCentre({ x: pos.x, y: pos.y, w: node.size.w })) : "";
-  if (options.frame && health && node.motion?.health !== "healthy") health = `<g class="nd-anim nd-health-blink" data-health="${node.motion!.health}">${health}</g>`;
+  if (options.frame && health && node.motion?.health !== "healthy") health = `<g class="nd-anim nd-health-blink" data-health="${q(node.motion!.health)}">${health}</g>`;
   // Pulse, in a frame: the glow, and the ripple, behind the shape (D116).
   const pulse = options.frame && node.motion?.pulse ? pulseSvg(node, pos, node.motion.pulse.ripple === true) : "";
   if (pulse) return pulse + renderNodeBody(node, pos, options) + health;
@@ -476,13 +474,13 @@ function pulseSvg(node: DNode, pos: { x: number; y: number }, ripple: boolean): 
   const outline =
     stencil && !stencil.raw
       ? fitStencilBody(stillBody(stencilBody(stencil, isClassicLook(node.style))), w, h)
-      : `<rect x="-3" y="-3" width="${w + 6}" height="${h + 6}" rx="10" />`;
-  const scale = stencil && !stencil.raw ? ` scale(${w / 100},${h / 100})` : "";
-  const at = `translate(${pos.x},${pos.y}) rotate(${node.rotation ?? 0},${w / 2},${h / 2})`;
+      : `<rect x="-3" y="-3" width="${q(w + 6)}" height="${q(h + 6)}" rx="10" />`;
+  const scale = stencil && !stencil.raw ? ` scale(${q(w / 100)},${q(h / 100)})` : "";
+  const at = `translate(${q(pos.x)},${q(pos.y)}) rotate(${q(node.rotation ?? 0)},${q(w / 2)},${q(h / 2)})`;
   return (
-    `<g transform="${at}"><g class="nd-anim nd-glow nd-outline-svg nd-outline-glow" transform="${scale.trim() || "scale(1)"}" filter="url(#nd-glow-blur)">${outline}</g>` +
+    `<g transform="${q(at)}"><g class="nd-anim nd-glow nd-outline-svg nd-outline-glow" transform="${q(scale.trim() || "scale(1)")}" filter="url(#nd-glow-blur)">${outline}</g>` +
     // The ripple's own scale is a CSS transform, which would replace an SVG one on the same element.
-    (ripple ? `<g transform="${scale.trim() || "scale(1)"}"><g class="nd-anim nd-ripple nd-outline-svg">${outline}</g></g>` : "") +
+    (ripple ? `<g transform="${q(scale.trim() || "scale(1)")}"><g class="nd-anim nd-ripple nd-outline-svg">${outline}</g></g>` : "") +
     `</g>`
   );
 }
@@ -534,23 +532,23 @@ function renderEdge(
       end: (edge.style.endArrow ?? "none") !== "none",
     });
     markup =
-      `<path d="${shaped.path}" fill="none" stroke="${stroke}" stroke-width="${shaped.outer}"${dashArray ? ` stroke-dasharray="${dashArray}"` : ""} />` +
-      `<path d="${shaped.path}" fill="none" stroke="${pageColor}" stroke-width="${shaped.inner}" />` +
-      shaped.heads.map((d) => `<path d="${d}" fill="${pageColor}" stroke="${stroke}" stroke-width="${strokeWidth}" stroke-linejoin="round" />`).join("");
+      `<path d="${q(shaped.path)}" fill="none" stroke="${q(stroke)}" stroke-width="${q(shaped.outer)}"${dashArray ? ` stroke-dasharray="${q(dashArray)}"` : ""} />` +
+      `<path d="${q(shaped.path)}" fill="none" stroke="${q(pageColor)}" stroke-width="${q(shaped.inner)}" />` +
+      shaped.heads.map((d) => `<path d="${q(d)}" fill="${q(pageColor)}" stroke="${q(stroke)}" stroke-width="${q(strokeWidth)}" stroke-linejoin="round" />`).join("");
   } else {
-    markup = `<path d="${linePath}" fill="none" stroke="${stroke}" stroke-width="${strokeWidth}"`;
-    if (dashArray) markup += ` stroke-dasharray="${dashArray}"`;
+    markup = `<path d="${q(linePath)}" fill="none" stroke="${q(stroke)}" stroke-width="${q(strokeWidth)}"`;
+    if (dashArray) markup += ` stroke-dasharray="${q(dashArray)}"`;
     // In a frame, Flow and Throughput march as the canvas does, by the same rule (G1, D131).
     const flow = frame ? flowVars(edge) : undefined;
-    if (flow && flowClass(edge)) markup += ` class="${flowClass(edge)}" style="${Object.entries(flow).map(([k, v]) => `${k}:${v}`).join(";")}"`;
-    if (markerStart) markup += ` marker-start="${markerStart}"`;
-    if (markerEnd) markup += ` marker-end="${markerEnd}"`;
+    if (flow && flowClass(edge)) markup += ` class="${q(flowClass(edge))}" style="${Object.entries(flow).map(([k, v]) => `${q(k)}:${q(v)}`).join(";")}"`;
+    if (markerStart) markup += ` marker-start="${q(markerStart)}"`;
+    if (markerEnd) markup += ` marker-end="${q(markerEnd)}"`;
     markup += " />";
   }
   // Packets rest as one dot, part of the way along in the direction it travels (A3, D119).
   if (edge.motion?.kind === "packets") {
     const at = frame ? packetPointAt(linePath, edge, frame.t) : packetRestPoint(linePath, edge);
-    if (at) markup += `<circle cx="${Math.round(at.x * 10) / 10}" cy="${Math.round(at.y * 10) / 10}" r="${packetRadius(strokeWidth)}" fill="${stroke}" />`;
+    if (at) markup += `<circle cx="${q(Math.round(at.x * 10) / 10)}" cy="${q(Math.round(at.y * 10) / 10)}" r="${q(packetRadius(strokeWidth))}" fill="${q(stroke)}" />`;
   }
 
   let labelMarkup = "";
@@ -561,8 +559,8 @@ function renderEdge(
     // The canvas draws an edge label as a pill over the line so the stroke doesn't run through
     // the text (DiagramEdge.module.css's .labelPill). Same here, sized from the text.
     labelMarkup =
-      `<rect x="${labelPos.x - half - 3}" y="${labelPos.y - size * 0.8}" width="${half * 2 + 6}" height="${size * 1.6}" rx="3" fill="${PANEL}" opacity="0.92" />` +
-      `<text x="${labelPos.x}" y="${labelPos.y}" text-anchor="middle" dominant-baseline="middle" ${fontAttrs(label, 11)} fill="${label.color ?? INK}">${escapeXml(label.text)}</text>`;
+      `<rect x="${q(labelPos.x - half - 3)}" y="${q(labelPos.y - size * 0.8)}" width="${q(half * 2 + 6)}" height="${q(size * 1.6)}" rx="3" fill="${PANEL}" opacity="0.92" />` +
+      `<text x="${q(labelPos.x)}" y="${q(labelPos.y)}" text-anchor="middle" dominant-baseline="middle" ${fontAttrs(label, 11)} fill="${q(label.color ?? INK)}">${escapeXml(label.text)}</text>`;
   }
 
   return { line: markup, label: labelMarkup };
@@ -577,7 +575,7 @@ export function diagramToSvg(diagram: Diagram, options: SvgExportOptions = {}): 
   const nodeById = new Map(diagram.nodes.map((n) => [n.id, n]));
 
   const backgroundRect =
-    options.background != null ? `<rect x="0" y="0" width="${width}" height="${height}" fill="${options.background}" />` : "";
+    options.background != null ? `<rect x="0" y="0" width="${q(width)}" height="${q(height)}" fill="${q(options.background)}" />` : "";
 
   const pageColor = options.background ?? diagram.background ?? "#ffffff";
   const frame = options.frame;
@@ -599,17 +597,17 @@ export function diagramToSvg(diagram: Diagram, options: SvgExportOptions = {}): 
     })
     .join("\n");
 
-  const fontStyle = options.fontCss ? `<style>${options.fontCss}</style>` : "";
+  const fontStyle = options.fontCss ? `<style>${q(options.fontCss)}</style>` : "";
   // A frame carries the canvas's own animation rules, paused at its moment (G1, D131).
   const motionStyle = frame ? `<style><![CDATA[${frameCss(frame.t)}]]></style>${GLOW_BLUR}` : "";
   const walkDot = frame?.walkDot
-    ? `<circle cx="${Math.round((frame.walkDot.x + offsetX) * 10) / 10}" cy="${Math.round((frame.walkDot.y + offsetY) * 10) / 10}" r="7" fill="${NEST_ACCENT}" stroke="#ffffff" stroke-width="2" />`
+    ? `<circle cx="${q(Math.round((frame.walkDot.x + offsetX) * 10) / 10)}" cy="${q(Math.round((frame.walkDot.y + offsetY) * 10) / 10)}" r="7" fill="${NEST_ACCENT}" stroke="#ffffff" stroke-width="2" />`
     : "";
   const stepMarkup = walkthroughBadges(diagram, nodeById, offsetX, offsetY);
 
   // The animated icons' accents are theme tokens on screen; a picture gets their colours (D124).
   return resolveIconTokens([
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${q(width)}" height="${q(height)}" viewBox="0 0 ${q(width)} ${q(height)}">`,
     `<defs>${fontStyle}${motionStyle}${MARKER_DEFS}${SHADOW_FILTER_SVG}</defs>`,
     backgroundRect,
     edgeMarkup,
@@ -635,7 +633,7 @@ function staged(id: string, kind: "node" | "edge", frame: MotionFrame | undefine
   if (frame.hidden?.has(id)) return "";
   if (frame.lit) {
     const on = kind === "node" ? frame.lit.nodes.has(id) : frame.lit.edges.has(id);
-    if (!on) return `<g opacity="${kind === "node" ? 0.15 : 0.1}">${markup}</g>`;
+    if (!on) return `<g opacity="${q(kind === "node" ? 0.15 : 0.1)}">${markup}</g>`;
   }
   return markup;
 }
