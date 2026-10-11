@@ -147,7 +147,8 @@ export function extractTextChunk(pngBytes: Uint8Array): string | null {
 
 function readITXt(data: Uint8Array): string | null {
   const nul1 = data.indexOf(0);
-  if (nul1 === -1) return null;
+  // PNG keywords are 1-79 bytes; anything longer is not ours, and spreading it could overflow.
+  if (nul1 < 1 || nul1 > 79) return null;
   const keyword = String.fromCharCode(...data.subarray(0, nul1));
   if (keyword !== CHUNK_KEYWORD) return null;
 
