@@ -17,5 +17,5 @@
     // their import.meta.glob — so this config needs Vite's client types, as tsconfig.app does.
     "types": ["node", "vite/client"]
   },
-  "include": ["vite.config.ts", "vite.brand.ts", "vitest.config.ts", "playwright.config.ts", "tests/e2e/**/*.ts", "examples/**/*.ts"]
+  "include": ["vite.config.ts", "vite.brand.ts", "vite.headers.ts", "vite.headers.test.ts", "vitest.config.ts", "playwright.config.ts", "tests/e2e/**/*.ts", "examples/**/*.ts"]
 }
