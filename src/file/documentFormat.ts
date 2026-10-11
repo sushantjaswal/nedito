@@ -157,9 +157,14 @@ export function decodeDoc(text: string): DecodeResult {
   // Values that are not what their field means — a colour that is not a colour, a number that
   // is not a number — are dropped before the structure is checked: a document may come from
   // anyone, and those values reach markup the app builds as a string (model/validate.ts).
-  cleanDocValues(doc);
-
-  const errors = validateDoc(doc);
+  // Never throws: whatever a file contains, opening it ends in a document or a message.
+  let errors;
+  try {
+    cleanDocValues(doc);
+    errors = validateDoc(doc);
+  } catch {
+    return { ok: false, error: "This file couldn't be checked — it may be damaged." };
+  }
   if (errors.length > 0) {
     const extra = errors.length > 1 ? ` (+${errors.length - 1} more issue${errors.length > 2 ? "s" : ""})` : "";
     return { ok: false, error: `This file failed validation: ${errors[0].message}${extra}` };
