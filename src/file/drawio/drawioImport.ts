@@ -17,7 +17,7 @@ import { nanoid } from "nanoid";
 import { APP_VERSION } from "../../app/version";
 import { BRAND } from "../../app/brand";
 import { createDefaultLayers } from "../../model/layers";
-import { validateDoc } from "../../model/validate";
+import { cleanDocValues, isSafeColour, validateDoc } from "../../model/validate";
 import { assetProblem, IMAGE_SHAPE_REF } from "../../model/assets";
 import type { DEdge, DNode, DiagramDocument, Diagram, EdgeEnd, EdgeLabelPosition, GroupNode, ImageAsset, Layer, RichLabel, ShapeNode } from "../../model/types";
 import { imageSizeFromBytes, sniffImageType } from "../imageImport";
@@ -83,7 +83,7 @@ function toLabel(value: string, style: ReturnType<typeof parseMxStyle>): RichLab
   }
   const size = Number(style.keys.fontSize);
   if (Number.isFinite(size) && size > 0) label.fontSize = size;
-  if (style.keys.fontColor && style.keys.fontColor.toLowerCase() !== "none") label.color = style.keys.fontColor;
+  if (isSafeColour(style.keys.fontColor) && style.keys.fontColor.toLowerCase() !== "none") label.color = style.keys.fontColor;
   const align = style.keys.align;
   if (align === "left" || align === "center" || align === "right") label.align = align;
   return label;
@@ -697,6 +697,7 @@ export async function decodeDrawio(text: string, fileName?: string): Promise<Dra
 
   // Same gate as any opened file: an importer that can emit a document the app would refuse to
   // open is worse than one that admits defeat here.
+  cleanDocValues(doc);
   const errors = validateDoc(doc);
   if (errors.length) {
     return {
