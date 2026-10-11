@@ -152,35 +152,58 @@ function checkChildDiagramsExist(doc: DiagramDocument): ValidationError[] {
   return errors;
 }
 
+/**
+ * How many levels of Nested Blocks a document may have. Real diagrams use a handful; the limit
+ * exists so that a crafted document cannot nest deeply enough to overflow the stack of anything
+ * that walks the levels (deleting a block, the PowerPoint and Word exports, navigation).
+ */
+export const MAX_NESTING_DEPTH = 1000;
+
+/**
+ * No diagram contains itself, directly or further down, and no chain of Nested Blocks is deeper
+ * than MAX_NESTING_DEPTH. A loop with its own stack rather than recursion, so a deep document is
+ * reported rather than overflowing the call stack.
+ */
 function checkNoCycles(doc: DiagramDocument): ValidationError[] {
   const errors: ValidationError[] = [];
-  // color: white=unvisited, grey=in current path, black=fully explored
+  // grey = on the current path, black = fully explored; absent = not visited yet
   const color = new Map<string, "grey" | "black">();
+  let reportedDepth = false;
 
   const childDiagramIdsOf = (diagram: Diagram): string[] =>
-    diagram.nodes.filter(isNestedNode).map((n) => n.childDiagramId);
+    Array.isArray(diagram.nodes) ? diagram.nodes.filter(isNestedNode).map((n) => n.childDiagramId) : [];
 
-  const visit = (diagramId: string, path: string[]): void => {
-    const diagram = doc.diagrams[diagramId];
-    if (!diagram) return; // reported by checkChildDiagramsExist
-    if (color.get(diagramId) === "black") return;
-    if (color.get(diagramId) === "grey") {
-      errors.push({
-        code: "CYCLE",
-        message: `Nesting cycle detected: ${[...path, diagramId].join(" -> ")}`,
-        diagramId,
-      });
-      return;
+  for (const start of Object.keys(doc.diagrams)) {
+    if (color.has(start) || !doc.diagrams[start]) continue;
+    const path: string[] = [start];
+    const pending: string[][] = [childDiagramIdsOf(doc.diagrams[start])];
+    color.set(start, "grey");
+    while (path.length > 0) {
+      const next = pending[pending.length - 1].pop();
+      if (next === undefined) {
+        color.set(path.pop()!, "black");
+        pending.pop();
+        continue;
+      }
+      const diagram = doc.diagrams[next];
+      if (!diagram) continue; // reported by checkChildDiagramsExist
+      const state = color.get(next);
+      if (state === "black") continue;
+      if (state === "grey") {
+        errors.push({ code: "CYCLE", message: `Nesting cycle detected: ${[...path, next].join(" -> ")}`, diagramId: next });
+        continue;
+      }
+      if (path.length >= MAX_NESTING_DEPTH) {
+        if (!reportedDepth) {
+          errors.push({ code: "TOO_DEEP", message: `Nested Blocks go more than ${MAX_NESTING_DEPTH} levels deep`, diagramId: next });
+          reportedDepth = true;
+        }
+        continue;
+      }
+      color.set(next, "grey");
+      path.push(next);
+      pending.push(childDiagramIdsOf(diagram));
     }
-    color.set(diagramId, "grey");
-    for (const childId of childDiagramIdsOf(diagram)) {
-      visit(childId, [...path, diagramId]);
-    }
-    color.set(diagramId, "black");
-  };
-
-  for (const diagramId of Object.keys(doc.diagrams)) {
-    if (!color.has(diagramId)) visit(diagramId, []);
   }
 
   return errors;

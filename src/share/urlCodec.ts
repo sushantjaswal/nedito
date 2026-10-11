@@ -11,6 +11,7 @@ import { CURRENT_FORMAT_VERSION, decodeDoc, encodeDoc, writtenVersion } from "..
 import type { DiagramDocument } from "../model/types";
 import { base64UrlToBytes, bytesToBase64Url } from "./base64url";
 import { gunzip, gzip } from "./gzip";
+import { TooLargeError } from "../file/decompress";
 import {
   SHARE_CHARS_PER_KB,
   SHARE_PARAM_DOC,
@@ -95,7 +96,8 @@ export async function decodeFragmentToDoc(fragment: string): Promise<ShareDecode
   let json: string;
   try {
     json = new TextDecoder().decode(await gunzip(base64UrlToBytes(payload)));
-  } catch {
+  } catch (e) {
+    if (e instanceof TooLargeError) return { ok: false, error: "This link's diagram is too large to open." };
     return {
       ok: false,
       error: "This link is damaged — it may have been cut short when it was copied or sent.",

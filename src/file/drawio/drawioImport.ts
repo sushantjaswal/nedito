@@ -285,6 +285,17 @@ function convertPage(model: Element, title: string, pageLabel: string, pictures:
   const unreadablePictureIds: string[] = [];
   let z = 0;
 
+  // Each cell's members, gathered once: scanning every cell for every group made a file with
+  // thousands of groups take seconds to import.
+  const membersByParent = new Map<string, string[]>();
+  for (const c of cells) {
+    const parent = c.cell.getAttribute("parent");
+    if (!parent || !c.id) continue;
+    const list = membersByParent.get(parent);
+    if (list) list.push(c.id);
+    else membersByParent.set(parent, [c.id]);
+  }
+
   // Vertices first, so every edge endpoint already exists to be validated against.
   for (const c of cells) {
     if (c.cell.getAttribute("vertex") !== "1") continue;
@@ -299,9 +310,7 @@ function convertPage(model: Element, title: string, pageLabel: string, pictures:
 
     // draw.io's group is a plain vertex with style "group" whose members name it as parent.
     if (style.names.includes("group")) {
-      const childIds = cells
-        .filter((other) => other.cell.getAttribute("parent") === c.id && idMap.has(other.id))
-        .map((other) => idMap.get(other.id)!);
+      const childIds = (membersByParent.get(c.id) ?? []).filter((m) => idMap.has(m)).map((m) => idMap.get(m)!);
       const group: GroupNode = {
         id,
         type: "group",

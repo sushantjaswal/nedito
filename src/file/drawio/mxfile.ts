@@ -6,18 +6,11 @@
 // are common in the wild — the compressed form was the default for years — so an importer that
 // only reads one of them fails on half the files people actually have.
 
-/** Raw deflate, no zlib header: what draw.io's compressed payloads are wrapped in. */
-async function inflateRaw(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
-  // Streams are hand-built rather than via Blob.stream(), matching share/gzip.ts: jsdom's Blob
-  // has no .stream(), and that would put these tests behind a real browser.
-  const source = new ReadableStream<BufferSource>({
-    start(controller) {
-      controller.enqueue(bytes);
-      controller.close();
-    },
-  });
-  const out = source.pipeThrough(new DecompressionStream("deflate-raw"));
-  return new Uint8Array(await new Response(out).arrayBuffer());
+import { decompress, MAX_FILE_PART_BYTES, TooLargeError } from "../decompress";
+
+/** Raw deflate, no zlib header: what draw.io's compressed payloads are wrapped in. Inflated with a limit (file/decompress.ts). */
+function inflateRaw(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
+  return decompress(bytes, "deflate-raw", MAX_FILE_PART_BYTES);
 }
 
 function base64ToBytes(b64: string): Uint8Array<ArrayBuffer> {
@@ -83,7 +76,8 @@ export async function unwrapMxfile(text: string): Promise<UnwrapResult> {
     try {
       const inflated = await inflateRaw(base64ToBytes(payload));
       xml = decodeURIComponent(new TextDecoder().decode(inflated));
-    } catch {
+    } catch (e) {
+      if (e instanceof TooLargeError) return { ok: false, pages: [], error: `Page "${name}" is too large to open.` };
       return {
         ok: false,
         pages: [],
