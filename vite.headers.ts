@@ -3,7 +3,9 @@
 //
 // Everything the app loads is its own: no CDN, no fonts or scripts from anywhere else, no network
 // calls but for its own files. So the Content-Security-Policy allows only this origin, plus data:
-// and blob: URLs for the pictures and downloads the app makes itself. The startup screen's one
+// and blob: URLs for the pictures and downloads the app makes itself — and one outside service,
+// named below: Cloudflare Web Analytics, which the hosting injects into nedito.app's pages to count
+// visits and page-load times (see the README's note under "Your diagrams are yours"). The startup screen's one
 // inline <script> and one inline <style> (vite.brand.ts) are allowed by their SHA-256 hashes, which
 // this plugin computes from the finished index.html on every build, so they can never fall out of
 // step with what is served.
@@ -15,6 +17,10 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
+
+/** Cloudflare Web Analytics: its script, and where it reports page views and load timings. */
+export const ANALYTICS_SCRIPT = "https://static.cloudflareinsights.com";
+export const ANALYTICS_REPORT = "https://cloudflareinsights.com";
 
 const sha256 = (text: string) => `'sha256-${createHash("sha256").update(text, "utf8").digest("base64")}'`;
 
@@ -30,11 +36,11 @@ export function contentSecurityPolicy(indexHtml: string): string {
   const { scripts, styles } = inlineBlocks(indexHtml);
   return [
     "default-src 'none'",
-    ["script-src 'self'", ...scripts.map(sha256)].join(" "),
+    ["script-src 'self'", ...scripts.map(sha256), ANALYTICS_SCRIPT].join(" "),
     ["style-src 'self'", ...styles.map(sha256)].join(" "),
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
-    "connect-src 'self' data: blob:",
+    `connect-src 'self' data: blob: ${ANALYTICS_REPORT}`,
     "manifest-src 'self'",
     "worker-src 'self' blob:",
     "base-uri 'none'",

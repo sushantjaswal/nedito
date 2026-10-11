@@ -89,7 +89,7 @@ print, and the Animated image export turns a level into a GIF — this one was m
   and nothing to log in to.
 - **Nothing is uploaded.** nedito.app serves the app's own files and nothing else, and it never
   receives a diagram. The one you are working on is kept in this browser's storage, saved as you go.
-  The app contains no analytics, trackers or telemetry.
+  The app's own code contains no analytics, trackers or telemetry.\*
 - **Sharing happens only when you choose.** An export is a file you put where you like. A share
   link carries the whole diagram inside the link, in the part after `#`, which browsers never send
   to a server.
@@ -100,6 +100,13 @@ print, and the Animated image export turns a level into a GIF — this one was m
 The flip side: nobody else holds a copy. Clearing this browser's data, or switching browser or
 machine, leaves your work behind, and it cannot be recovered for you. Download your file (app menu ›
 Save a copy, or Export) to keep it, move it or share it.
+
+\* nedito.app, the hosted copy, uses Cloudflare Web Analytics to count visitors, page views and how
+quickly pages load, and Cloudflare's hosting reports on requests, throughput and failed requests,
+so the site can be kept fast and working. None of it touches your diagrams or what you type: the
+analytics script removes everything after `#` from the page address before reporting it, so a
+share link's diagram is never sent, and it uses no cookies. A copy you run yourself has none of
+this.
 
 ## The file format
 
