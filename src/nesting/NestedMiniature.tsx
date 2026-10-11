@@ -38,8 +38,10 @@ function NestedMiniatureComponent({ diagram, className }: NestedMiniatureProps) 
       viewBox={mini.viewBox}
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
-      // Built from authored-in-repo stencil markup and the document's own numbers — see
-      // StencilDef; no user-supplied HTML reaches this.
+      // Repository stencil markup plus the child diagram's values. Those come from a document,
+      // which may come from anyone: every one is escaped by buildMiniatureSvg (escapeMarkup) and
+      // checked when the document was read (cleanDocValues).
+      // eslint-disable-next-line no-restricted-syntax -- see above
       dangerouslySetInnerHTML={{ __html: mini.body }}
     />
   );

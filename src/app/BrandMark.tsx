@@ -22,6 +22,7 @@ export function BrandMark({ className }: { className?: string }) {
       className={className ? `${styles.mark} ${className}` : styles.mark}
       aria-hidden="true"
       data-testid="nd-brand-mark"
+      // eslint-disable-next-line no-restricted-syntax -- the brand mark, a constant from the repository
       dangerouslySetInnerHTML={{ __html: INLINE }}
     />
   );
