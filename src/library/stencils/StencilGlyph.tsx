@@ -62,6 +62,7 @@ export function StencilGlyph({
 }: StencilGlyphProps) {
   // raw vendor icons carry their own viewBox/colors and are never themed — see StencilDef.
   if (raw) {
+    // eslint-disable-next-line no-restricted-syntax -- `raw` is repository-authored vendor markup, chosen by stencil id
     return <div className={className} style={shadow ? { filter: SHADOW_CSS } : undefined} dangerouslySetInnerHTML={{ __html: raw }} />;
   }
   // Scale the drawn content (not the viewBox) around its own center: a ratio > 1 (wider than
@@ -93,6 +94,7 @@ export function StencilGlyph({
           stroke={stroke}
           strokeWidth={strokeWidth}
           strokeDasharray={dash}
+          // eslint-disable-next-line no-restricted-syntax -- a repository stencil body; the document's values in it are escaped by fitStencilBody
           dangerouslySetInnerHTML={{ __html: fitStencilBody(svgBody, fitted.w, fitted.h, { stroke, strokeWidth, headScale: size ? 1 : 2.2 }) }}
         />
       </g>

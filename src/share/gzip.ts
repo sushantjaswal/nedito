@@ -10,6 +10,8 @@
 
 // Typed as BufferSource, not Uint8Array: that is what CompressionStream's writable side
 // accepts, and pipeThrough requires the two to line up exactly.
+import { decompress, MAX_LINK_BYTES } from "../file/decompress";
+
 function toStream(bytes: Uint8Array<ArrayBuffer>): ReadableStream<BufferSource> {
   return new ReadableStream<BufferSource>({
     start(controller) {
@@ -27,7 +29,10 @@ export async function gzip(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<A
   return collect(toStream(bytes).pipeThrough(new CompressionStream("gzip")));
 }
 
-/** Rejects on malformed input — a truncated or corrupted link lands here first. */
+/**
+ * Rejects on malformed input — a truncated or corrupted link lands here first — and with
+ * TooLargeError once the output passes the share-link limit (file/decompress.ts).
+ */
 export async function gunzip(bytes: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
-  return collect(toStream(bytes).pipeThrough(new DecompressionStream("gzip")));
+  return decompress(bytes, "gzip", MAX_LINK_BYTES);
 }

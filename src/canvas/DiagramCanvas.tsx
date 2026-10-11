@@ -226,6 +226,7 @@ const toMarker = markerId;
 function ArrowheadDefs() {
   return (
     <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
+      {/* eslint-disable-next-line no-restricted-syntax -- built from the fixed arrowhead table, no document data */}
       <defs dangerouslySetInnerHTML={{ __html: markerDefs() }} />
     </svg>
   );

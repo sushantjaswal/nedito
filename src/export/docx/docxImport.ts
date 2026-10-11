@@ -6,6 +6,7 @@
 //
 // Only our own custom part is read. Nothing tries to reconstruct a diagram from Word content —
 // a docx written by Word has no diagram in it, and guessing would be worse than saying so.
+import { decompress, MAX_FILE_PART_BYTES, TooLargeError } from "../../file/decompress";
 import { decodeDoc } from "../../file/documentFormat";
 import { BRAND } from "../../app/brand";
 import { isDocumentCustomXml, readCustomXmlJson } from "./docxParts";
@@ -13,16 +14,9 @@ import type { DiagramDocument } from "../../model/types";
 
 export type DocxDecodeResult = { ok: true; doc: DiagramDocument } | { ok: false; error: string };
 
-/** Inflate helper mirroring export/pptx/zip.ts's compressor. */
-async function inflateRaw(bytes: Uint8Array): Promise<Uint8Array> {
-  const source = new ReadableStream<BufferSource>({
-    start(controller) {
-      controller.enqueue(bytes as unknown as BufferSource);
-      controller.close();
-    },
-  });
-  const out = source.pipeThrough(new DecompressionStream("deflate-raw"));
-  return new Uint8Array(await new Response(out).arrayBuffer());
+/** The document part inside a Word export, inflated with a limit (file/decompress.ts). */
+function inflateRaw(bytes: Uint8Array): Promise<Uint8Array> {
+  return decompress(bytes, "deflate-raw", MAX_FILE_PART_BYTES);
 }
 
 /**
@@ -78,7 +72,8 @@ export async function decodeDocx(buffer: ArrayBuffer): Promise<DocxDecodeResult>
   let part: string | null;
   try {
     part = await findDocumentPart(zip);
-  } catch {
+  } catch (e) {
+    if (e instanceof TooLargeError) return { ok: false, error: "This Word file's diagram is too large to open." };
     return { ok: false, error: "This Word file couldn't be read — it may be damaged." };
   }
 

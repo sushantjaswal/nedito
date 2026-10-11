@@ -34,6 +34,16 @@ export default [
       // on type-only namespace usage like `React.CSSProperties` under the automatic JSX runtime.
       "no-undef": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      // Markup inserted as HTML is where a document's values could become script. Every use has to
+      // be argued for in a disable comment: what is inserted, and why none of it is unescaped
+      // document data.
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
+          message: "Inserting HTML is where document data can become script. Build the markup with React, or escape every value (model/escapeMarkup.ts) and justify it in a disable comment.",
+        },
+      ],
     },
   },
   // Build scripts (npm run icons) run in Node, not the browser.
