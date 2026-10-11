@@ -13,6 +13,7 @@ import { getStencil } from "../library/stencils";
 import { getStencilDefaultStyle, stencilBody } from "../library/stencils/defaultStyle";
 import { isClassicLook } from "../model/look";
 import { assetDataUrl, isImageNode } from "../model/assets";
+import { escapeMarkup as q } from "../model/escapeMarkup";
 import type { Diagram, DNode, ImageAsset } from "../model/types";
 
 const PAD = 12;
@@ -74,12 +75,12 @@ export function buildMiniatureSvg(
   const c = MINIATURE_COLORS;
 
   const edgeAttrs = classes
-    ? `class="${classes.edge}"`
-    : `stroke="${c.edge}" stroke-width="1.5" fill="none"`;
-  const tileAttrs = classes ? `class="${classes.tile}"` : `fill="${c.tile}" stroke="${c.tileStroke}" stroke-width="1.5"`;
+    ? `class="${q(classes.edge)}"`
+    : `stroke="${q(c.edge)}" stroke-width="1.5" fill="none"`;
+  const tileAttrs = classes ? `class="${q(classes.tile)}"` : `fill="${q(c.tile)}" stroke="${q(c.tileStroke)}" stroke-width="1.5"`;
   const nestedAttrs = classes
-    ? `class="${classes.nestedBox}"`
-    : `fill="${c.nestedFill}" stroke="${c.nestedStroke}" stroke-width="1.5"`;
+    ? `class="${q(classes.nestedBox)}"`
+    : `fill="${q(c.nestedFill)}" stroke="${q(c.nestedStroke)}" stroke-width="1.5"`;
 
   const parts: string[] = [];
 
@@ -93,14 +94,14 @@ export function buildMiniatureSvg(
     // Straight centre-to-centre regardless of the edge's real routing: at thumbnail scale the
     // difference is a pixel or two, and it avoids re-deriving waypoint geometry here.
     parts.push(
-      `<line x1="${a.x}" y1="${a.y}" x2="${z.x}" y2="${z.y}" ${edgeAttrs} vector-effect="non-scaling-stroke" />`,
+      `<line x1="${q(a.x)}" y1="${q(a.y)}" x2="${q(z.x)}" y2="${q(z.y)}" ${edgeAttrs} vector-effect="non-scaling-stroke" />`,
     );
   }
 
   for (const n of nodes) {
     if (n.type === "nested") {
       parts.push(
-        `<rect x="${n.position.x}" y="${n.position.y}" width="${n.size.w}" height="${n.size.h}" rx="6" ${nestedAttrs} vector-effect="non-scaling-stroke" />`,
+        `<rect x="${q(n.position.x)}" y="${q(n.position.y)}" width="${q(n.size.w)}" height="${q(n.size.h)}" rx="6" ${nestedAttrs} vector-effect="non-scaling-stroke" />`,
       );
       continue;
     }
@@ -111,8 +112,8 @@ export function buildMiniatureSvg(
       const asset = assets?.[n.imageId];
       parts.push(
         asset
-          ? `<image x="${n.position.x}" y="${n.position.y}" width="${n.size.w}" height="${n.size.h}" href="${assetDataUrl(asset)}" preserveAspectRatio="none" />`
-          : `<rect x="${n.position.x}" y="${n.position.y}" width="${n.size.w}" height="${n.size.h}" rx="3" ${tileAttrs} vector-effect="non-scaling-stroke" />`,
+          ? `<image x="${q(n.position.x)}" y="${q(n.position.y)}" width="${q(n.size.w)}" height="${q(n.size.h)}" href="${q(assetDataUrl(asset))}" preserveAspectRatio="none" />`
+          : `<rect x="${q(n.position.x)}" y="${q(n.position.y)}" width="${q(n.size.w)}" height="${q(n.size.h)}" rx="3" ${tileAttrs} vector-effect="non-scaling-stroke" />`,
       );
       continue;
     }
@@ -129,7 +130,7 @@ export function buildMiniatureSvg(
     // since an Azure landing zone's spokes are Nested Blocks full of vendor icons.
     if (stencil?.raw) {
       parts.push(
-        `<svg x="${n.position.x}" y="${n.position.y}" width="${n.size.w}" height="${n.size.h}" overflow="visible">${stencil.raw}</svg>`,
+        `<svg x="${q(n.position.x)}" y="${q(n.position.y)}" width="${q(n.size.w)}" height="${q(n.size.h)}" overflow="visible">${stencil.raw}</svg>`,
       );
       continue;
     }
@@ -138,7 +139,7 @@ export function buildMiniatureSvg(
     // nothing at all where a shape should be.
     if (!stencil) {
       parts.push(
-        `<rect x="${n.position.x}" y="${n.position.y}" width="${n.size.w}" height="${n.size.h}" rx="3" ${tileAttrs} vector-effect="non-scaling-stroke" />`,
+        `<rect x="${q(n.position.x)}" y="${q(n.position.y)}" width="${q(n.size.w)}" height="${q(n.size.h)}" rx="3" ${tileAttrs} vector-effect="non-scaling-stroke" />`,
       );
       continue;
     }
@@ -152,12 +153,12 @@ export function buildMiniatureSvg(
       // svgBody is authored against a fixed 0-100 box, so this maps it onto the node's real
       // position and size — the same square-to-rect stretch ShapeNode applies.
       // An animated icon stands still in a miniature (D124): only the open level moves.
-      `<g transform="translate(${n.position.x} ${n.position.y}) scale(${n.size.w / 100} ${n.size.h / 100})" fill="${fill}"${stencil.pictogram ? ` color="${fill}"` : ""}${fillOpacity === undefined ? "" : ` fill-opacity="${fillOpacity}"`} stroke="${stroke}" stroke-width="${defaults.strokeWidth}">${fitStencilBody(stillBody(stencilBody(stencil, classic)), n.size.w, n.size.h, { stroke, strokeWidth: defaults.strokeWidth })}</g>`,
+      `<g transform="translate(${q(n.position.x)} ${q(n.position.y)}) scale(${q(n.size.w / 100)} ${q(n.size.h / 100)})" fill="${q(fill)}"${stencil.pictogram ? ` color="${q(fill)}"` : ""}${fillOpacity === undefined ? "" : ` fill-opacity="${q(fillOpacity)}"`} stroke="${q(stroke)}" stroke-width="${q(defaults.strokeWidth)}">${fitStencilBody(stillBody(stencilBody(stencil, classic)), n.size.w, n.size.h, { stroke, strokeWidth: defaults.strokeWidth })}</g>`,
     );
   }
 
   return {
-    viewBox: `${b.minX - PAD} ${b.minY - PAD} ${b.w + PAD * 2} ${b.h + PAD * 2}`,
+    viewBox: `${q(b.minX - PAD)} ${q(b.minY - PAD)} ${q(b.w + PAD * 2)} ${q(b.h + PAD * 2)}`,
     body: parts.join(""),
   };
 }

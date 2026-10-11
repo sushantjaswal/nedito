@@ -4,6 +4,8 @@
 // "rhombus", "triangle"); a plain rectangle simply has none, which is why the absence of a
 // name is meaningful rather than a parse failure.
 
+import { isSafeColour } from "../../model/validate";
+
 export interface MxStyle {
   /** Bare tokens, in order. Usually zero or one; "html=1" style strings often have none. */
   names: string[];
@@ -161,10 +163,14 @@ export function toShapeRef(style: MxStyle): ShapeMatch {
   return { shapeRef: "general/rect", matched: false, requested: style.names[0] };
 }
 
-/** draw.io colour values are hex, a named colour, or the literal "none". */
+/**
+ * A drawio colour, if it is one Nedito can draw: hex, rgb()/rgba() or a named colour. Anything else
+ * — "default", "inherit", or text that is not a colour at all — is left out, so the shape keeps
+ * Nedito's default. "none" is handled by the callers.
+ */
 function color(value: string | undefined): string | undefined {
   if (!value || value.toLowerCase() === "none") return undefined;
-  return value;
+  return isSafeColour(value) ? value : undefined;
 }
 
 export function toNodeStyle(style: MxStyle): Record<string, string | number> {

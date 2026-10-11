@@ -15,6 +15,7 @@
 // expandLines turns each one into real SVG for the size it is drawn at: the line, shortened so
 // it stops inside its head as a connector's does, and each head drawn in screen pixels, pointing
 // along the line, at a size that follows the stroke width.
+import { escapeMarkup as q } from "../../model/escapeMarkup";
 import { ARROWHEADS, type ArrowheadPaint } from "../../canvas/arrowheads";
 
 export interface LinePaint {
@@ -43,10 +44,10 @@ export function headSize(strokeWidth: number): number {
 }
 
 function partPaint(fill: ArrowheadPaint, paint: LinePaint, unitStroke: number): string {
-  if (fill === "stroke") return `fill="${paint.stroke}" stroke="none"`;
+  if (fill === "stroke") return `fill="${q(paint.stroke)}" stroke="none"`;
   // A hollow head is filled with paper, as on a connector, so the line does not show through it.
   const inside = fill === "background" ? "#ffffff" : "none";
-  return `fill="${inside}" stroke="${paint.stroke}" stroke-width="${r(unitStroke)}" stroke-linejoin="round"`;
+  return `fill="${inside}" stroke="${q(paint.stroke)}" stroke-width="${r(unitStroke)}" stroke-linejoin="round"`;
 }
 
 /**

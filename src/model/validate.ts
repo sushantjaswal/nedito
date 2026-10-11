@@ -243,3 +243,155 @@ function checkPortsReferenceRealNodes(doc: DiagramDocument): ValidationError[] {
   }
   return errors;
 }
+
+// ---- values from outside, cleaned on the way in --------------------------------------------
+//
+// A document may come from anyone, and its style, label and geometry values reach markup the app
+// builds as a string (the Nested Block miniature, the stencil glyphs, the SVG export). Those
+// builders escape every value; this is the other end: a value that is not what its field means —
+// a colour that is not a colour, a number that is not a number — is dropped as the document is
+// read, so it falls back to the default look. Dropped rather than refused, so one stray value
+// never makes someone's diagram unopenable; nothing the app writes is ever outside these rules,
+// so a legitimate document comes through unchanged.
+
+const HEX_COLOUR = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const CHANNEL = String.raw`\s*\d{1,3}(?:\.\d+)?%?\s*`;
+const ALPHA = String.raw`\s*(?:\d?\.\d+|[01]|\d{1,3}%)\s*`;
+const RGB_COLOUR = new RegExp(String.raw`^rgba?\(${CHANNEL},${CHANNEL},${CHANNEL}(?:,${ALPHA})?\)$`, "i");
+const NAMED_COLOURS = new Set(
+  (
+    "none transparent aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet " +
+    "brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan " +
+    "darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred " +
+    "darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue " +
+    "dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray " +
+    "green greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen " +
+    "lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink " +
+    "lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow lime limegreen " +
+    "linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue " +
+    "mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy " +
+    "oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip " +
+    "peachpuff peru pink plum powderblue purple rebeccapurple red rosybrown royalblue saddlebrown salmon sandybrown " +
+    "seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue tan teal thistle " +
+    "tomato turquoise violet wheat white whitesmoke yellow yellowgreen"
+  ).split(" "),
+);
+
+/** A colour Nedito draws with: hex, rgb()/rgba(), a CSS named colour, "none" or "transparent". */
+export function isSafeColour(value: unknown): value is string {
+  return typeof value === "string" && (HEX_COLOUR.test(value) || RGB_COLOUR.test(value) || NAMED_COLOURS.has(value.toLowerCase()));
+}
+
+const COLOUR_KEYS = new Set(["fill", "stroke", "fontColor", "labelColor", "background"]);
+/** Number-valued style keys, with the range a real document stays inside. */
+const NUMBER_KEYS: Record<string, [number, number]> = {
+  strokeWidth: [0, 100],
+  fillOpacity: [0, 1],
+  opacity: [0, 1],
+  fontSize: [1, 400],
+};
+/** Any other style value: a short word, an id, a number with a unit — never markup. */
+const PLAIN_TOKEN = /^[A-Za-z0-9 #.,%:_()/+-]{0,200}$/;
+
+const inRange = (v: unknown, [lo, hi]: [number, number]): v is number => typeof v === "number" && Number.isFinite(v) && v >= lo && v <= hi;
+
+/** A style map with every value that is not what its key means dropped. Returns the count dropped too. */
+export function cleanStyle(style: unknown): { style: Record<string, string | number | boolean>; dropped: number } {
+  const out: Record<string, string | number | boolean> = {};
+  let dropped = 0;
+  if (typeof style !== "object" || style === null || Array.isArray(style)) return { style: out, dropped: style === undefined ? 0 : 1 };
+  for (const [key, value] of Object.entries(style as Record<string, unknown>)) {
+    const ok = COLOUR_KEYS.has(key)
+      ? isSafeColour(value)
+      : key in NUMBER_KEYS
+        ? inRange(value, NUMBER_KEYS[key])
+        : typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && PLAIN_TOKEN.test(value));
+    if (ok) out[key] = value as string | number | boolean;
+    else dropped++;
+  }
+  return { style: out, dropped };
+}
+
+const POSITION: [number, number] = [-1e7, 1e7];
+const SIZE: [number, number] = [Number.MIN_VALUE, 1e7];
+
+/**
+ * Cleans a freshly read document in place, before validateDoc checks its structure: colours,
+ * numbers and plain style values that are not what their field means are dropped (falling back
+ * to the default look), and a position or size that is not a finite number is replaced by a safe
+ * default, since a shape cannot do without one. Returns how many values it changed.
+ */
+export function cleanDocValues(doc: DiagramDocument): number {
+  let changed = 0;
+  const num = (v: unknown, range: [number, number], fallback: number): number => {
+    if (inRange(v, range)) return v;
+    changed++;
+    return fallback;
+  };
+  const cleanLabel = (owner: { label?: unknown }) => {
+    const label = owner.label as Record<string, unknown> | undefined;
+    if (!label || typeof label !== "object") return;
+    if ("color" in label && !isSafeColour(label.color)) {
+      delete label.color;
+      changed++;
+    }
+    if ("fontSize" in label && !inRange(label.fontSize, NUMBER_KEYS.fontSize)) {
+      delete label.fontSize;
+      changed++;
+    }
+    for (const flag of ["bold", "italic"]) {
+      if (flag in label && typeof label[flag] !== "boolean") {
+        delete label[flag];
+        changed++;
+      }
+    }
+    if ("align" in label && !["left", "center", "right"].includes(label.align as string)) {
+      delete label.align;
+      changed++;
+    }
+  };
+  for (const diagram of Object.values(doc.diagrams ?? {})) {
+    if (typeof diagram !== "object" || diagram === null) continue;
+    const d = diagram as Diagram & { background?: unknown; pageSize?: unknown };
+    if ("background" in d && d.background !== undefined && !isSafeColour(d.background)) {
+      delete d.background;
+      changed++;
+    }
+    if (d.pageSize !== undefined) {
+      const p = d.pageSize as { w?: unknown; h?: unknown };
+      if (!(p && inRange(p.w, SIZE) && inRange(p.h, SIZE))) {
+        delete d.pageSize;
+        changed++;
+      }
+    }
+    for (const node of Array.isArray(d.nodes) ? d.nodes : []) {
+      if (typeof node !== "object" || node === null) continue;
+      const n = node as DNode & { position?: { x: unknown; y: unknown }; size?: { w: unknown; h: unknown } };
+      n.position = { x: num(n.position?.x, POSITION, 0), y: num(n.position?.y, POSITION, 0) };
+      n.size = { w: num(n.size?.w, SIZE, 120), h: num(n.size?.h, SIZE, 60) };
+      if (n.rotation !== undefined && !inRange(n.rotation, [-36000, 36000])) {
+        delete n.rotation;
+        changed++;
+      }
+      if (!inRange(n.z, [-1e9, 1e9])) {
+        n.z = 0;
+        changed++;
+      }
+      const s = cleanStyle(n.style);
+      n.style = s.style;
+      changed += s.dropped;
+      cleanLabel(n);
+      if (n.type === "nested" && Array.isArray(n.ports)) {
+        for (const port of n.ports) port.offset = num(port.offset, [0, 1], 0.5);
+      }
+    }
+    for (const edge of Array.isArray(d.edges) ? d.edges : []) {
+      if (typeof edge !== "object" || edge === null) continue;
+      const s = cleanStyle(edge.style);
+      edge.style = s.style;
+      changed += s.dropped;
+      cleanLabel(edge);
+    }
+  }
+  return changed;
+}

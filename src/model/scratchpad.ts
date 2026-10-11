@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { BRAND } from "../app/brand";
 import type { RichLabel, ShapeNode, StyleMap } from "./types";
 import { getStencil } from "../library/stencils";
+import { cleanStyle, isSafeColour } from "./validate";
 
 export interface ScratchpadItem {
   id: string;
@@ -17,10 +18,33 @@ export interface ScratchpadItem {
 
 const KEY = `${BRAND.storagePrefix}:scratchpad`;
 
+function readItems(parsed: unknown): ScratchpadItem[] {
+  if (!Array.isArray(parsed)) return [];
+  const finite = (v: unknown) => typeof v === "number" && Number.isFinite(v) && v > 0 && v <= 1e7;
+  return parsed.flatMap((item): ScratchpadItem[] => {
+    if (typeof item !== "object" || item === null) return [];
+    const { id, shapeRef, size, style, label } = item as Record<string, unknown>;
+    if (typeof id !== "string" || typeof shapeRef !== "string") return [];
+    const s = size as { w?: unknown; h?: unknown } | undefined;
+    if (!s || !finite(s.w) || !finite(s.h)) return [];
+    const out: ScratchpadItem = { id, shapeRef, size: { w: s.w as number, h: s.h as number }, style: cleanStyle(style).style };
+    if (label && typeof label === "object" && typeof (label as { text?: unknown }).text === "string") {
+      const l = { ...(label as RichLabel) };
+      if (l.color !== undefined && !isSafeColour(l.color)) delete l.color;
+      if (l.fontSize !== undefined && !(typeof l.fontSize === "number" && l.fontSize >= 1 && l.fontSize <= 400)) delete l.fontSize;
+      out.label = l;
+    }
+    return [out];
+  });
+}
+
 export function readScratchpad(): ScratchpadItem[] {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as ScratchpadItem[]) : [];
+    // Favorites were saved from documents, and a document may come from anyone: what is stored is
+    // checked as it is read back, like a document is, so a value saved before that check existed
+    // cannot reach the glyphs that draw them.
+    return raw ? readItems(JSON.parse(raw)) : [];
   } catch {
     return [];
   }
