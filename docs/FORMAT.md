@@ -284,6 +284,26 @@ failure never crashes the app, it shows a clear error instead:
 - `BAD_EDGE_END` — an edge end has neither a `nodeId` nor a `point`, both, or a `point` whose
   coordinates aren't finite numbers.
 
+Before those checks, values that are not what their field means are **dropped**, not refused, so
+one stray value never makes a document unopenable; the shape falls back to its default look. A
+reader should treat a file as untrusted, and these rules are what keep its values from reaching
+anything but the drawing:
+
+- **Colours** — `style.fill`, `style.stroke`, a label's `color` and a diagram's `background` — are
+  hex (`#rgb`, `#rgba`, `#rrggbb`, `#rrggbbaa`), `rgb()`/`rgba()` with comma-separated numbers, a
+  CSS named colour, `none` or `transparent`. Anything else is dropped.
+- **Numbers** are finite and in range: `style.strokeWidth` 0–100, `style.fillOpacity` and
+  `style.opacity` 0–1, a label's `fontSize` 1–400, a node's `rotation` within ±36000. A node's
+  `position` (±10,000,000) and `size` (above 0, up to 10,000,000) cannot be dropped, so a value
+  outside that is replaced: `0` for a position, 120 × 60 for a size. A port's `offset` outside
+  0–1 becomes 0.5, and a `pageSize` that is not two positive numbers is removed.
+- **Any other style value** is a finite number, a boolean, or plain text of up to 200 letters,
+  digits, spaces and `#.,%:_()/+-` — never markup. A label's `bold` and `italic` are booleans and
+  its `align` is `left`, `center` or `right`.
+
+Every value Nedito itself writes is inside these rules, so a document it saved comes back
+unchanged; none of this changed the format version.
+
 ### `pageSize` (optional, on a diagram)
 
 `{ "w": 794, "h": 1123 }` — the printable page in canvas units (CSS px at 96dpi), used to draw

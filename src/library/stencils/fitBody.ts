@@ -12,6 +12,7 @@
 //
 // Canvas, exports and miniatures all draw through this, so they cannot drift apart.
 
+import { escapeMarkup as q } from "../../model/escapeMarkup";
 import { expandLines, type LinePaint } from "./lineBody";
 
 const STROKED = /<(rect|circle|ellipse|path|polygon|polyline|line)\b([^>]*?)(\/?)>/gi;
@@ -23,7 +24,7 @@ function attr(attrs: string, name: string): number | undefined {
 
 function withAttr(attrs: string, name: string, value: string): string {
   const re = new RegExp(`\\s${name}="[^"]*"`);
-  return re.test(attrs) ? attrs.replace(re, ` ${name}="${value}"`) : `${attrs} ${name}="${value}"`;
+  return re.test(attrs) ? attrs.replace(re, ` ${name}="${q(value)}"`) : `${attrs} ${name}="${q(value)}"`;
 }
 
 const round = (n: number) => String(Math.round(n * 1000) / 1000);

@@ -9,7 +9,7 @@ import { hasOwnLook } from "../model/look";
 import { hasMotion } from "../model/motion";
 import { pruneOrders } from "../model/presentation";
 import { splitSharedPorts } from "../model/nesting";
-import { validateDoc } from "../model/validate";
+import { cleanDocValues, validateDoc } from "../model/validate";
 import type { DiagramDocument, Diagram } from "../model/types";
 import { KNOWN_FORMAT_IDS, migrate } from "./migrations";
 
@@ -153,6 +153,11 @@ export function decodeDoc(text: string): DecodeResult {
     diagrams: migrated.diagrams as DiagramDocument["diagrams"],
     ...(migrated.assets ? { assets: migrated.assets as DiagramDocument["assets"] } : {}),
   });
+
+  // Values that are not what their field means — a colour that is not a colour, a number that
+  // is not a number — are dropped before the structure is checked: a document may come from
+  // anyone, and those values reach markup the app builds as a string (model/validate.ts).
+  cleanDocValues(doc);
 
   const errors = validateDoc(doc);
   if (errors.length > 0) {
