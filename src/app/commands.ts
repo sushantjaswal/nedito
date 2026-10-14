@@ -43,6 +43,9 @@ export interface Command {
   run: () => void | Promise<void>;
 }
 
+/** The words someone looks for auto-layout by; "tidy up" is what the commands are called. */
+const TIDY_KEYWORDS = ["tidy", "layout", "auto layout", "arrange", "clean up", "organise", "organize", "untangle"];
+
 export function getCommands(): Command[] {
   const s = useDocStore.getState();
   const temporal = useDocStore.temporal.getState();
@@ -58,6 +61,7 @@ export function getCommands(): Command[] {
   const canAddConnected = !s.ui.viewerMode && (sole?.type === "shape" || sole?.type === "nested");
   const addConnected = (side: Side) => () => void (sole && addConnectedCopyAndReveal(sole.id, side));
   const store = () => useDocStore.getState();
+  const canTidy = !s.ui.viewerMode && !s.ui.tidyingUp && nodes.length > 1;
 
   return [
     // ---- documents
@@ -151,6 +155,40 @@ export function getCommands(): Command[] {
     ).map(([mode, label]) => ({ id: `align-${mode}`, label, group: "Arrange", disabled: nodeIds.length < 2, run: () => store().alignSelection(mode) })),
     { id: "distribute-h", label: "Distribute Horizontally", group: "Arrange", disabled: nodeIds.length < 3, run: () => store().distributeSelection("horizontal") },
     { id: "distribute-v", label: "Distribute Vertically", group: "Arrange", disabled: nodeIds.length < 3, run: () => store().distributeSelection("vertical") },
+    // Auto-layout (model/layout.ts). The whole level is the common case, so it comes first and
+    // keeps the plain name; the selection and the levels below it are the same command, scoped.
+    {
+      id: "tidy-level",
+      label: "Tidy Up This Level",
+      group: "Arrange",
+      keywords: TIDY_KEYWORDS,
+      disabled: !canTidy,
+      run: () => store().tidyUp({ direction: "right", scope: "level" }),
+    },
+    {
+      id: "tidy-level-down",
+      label: "Tidy Up This Level, Top to Bottom",
+      group: "Arrange",
+      keywords: TIDY_KEYWORDS,
+      disabled: !canTidy,
+      run: () => store().tidyUp({ direction: "down", scope: "level" }),
+    },
+    {
+      id: "tidy-selection",
+      label: "Tidy Up Selection",
+      group: "Arrange",
+      keywords: TIDY_KEYWORDS,
+      disabled: !canTidy || nodeIds.length < 2,
+      run: () => store().tidyUp({ direction: "right", scope: "selection" }),
+    },
+    {
+      id: "tidy-all-levels",
+      label: "Tidy Up Every Level Below",
+      group: "Arrange",
+      keywords: [...TIDY_KEYWORDS, "nested", "all levels", "everything"],
+      disabled: !canTidy || !nodes.some((n) => n.type === "nested"),
+      run: () => store().tidyUp({ direction: "right", scope: "all-levels" }),
+    },
 
     // ---- the page and the app
     {

@@ -132,3 +132,20 @@ export const DistributeV = () => (
     <rect x="4.5" y="6" width="7" height="4" rx="0.5" />
   </Icon>
 );
+// Tidy up: shapes stepped along the direction the flow will run, with the line between them.
+export const TidyRight = () => (
+  <Icon>
+    <rect x="1.5" y="5.5" width="4" height="5" rx="0.5" />
+    <rect x="10.5" y="2.5" width="4" height="4" rx="0.5" />
+    <rect x="10.5" y="9.5" width="4" height="4" rx="0.5" />
+    <path d="M5.5 8h2.5M8 8V4.5h2.5M8 8v3.5h2.5" />
+  </Icon>
+);
+export const TidyDown = () => (
+  <Icon>
+    <rect x="5.5" y="1.5" width="5" height="4" rx="0.5" />
+    <rect x="2.5" y="10.5" width="4" height="4" rx="0.5" />
+    <rect x="9.5" y="10.5" width="4" height="4" rx="0.5" />
+    <path d="M8 5.5v2.5M8 8h-3.5v2.5M8 8h3.5v2.5" />
+  </Icon>
+);

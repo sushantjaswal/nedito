@@ -9,6 +9,8 @@ import { nanoid } from "nanoid";
 import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, Port, RichLabel, ShapeNode, StyleMap } from "./types";
 import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
+import { loadLayoutEngine } from "./elkEngine";
+import { autoLayout, autoLayoutAllLevels, type LayoutDirection } from "./layout";
 import * as imageOps from "./assets";
 import * as groups from "./groups";
 import * as layers from "./layers";
@@ -107,6 +109,9 @@ export interface OnboardingState {
  * callback: the store stays serialisable, and the component decides what "download-doc" means
  * rather than the caller having to hand a function across the boundary.
  */
+/** What a tidy-up covers: just the selection, the level being viewed, or every level below it. */
+export type TidyUpScope = "selection" | "level" | "all-levels";
+
 export interface Notice {
   message: string;
   tone: "info" | "warn";
@@ -154,6 +159,11 @@ export interface UiState {
    * and comes back where the selection ends up (R1, D90). Not part of the document or of undo.
    */
   canvasGesture: boolean;
+  /**
+   * A layout is running. Session-only: it guards against a second one starting while the engine
+   * is still being fetched, and is what the Arrange popover's button reads to say so.
+   */
+  tidyingUp: boolean;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -281,6 +291,11 @@ export interface DocStoreState {
   moveBackward: (nodeIds: string[]) => void;
   alignSelection: (mode: actions.AlignMode) => void;
   distributeSelection: (axis: actions.DistributeAxis) => void;
+  /**
+   * Lays the diagram out by itself (model/layout.ts). Asynchronous because the layout engine
+   * arrives on first use; whatever it moves, however many levels deep, is one undo entry.
+   */
+  tidyUp: (args: { direction: LayoutDirection; scope: TidyUpScope }) => Promise<void>;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -503,6 +518,7 @@ export const useDocStore = create<DocStoreState>()(
           viewerMode: false,
           gridEnabled: true,
           canvasGesture: false,
+          tidyingUp: false,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -919,6 +935,31 @@ export const useDocStore = create<DocStoreState>()(
         },
         alignSelection: (mode) => {
           set({ doc: actions.alignNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds, mode) });
+        },
+        tidyUp: async ({ direction, scope }) => {
+          if (get().ui.viewerMode || get().ui.tidyingUp) return;
+          const diagramId = get().currentDiagramId();
+          const options = {
+            direction,
+            nodeIds: scope === "selection" ? get().selection.nodeIds : undefined,
+            relayoutLines: true,
+            snap: get().ui.snapEnabled ? GRID_SIZE : undefined,
+          };
+          set((s) => ({ ui: { ...s.ui, tidyingUp: true } }));
+          try {
+            const engine = await loadLayoutEngine();
+            const run = scope === "all-levels" ? autoLayoutAllLevels : autoLayout;
+            // Laid out from the document as it was when the engine was asked, then applied to the
+            // document as it is now: only the very first run waits on anything slow (the engine
+            // itself), and a shape deleted in the meantime is simply one the layout no longer
+            // finds, not a failure.
+            const doc = await run(get().doc, diagramId, options, engine);
+            set({ doc });
+          } catch {
+            get().showNotice({ message: "The diagram could not be tidied up.", tone: "warn" });
+          } finally {
+            set((s) => ({ ui: { ...s.ui, tidyingUp: false } }));
+          }
         },
         distributeSelection: (axis) => {
           set({ doc: actions.distributeNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds, axis) });
