@@ -39,6 +39,7 @@ const GROUPS: ShortcutGroup[] = [
       { keys: `${MOD}+Shift+U`, action: "Ungroup" },
       { keys: `${MOD}+Shift+F`, action: "Bring to front" },
       { keys: `${MOD}+Shift+B`, action: "Send to back" },
+      { keys: `${MOD}+Shift+L`, action: "Tidy up the selection, or the whole level" },
       { keys: "Arrow keys", action: "Nudge selection (1px)" },
       { keys: "Shift+Arrow keys", action: "Nudge selection (1 grid step)" },
     ],
