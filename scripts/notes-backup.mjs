@@ -13,11 +13,33 @@
 // the clone command printed when the clone is missing, is worked out from this repository's own
 // origin remote.
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync } from "node:fs";
+import { copyFileSync, existsSync, readdirSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 
-const FILES = ["CLAUDE.md", "PROGRESS.md", "CLAUDE_HISTORY.md"];
+const GOVERNANCE = ["CLAUDE.md", "PROGRESS.md", "CLAUDE_HISTORY.md"];
 const PROJECT = process.cwd();
+
+/**
+ * The working documents a change is worked out in — scope and spec documents, audit reports —
+ * which belong in the notes repository beside the governance files. Matched by name rather than
+ * listed, so a new one is carried over without this script learning its name, and the names match
+ * what this project's .gitignore keeps out of the public repository. Only the project root is
+ * looked at: these are working documents, not part of docs/.
+ */
+const WORKING_DOCUMENT = /^(Nedito_.*|.*Scope.*|.*Spec.*|security-audit-.*)\.md$/i;
+
+function workingDocuments() {
+  try {
+    return readdirSync(PROJECT, { withFileTypes: true })
+      .filter((e) => e.isFile() && WORKING_DOCUMENT.test(e.name) && !GOVERNANCE.includes(e.name))
+      .map((e) => e.name)
+      .sort();
+  } catch {
+    return [];
+  }
+}
+
+const FILES = [...GOVERNANCE, ...workingDocuments()];
 const NOTES = resolve(process.env.NEDITO_NOTES_REPO || join(PROJECT, "..", `${basename(PROJECT)}-notes`));
 
 /** Runs git, returning its trimmed output; on failure, prints git's own message and exits. */
@@ -30,9 +52,10 @@ function git(cwd, ...args) {
   return r.stdout.trim();
 }
 
-// A clone without the notes (a contributor's, say) has nothing to back up: say so quietly.
+// A clone without the notes (a contributor's, say) has nothing to back up: say so quietly. Judged
+// on the governance files, since the working documents come and go.
 const missing = FILES.filter((f) => !existsSync(join(PROJECT, f)));
-if (missing.length === FILES.length) {
+if (GOVERNANCE.every((f) => missing.includes(f))) {
   console.log("notes:backup: none of the notes files are here; nothing to back up.");
   process.exit(0);
 }
