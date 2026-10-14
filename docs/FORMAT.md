@@ -12,7 +12,7 @@ A `.nedito` file diffs cleanly in Git: keys are in a stable order and the JSON i
 pretty-printed with 2-space indentation. Re-saving an unmodified document produces
 byte-identical output.
 
-## Envelope (current: format version 6)
+## Envelope (current: format version 7)
 
 ```json
 {
@@ -21,6 +21,7 @@ byte-identical output.
   "meta": { "title": "...", "created": "...", "modified": "...", "appVersion": "..." },
   "rootDiagramIds": ["..."],
   "diagrams": { "<diagramId>": { "...": "..." } },
+  "notes": [{ "...": "..." }],
   "assets": { "<assetId>": { "...": "..." } }
 }
 ```
@@ -44,6 +45,9 @@ byte-identical output.
   children. Diagrams reachable only through a `NestedNode.childDiagramId` reference are
   **not** listed in `rootDiagramIds` — nesting is a reference graph layered on top of this
   flat map, not a physical hierarchy in the JSON. Keys are written in sorted order.
+- `notes` (v7, optional) — what the author wrote about the document, in reading order. The
+  array's order **is** the order; there is no index or rank field to keep in step with it.
+  Omitted entirely when the document has none. See *Notes* below.
 - `assets` (v3, optional) — the pictures image nodes show, keyed by asset id, each stored once
   however many nodes show it. Written last, keys sorted, and only the assets some node still
   shows: an image deleted in the app never leaves its picture in the file. Omitted entirely
@@ -264,6 +268,39 @@ rather than reject the file.
 Validation rejects an unknown kind, speed, health or presentation mode, a volume outside 1–5, a
 `peek` on anything but a Nested Block, and a presentation order naming anything not on its level.
 
+## Notes (v7, optional)
+
+A note is a piece of writing about a diagram, attached to whatever was selected when it was
+written.
+
+```json
+{
+  "id": "nanoid",
+  "title": "Why the queue is here",
+  "body": "Orders arrive faster than the ledger can settle them...",
+  "focus": { "diagramId": "...", "nodeIds": ["..."], "edgeIds": ["..."] }
+}
+```
+
+- `id` — a nanoid, unique across the whole document like every other id.
+- `title` (optional) — one line. When absent, a reader shows the first line of `body`.
+- `body` — plain text. Line breaks are allowed; there is no markup.
+- `focus.diagramId` — the level the note is about, and the level a reader opens at. There is no
+  page id: a diagram id is unique across the document, so the page it belongs to is found from
+  the id alone.
+- `focus.nodeIds`, `focus.edgeIds` (optional) — the shapes, Nested Blocks and lines the note
+  concerns. Both absent means the note is about the level as a whole, which is an ordinary note
+  rather than an incomplete one.
+
+A note names things on **one** level. A connection that crosses into a Nested Block is followed
+by the reader, not recorded here.
+
+**Stale ids are not an error.** Unlike a port's `innerNodeId`, an id in `focus` that no longer
+resolves does not make the document invalid. On open those ids are dropped and the note is kept
+with its text intact; if every id goes, the note becomes a note about the level. A note whose
+`focus.diagramId` no longer exists is dropped when the document is written. Writing is not
+thrown away because a shape was deleted.
+
 ## Validation on open
 
 Every file is run through `src/model/validate.ts` before it's loaded — a parse or schema
@@ -413,4 +450,5 @@ Everything identifying a document as ours, what is written now, and what is stil
 | 3 | 2026-09-28 | Images of the user's own: an `assets` table and `ShapeNode.imageId` (see *Image nodes*). Nothing in a v2 file changes, so there is no v2→v3 migration, and a document without images is still written as v2. The bump exists for the reverse direction: a v2 app shown a v3 file says "created with a newer version" instead of drawing its images as blank shapes. |
 | 5 | 2026-10-05 | The app's own default look (see *The `look` key*). **Migration:** every shape and edge in a v4-or-older document gets `style.look: "classic"`, so it draws exactly as before — on screen, in dark mode, and in every export (a committed fixture rendered by the pre-v5 code proves the export byte for byte). A document whose every shape and edge is classic is still written at the lowest version it needs; anything in the new look makes it v5, because an older app would draw it in the classic look and, read back as v4, it would be marked classic by this very migration. |
 | 6 | 2026-10-07 | Motion (see *Motion*): optional `motion` on edges, shapes and diagrams, and `peek` on Nested Blocks. Nothing in a v5 file changes, so the v5→v6 migration only restamps the version, and a document without motion is still written as v5 or lower. The bump exists for the reverse direction: an app that predates motion says "created with a newer version" instead of opening the file, dropping its motion and saving over it. |
+| 7 | 2026-10-14 | Notes (see *Notes*): an optional `notes` array on the document. Nothing in a v6 file changes, so the v6→v7 migration only restamps the version, and a document without notes is still written as v6 or lower — byte for byte the file it was. The bump exists for the reverse direction: an app that predates notes says "created with a newer version" instead of opening the file, dropping the writing and saving over it. |
 | 4 | 2026-10-03 | Free edge ends: `EdgeEnd.point` (see *Edges*), for lines drawn on their own and connections let go on open canvas. Every v3 edge is attached at both ends, which stays valid, so there is no v3→v4 migration, and a document without a free end is written as v3 or v2 as before. The bump exists for the reverse direction: an older app would read a free end as a missing node and silently lose the line. |

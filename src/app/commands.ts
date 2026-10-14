@@ -201,6 +201,35 @@ export function getCommands(): Command[] {
       run: () => store().tidyUp({ scope: "all-levels" }),
     },
 
+    // ---- notes (model/notes.ts). Commands only for now: a note has no card to open yet, so the
+    // one just added is the one the delete command acts on.
+    {
+      id: "add-note",
+      // Not "...About Selection": the palette matches on the label, and the word about belongs to
+      // the About command — typing it opened a new note instead (caught by the About e2e spec).
+      label: hasNodes || s.selection.edgeIds.length > 0 ? "Add Note to Selection" : "Add Note for This Level",
+      group: "Arrange",
+      keywords: ["note", "notes", "comment", "annotate", "why", "write"],
+      disabled: s.ui.viewerMode,
+      run: () =>
+        void store().addNote(
+          {
+            diagramId: s.currentDiagramId(),
+            ...(nodeIds.length > 0 ? { nodeIds } : {}),
+            ...(s.selection.edgeIds.length > 0 ? { edgeIds: s.selection.edgeIds } : {}),
+          },
+          "",
+        ),
+    },
+    {
+      id: "delete-note",
+      label: "Delete Note",
+      group: "Arrange",
+      keywords: ["note", "notes", "remove note"],
+      disabled: s.ui.viewerMode || !s.ui.selectedNoteId,
+      run: () => s.ui.selectedNoteId && store().deleteNote(s.ui.selectedNoteId),
+    },
+
     // ---- the page and the app
     {
       id: "diagram-settings",

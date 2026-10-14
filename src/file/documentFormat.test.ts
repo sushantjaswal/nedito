@@ -45,7 +45,8 @@ describe("encodeDoc", () => {
     // The lowest version that describes the document: v2 without images (D79). Images and v3
     // are covered in model/assets.test.ts.
     expect(parsed.formatVersion).toBe(2);
-    expect(CURRENT_FORMAT_VERSION).toBe(6);
+    // Notes made the newest version 7 (model/notes.ts); an empty document still says 2.
+    expect(CURRENT_FORMAT_VERSION).toBe(7);
   });
 
   it("is pretty-printed", () => {
