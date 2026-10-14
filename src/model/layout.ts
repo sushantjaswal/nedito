@@ -41,7 +41,15 @@ export interface LayoutOptions {
   relayoutLines?: boolean;
   /** Round the result to this grid, when snapping is on. Omitted: exact positions. */
   snap?: number;
+  /**
+   * Which shapes the level above enters and leaves through, from `parentBoundary` below. Keeps a
+   * child diagram's flow pointing the same way as the lines that reach it.
+   */
+  boundary?: ReadonlyMap<string, LayerEnd>;
 }
+
+/** The near or far end of the flow: where a shape goes when the level above connects to it. */
+export type LayerEnd = "FIRST" | "LAST";
 
 /**
  * What the engine gives back: positions and sizes, nested the way the graph was. Spelled out
@@ -145,12 +153,14 @@ function elkPortId(nodeId: string, portId: string): string {
   return `${nodeId}::${portId}`;
 }
 
-function elkLeaf(node: DNode): ElkNode {
+function elkLeaf(node: DNode, boundary?: ReadonlyMap<string, LayerEnd>): ElkNode {
   const leaf: ElkNode = { id: node.id, width: node.size.w, height: node.size.h };
+  const end = boundary?.get(node.id);
+  if (end) leaf.layoutOptions = { "elk.layered.layering.layerConstraint": end };
   if (node.type !== "nested" || node.ports.length === 0) return leaf;
   // FIXED_POS, not a free choice of side: these ports are where the author put them, and the
   // lines on this level already arrive there. The layout works around them.
-  leaf.layoutOptions = { "elk.portConstraints": "FIXED_POS" };
+  leaf.layoutOptions = { ...leaf.layoutOptions, "elk.portConstraints": "FIXED_POS" };
   leaf.ports = node.ports.map((port) => {
     const at = portPosition(node, port);
     return {
@@ -163,6 +173,58 @@ function elkLeaf(node: DNode): ElkNode {
     };
   });
   return leaf;
+}
+
+/**
+ * Which shapes in `diagramId` the level above connects to, and at which end of the flow they
+ * belong.
+ *
+ * A Nested Block's port has a side, and inside the child that connection is drawn as a ghost link
+ * at the matching edge of the canvas (nesting/ghostLinkGeometry.ts). So a line arriving at the
+ * block's left side should reach a shape near the left of the child, not travel the whole canvas
+ * to one on the right. The shapes those ports map to are pinned to the first or last layer of the
+ * child's own layout, which is the one part of this that needs to look outside the level being
+ * laid out.
+ *
+ * Only the sides along the flow can say anything: laying out left to right, a left port means
+ * "first" and a right port "last", while top and bottom ports carry no such meaning and are left
+ * alone. A shape the level above both enters and leaves from opposite sides cannot be at both
+ * ends, so it is left alone too. A diagram more than one Nested Block points at has no single
+ * level above, so nothing is pinned.
+ */
+export function parentBoundary(doc: DiagramDocument, diagramId: string, direction: LayoutDirection): Map<string, LayerEnd> {
+  const ends = new Map<string, LayerEnd>();
+  const parents: { diagram: Diagram; node: NestedNode }[] = [];
+  for (const diagram of Object.values(doc.diagrams)) {
+    for (const node of diagram.nodes) {
+      if (node.type === "nested" && node.childDiagramId === diagramId) parents.push({ diagram, node });
+    }
+  }
+  if (parents.length !== 1) return ends;
+  const { diagram: above, node: block } = parents[0];
+  const child = doc.diagrams[diagramId];
+  if (!child) return ends;
+
+  const first = direction === "right" ? "left" : "top";
+  const last = direction === "right" ? "right" : "bottom";
+  const conflicted = new Set<string>();
+  for (const port of block.ports) {
+    if (!port.innerNodeId || !child.nodes.some((n) => n.id === port.innerNodeId)) continue;
+    // Only a port a line actually reaches is drawn as a ghost link, and only those should pull.
+    const used = above.edges.some(
+      (e) =>
+        (e.source.nodeId === block.id && e.source.portId === port.id) ||
+        (e.target.nodeId === block.id && e.target.portId === port.id),
+    );
+    if (!used) continue;
+    const end: LayerEnd | null = port.side === first ? "FIRST" : port.side === last ? "LAST" : null;
+    if (!end) continue;
+    const already = ends.get(port.innerNodeId);
+    if (already && already !== end) conflicted.add(port.innerNodeId);
+    ends.set(port.innerNodeId, end);
+  }
+  for (const id of conflicted) ends.delete(id);
+  return ends;
 }
 
 /** The id an edge end attaches to in the graph: a port when it has one, else the node itself. */
@@ -197,7 +259,7 @@ export function buildLayoutGraph(diagram: Diagram, options: LayoutOptions): ElkN
       const members = node.childIds.filter((id) => targets.has(id) && byId.has(id));
       // A group with nothing of its own left in the layout is a box, not a container.
       if (members.length === 0) {
-        children.push(elkLeaf(node));
+        children.push(elkLeaf(node, options.boundary));
         continue;
       }
       children.push({
@@ -205,11 +267,11 @@ export function buildLayoutGraph(diagram: Diagram, options: LayoutOptions): ElkN
         layoutOptions: {
           "elk.padding": `[top=${GROUP_PADDING_TOP},left=${GROUP_PADDING},bottom=${GROUP_PADDING},right=${GROUP_PADDING}]`,
         },
-        children: members.map((id) => elkLeaf(byId.get(id) as DNode)),
+        children: members.map((id) => elkLeaf(byId.get(id) as DNode, options.boundary)),
       });
       continue;
     }
-    children.push(elkLeaf(node));
+    children.push(elkLeaf(node, options.boundary));
   }
 
   const laidOut = (end: DEdge["source"]) => Boolean(end.nodeId && targets.has(end.nodeId));
@@ -295,7 +357,7 @@ export function applyLayoutGraph(
   };
 }
 
-/** Lays out one level. */
+/** Lays out one level, pointing its flow the same way as the level above connects to it. */
 export async function autoLayout(
   doc: DiagramDocument,
   diagramId: string,
@@ -304,9 +366,10 @@ export async function autoLayout(
 ): Promise<DiagramDocument> {
   const diagram = doc.diagrams[diagramId];
   if (!diagram) return doc;
-  const graph = buildLayoutGraph(diagram, options);
+  const withBoundary = { ...options, boundary: options.boundary ?? parentBoundary(doc, diagramId, options.direction) };
+  const graph = buildLayoutGraph(diagram, withBoundary);
   if ((graph.children ?? []).length === 0) return doc;
-  return applyLayoutGraph(doc, diagramId, await engine.layout(graph), options);
+  return applyLayoutGraph(doc, diagramId, await engine.layout(graph), withBoundary);
 }
 
 /**
@@ -342,7 +405,9 @@ export async function autoLayoutAllLevels(
   // A selection only means something on the level it was made on; levels below are laid out whole.
   let next = await autoLayout(doc, diagramId, options, engine);
   for (const id of levelsBelow(next, diagramId).slice(1)) {
-    next = await autoLayout(next, id, { ...options, nodeIds: undefined }, engine);
+    // Each level is laid out against the one that was just placed above it, so the boundary is
+    // recomputed per level rather than carried down from this call.
+    next = await autoLayout(next, id, { ...options, nodeIds: undefined, boundary: undefined }, engine);
   }
   return next;
 }

@@ -11,6 +11,7 @@ import {
   buildLayoutGraph,
   layoutTargets,
   levelsBelow,
+  parentBoundary,
   type LayoutEngine,
 } from "./layout";
 import type { DEdge, DiagramDocument, DNode, GroupNode, NestedNode, ShapeNode } from "./types";
@@ -278,6 +279,69 @@ describe("a tidied level", () => {
   it("changes nothing when the engine places nothing it knows about", () => {
     const d = doc([shape("a", 5, 5)]);
     expect(applyLayoutGraph(d, "d1", { id: "root", children: [] }, { direction: "right" })).toBe(d);
+  });
+});
+
+describe("the level above", () => {
+  /** A parent holding one Nested Block over `child`, with ports on the given sides. */
+  const withParent = (ports: { id: string; side: NestedNode["ports"][number]["side"]; inner?: string }[], wired = true) =>
+    doc(
+      [shape("feeder", 0, 0), nested("block", "d2", ports.map((p) => ({ id: p.id, side: p.side, offset: 0.5, innerNodeId: p.inner })))],
+      ports.filter(() => wired).map((p, i) => edge(`pe${i}`, { nodeId: "feeder" }, { nodeId: "block", portId: p.id })),
+      { d2: { nodes: [shape("in"), shape("mid"), shape("out")], edges: [edge("i1", { nodeId: "in" }, { nodeId: "mid" }), edge("i2", { nodeId: "mid" }, { nodeId: "out" })] } },
+    );
+
+  it("pins the shape a left-side port maps to at the start of the flow, and a right-side one at the end", () => {
+    const d = withParent([
+      { id: "pl", side: "left", inner: "out" },
+      { id: "pr", side: "right", inner: "in" },
+    ]);
+    expect(parentBoundary(d, "d2", "right")).toEqual(new Map([["out", "FIRST"], ["in", "LAST"]]));
+  });
+
+  it("reads top and bottom instead when the flow runs downwards", () => {
+    const d = withParent([{ id: "pt", side: "top", inner: "in" }]);
+    expect(parentBoundary(d, "d2", "down")).toEqual(new Map([["in", "FIRST"]]));
+    // Across the flow, a side says nothing about which end a shape belongs at.
+    expect(parentBoundary(d, "d2", "right")).toEqual(new Map());
+  });
+
+  it("ignores a port no line reaches, since nothing is drawn for it inside the child", () => {
+    const d = withParent([{ id: "pl", side: "left", inner: "in" }], false);
+    expect(parentBoundary(d, "d2", "right")).toEqual(new Map());
+  });
+
+  it("ignores an unmapped port, and one mapping to a shape that is gone", () => {
+    expect(parentBoundary(withParent([{ id: "pl", side: "left" }]), "d2", "right")).toEqual(new Map());
+    expect(parentBoundary(withParent([{ id: "pl", side: "left", inner: "stale" }]), "d2", "right")).toEqual(new Map());
+  });
+
+  it("leaves a shape the level above both enters and leaves from opposite sides alone", () => {
+    const d = withParent([
+      { id: "pl", side: "left", inner: "in" },
+      { id: "pr", side: "right", inner: "in" },
+    ]);
+    expect(parentBoundary(d, "d2", "right")).toEqual(new Map());
+  });
+
+  it("pins nothing when more than one Nested Block points at the level, or none does", () => {
+    const shared = doc([nested("b1", "d2"), nested("b2", "d2")], [], { d2: { nodes: [shape("in")], edges: [] } });
+    expect(parentBoundary(shared, "d2", "right")).toEqual(new Map());
+    expect(parentBoundary(shared, "d1", "right")).toEqual(new Map());
+  });
+
+  it("turns the child's flow round so it points the way the level above reaches it", async () => {
+    // in -> mid -> out, but the level above arrives at `out` from the left and leaves `in` to the
+    // right: laid out on its own the chain would run the other way.
+    const d = withParent([
+      { id: "pl", side: "left", inner: "out" },
+      { id: "pr", side: "right", inner: "in" },
+    ]);
+    const plain = await autoLayout(d, "d2", { direction: "right", boundary: new Map() }, await withEngine());
+    expect(box(at(plain, "in", "d2")).right).toBeLessThanOrEqual(box(at(plain, "out", "d2")).left);
+
+    const aligned = await autoLayout(d, "d2", { direction: "right" }, await withEngine());
+    expect(box(at(aligned, "out", "d2")).right).toBeLessThanOrEqual(box(at(aligned, "in", "d2")).left);
   });
 });
 

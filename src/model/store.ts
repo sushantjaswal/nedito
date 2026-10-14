@@ -11,6 +11,7 @@ import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
 import { loadLayoutEngine } from "./elkEngine";
 import { autoLayout, autoLayoutAllLevels, type LayoutDirection } from "./layout";
+import { readLayoutDirection, writeLayoutDirection } from "./layoutDirection";
 import * as imageOps from "./assets";
 import * as groups from "./groups";
 import * as layers from "./layers";
@@ -164,6 +165,8 @@ export interface UiState {
    * is still being fetched, and is what the Arrange popover's button reads to say so.
    */
   tidyingUp: boolean;
+  /** Which way the last tidy-up ran, remembered per browser; what a tidy-up uses when not told. */
+  layoutDirection: LayoutDirection;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -295,7 +298,7 @@ export interface DocStoreState {
    * Lays the diagram out by itself (model/layout.ts). Asynchronous because the layout engine
    * arrives on first use; whatever it moves, however many levels deep, is one undo entry.
    */
-  tidyUp: (args: { direction: LayoutDirection; scope: TidyUpScope }) => Promise<void>;
+  tidyUp: (args: { direction?: LayoutDirection; scope: TidyUpScope }) => Promise<void>;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -519,6 +522,7 @@ export const useDocStore = create<DocStoreState>()(
           gridEnabled: true,
           canvasGesture: false,
           tidyingUp: false,
+          layoutDirection: readLayoutDirection(),
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -939,13 +943,17 @@ export const useDocStore = create<DocStoreState>()(
         tidyUp: async ({ direction, scope }) => {
           if (get().ui.viewerMode || get().ui.tidyingUp) return;
           const diagramId = get().currentDiagramId();
+          // Asking for a direction sets the one later tidy-ups use, so someone who works top to
+          // bottom chooses it once.
+          const chosen = direction ?? get().ui.layoutDirection;
+          if (direction && direction !== get().ui.layoutDirection) writeLayoutDirection(direction);
           const options = {
-            direction,
+            direction: chosen,
             nodeIds: scope === "selection" ? get().selection.nodeIds : undefined,
             relayoutLines: true,
             snap: get().ui.snapEnabled ? GRID_SIZE : undefined,
           };
-          set((s) => ({ ui: { ...s.ui, tidyingUp: true } }));
+          set((s) => ({ ui: { ...s.ui, tidyingUp: true, layoutDirection: chosen } }));
           try {
             const engine = await loadLayoutEngine();
             const run = scope === "all-levels" ? autoLayoutAllLevels : autoLayout;
