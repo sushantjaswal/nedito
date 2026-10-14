@@ -160,6 +160,14 @@ export function useGlobalShortcuts(): void {
         store.groupSelection();
         return;
       }
+      // Tidy up, in the direction last chosen: the level, or the selection when there is one.
+      // draw.io has no shortcut for its layouts; L for layout is free here, and the key draw.io
+      // gives it (the format panel) is a panel Nedito does not have.
+      if (mod && e.shiftKey && key === "l") {
+        e.preventDefault();
+        void store.tidyUp({ scope: store.selection.nodeIds.length >= 2 ? "selection" : "level" });
+        return;
+      }
       if (mod && e.shiftKey && key === "h") {
         e.preventDefault();
         getCanvasInstance()?.fitView({ duration: 200, padding: 0.2 });

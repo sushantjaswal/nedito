@@ -59,6 +59,15 @@ print, and the Animated image export turns a level into a GIF — this one was m
   <img src="docs/readme/motion.gif" alt="An AWS three-tier architecture with packets moving along its lines, exported by Nedito as a GIF" width="880">
 </p>
 
+**Tidy up.** One command lays a level out along its connections — or every level below it, in one
+step, which is the part that is tedious by hand once a document nests. Shapes that are connected to
+something move; a title or a legend stays where you put it. Groups keep their members, and a line
+arriving at a Nested Block's left side puts the shape feeding it on the left.
+
+<p align="center">
+  <img src="docs/readme/tidy.gif" alt="A C4 model piled on top of itself, then laid out left to right by Tidy up from the command palette" width="880">
+</p>
+
 <table>
   <tr>
     <td width="50%"><img src="docs/readme/editor.png" alt="The editor in light mode, a Nested Block selected with its context bar showing"></td>

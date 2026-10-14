@@ -161,6 +161,7 @@ export function getCommands(): Command[] {
       id: "tidy-level",
       label: "Tidy Up This Level",
       group: "Arrange",
+      shortcut: "Ctrl+Shift+L",
       keywords: TIDY_KEYWORDS,
       disabled: !canTidy,
       run: () => store().tidyUp({ scope: "level" }),

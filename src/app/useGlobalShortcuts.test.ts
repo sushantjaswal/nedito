@@ -242,6 +242,26 @@ describe("useGlobalShortcuts", () => {
     expect(fitView).toHaveBeenCalledTimes(1);
   });
 
+  it("Ctrl+Shift+L tidies the selection when there is one, and the level when there is not", () => {
+    const tidyUp = vi.fn().mockResolvedValue(undefined);
+    useDocStore.setState({ tidyUp });
+
+    expect(press("l", { shiftKey: true })).toBe(false);
+    expect(tidyUp).toHaveBeenLastCalledWith({ scope: "level" });
+
+    useDocStore.setState({ selection: { nodeIds: ["a", "b"], edgeIds: [] } });
+    press("l", { shiftKey: true });
+    expect(tidyUp).toHaveBeenLastCalledWith({ scope: "selection" });
+
+    // One shape is not something to lay out against anything, so it is still the level.
+    useDocStore.setState({ selection: { nodeIds: ["a"], edgeIds: [] } });
+    press("l", { shiftKey: true });
+    expect(tidyUp).toHaveBeenLastCalledWith({ scope: "level" });
+
+    // Without Ctrl it is just a letter, and the app must not swallow it.
+    expect(press("l", { ctrlKey: false, shiftKey: true })).toBe(true);
+  });
+
   it("Ctrl+= and Ctrl+- delegate to the registered stepZoom in each direction", () => {
     const step = vi.fn();
     setStepZoom(step);

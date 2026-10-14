@@ -10,10 +10,17 @@
 //                 (.gif) export
 //   editor.png    the editor, light, with a Nested Block selected and its context bar showing
 //   dark.png      the editor in dark mode
+//   tidy.gif      a level piled on top of itself, laid out by Tidy up from the command palette
 // Uses the Chromium Playwright already installs for the E2E tests: no new dependency.
 import { chromium } from "@playwright/test";
 import { copyFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+
+// Named on the command line, only those pictures are remade: re-recording one leaves the others
+// byte-for-byte as they were, so a change to one is a one-file diff.
+//   npm run readme-images -- tidy
+const only = process.argv.slice(2);
+const wanted = (name) => only.length === 0 || only.includes(name);
 
 const DEV = process.env.DEV_URL || "http://localhost:5173/";
 const OUT = resolve("docs/readme");
@@ -54,48 +61,82 @@ const nestedId = (page, label) =>
     return s.doc.diagrams[s.currentDiagramId()].nodes.find((n) => n.type === "nested" && n.label?.text === label)?.id;
   }, label);
 
+/** A drawn pointer, since a headless screenshot has no cursor of its own. */
+async function showPointer(page) {
+  await page.evaluate(() => {
+    const c = document.createElement("div");
+    c.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.4-6.7L4 20z" fill="#1E2733" stroke="#fff" stroke-width="1.5"/></svg>';
+    Object.assign(c.style, { position: "fixed", left: "0", top: "0", zIndex: "99999", pointerEvents: "none" });
+    document.body.append(c);
+    addEventListener("mousemove", (e) => (c.style.transform = `translate(${e.clientX - 3}px, ${e.clientY - 2}px)`), true);
+  });
+}
+
+/** Screenshots collected as GIF frames, and the pointer moves worth showing between them. */
+function recorder(page) {
+  const frames = [];
+  let last = Date.now();
+  const snap = async (holdMs = 0) => {
+    const png = await page.screenshot();
+    const now = Date.now();
+    // A frame lasts until the next one was taken, except a pause, which keeps its own length.
+    const prev = frames[frames.length - 1];
+    if (prev && !prev.held) prev.delayMs = Math.max(40, now - last);
+    frames.push({ png: png.toString("base64"), delayMs: holdMs || 80, held: holdMs > 0 });
+    last = now;
+    if (holdMs) {
+      await page.waitForTimeout(holdMs);
+      last = Date.now();
+    }
+  };
+  const glide = async (to, steps = 10) => {
+    const from = await page.evaluate(() => window.__ndPointer ?? { x: 600, y: 600 });
+    for (let i = 1; i <= steps; i++) {
+      const x = from.x + ((to.x - from.x) * i) / steps;
+      const y = from.y + ((to.y - from.y) * i) / steps;
+      await page.mouse.move(x, y);
+      await page.evaluate((p) => (window.__ndPointer = p), { x, y });
+      await snap();
+    }
+  };
+  const center = async (locator) => {
+    const b = await locator.boundingBox();
+    return { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+  };
+  return { frames, snap, glide, center };
+}
+
+/** Encodes the frames in the page, with the app's own encoder (src/file/gifEncoder.ts). */
+async function encodeGif(page, frames) {
+  // Decoded back to pixels in the page, which is where the encoder runs.
+  return await page.evaluate(async (frames) => {
+    const { GifStreamEncoder, gifPalette } = await import("/src/file/gifEncoder.ts");
+    const pixels = async (b64) => {
+      const bmp = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob());
+      const c = new OffscreenCanvas(bmp.width, bmp.height);
+      const g = c.getContext("2d");
+      g.drawImage(bmp, 0, 0);
+      return g.getImageData(0, 0, bmp.width, bmp.height);
+    };
+    const first = await pixels(frames[0].png);
+    const { width: w, height: h } = first;
+    const sample = [];
+    for (const i of [0, Math.floor(frames.length / 3), Math.floor((frames.length * 2) / 3), frames.length - 1]) {
+      sample.push({ rgba: (await pixels(frames[i].png)).data, delayMs: 0 });
+    }
+    const enc = new GifStreamEncoder(w, h, gifPalette(sample, w, h), true);
+    for (const f of frames) enc.addFrame({ rgba: (await pixels(f.png)).data, delayMs: f.delayMs });
+    return Array.from(enc.finish());
+  }, frames);
+}
+
 try {
   // 1. Opening a Nested Block, and back out.
-  {
+  if (wanted("nesting")) {
     const page = await editor({ width: 1200, height: 720 });
     await openTemplate(page, "azure-landing-zone");
-    // A pointer the recording can see: headless screenshots draw no cursor.
-    await page.evaluate(() => {
-      const c = document.createElement("div");
-      c.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l15 11-6.5 1.2L16 21l-3 1.4-3.4-6.7L4 20z" fill="#1E2733" stroke="#fff" stroke-width="1.5"/></svg>';
-      Object.assign(c.style, { position: "fixed", left: "0", top: "0", zIndex: "99999", pointerEvents: "none" });
-      document.body.append(c);
-      addEventListener("mousemove", (e) => (c.style.transform = `translate(${e.clientX - 3}px, ${e.clientY - 2}px)`), true);
-    });
-    const frames = [];
-    let last = Date.now();
-    const snap = async (holdMs = 0) => {
-      const png = await page.screenshot();
-      const now = Date.now();
-      // A frame lasts until the next one was taken, except a pause, which keeps its own length.
-      const prev = frames[frames.length - 1];
-      if (prev && !prev.held) prev.delayMs = Math.max(40, now - last);
-      frames.push({ png: png.toString("base64"), delayMs: holdMs || 80, held: holdMs > 0 });
-      last = now;
-      if (holdMs) {
-        await page.waitForTimeout(holdMs);
-        last = Date.now();
-      }
-    };
-    const glide = async (to, steps = 10) => {
-      const from = await page.evaluate(() => window.__ndPointer ?? { x: 600, y: 600 });
-      for (let i = 1; i <= steps; i++) {
-        const x = from.x + ((to.x - from.x) * i) / steps;
-        const y = from.y + ((to.y - from.y) * i) / steps;
-        await page.mouse.move(x, y);
-        await page.evaluate((p) => (window.__ndPointer = p), { x, y });
-        await snap();
-      }
-    };
-    const center = async (locator) => {
-      const b = await locator.boundingBox();
-      return { x: b.x + b.width / 2, y: b.y + b.height / 2 };
-    };
+    await showPointer(page);
+    const { frames, snap, glide, center } = recorder(page);
     await page.mouse.move(600, 600);
     await snap(2200);
     const spoke = await nestedId(page, "Retail spoke");
@@ -114,33 +155,14 @@ try {
     await page.waitForTimeout(600);
     await snap(2400);
 
-    // Encode in the page, with the app's own encoder: decode each screenshot to pixels there.
-    const gif = await page.evaluate(async (frames) => {
-      const { GifStreamEncoder, gifPalette } = await import("/src/file/gifEncoder.ts");
-      const pixels = async (b64) => {
-        const bmp = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob());
-        const c = new OffscreenCanvas(bmp.width, bmp.height);
-        const g = c.getContext("2d");
-        g.drawImage(bmp, 0, 0);
-        return g.getImageData(0, 0, bmp.width, bmp.height);
-      };
-      const first = await pixels(frames[0].png);
-      const { width: w, height: h } = first;
-      const sample = [];
-      for (const i of [0, Math.floor(frames.length / 3), Math.floor((frames.length * 2) / 3), frames.length - 1]) {
-        sample.push({ rgba: (await pixels(frames[i].png)).data, delayMs: 0 });
-      }
-      const enc = new GifStreamEncoder(w, h, gifPalette(sample, w, h), true);
-      for (const f of frames) enc.addFrame({ rgba: (await pixels(f.png)).data, delayMs: f.delayMs });
-      return Array.from(enc.finish());
-    }, frames);
+    const gif = await encodeGif(page, frames);
     writeFileSync(`${OUT}/nesting.gif`, Buffer.from(gif));
     console.log(`nesting.gif: ${frames.length} frames, ${Math.round(gif.length / 1024)} KB`);
     await page.close();
   }
 
   // 2. Motion, through the app's own GIF export.
-  {
+  if (wanted("motion")) {
     const page = await editor({ width: 1400, height: 860 });
     await openTemplate(page, "aws-three-tier");
     await page.evaluate(() => {
@@ -160,7 +182,7 @@ try {
   }
 
   // 3. The editor, light, with a Nested Block selected; 4. and dark.
-  {
+  if (wanted("editor")) {
     const page = await editor({ width: 1440, height: 900 });
     await openTemplate(page, "azure-landing-zone");
     const spoke = await nestedId(page, "Data platform spoke");
@@ -175,6 +197,58 @@ try {
     await dark.mouse.move(5, 5);
     await dark.screenshot({ path: `${OUT}/dark.png` });
     await dark.close();
+  }
+  // 5. Tidy up: a level piled on top of itself, laid out by its connections.
+  if (wanted("tidy")) {
+    const page = await editor({ width: 1200, height: 720 });
+    await openTemplate(page, "c4-model");
+    await showPointer(page);
+    // Every shape bunched up, as a diagram grown by hand and never tidied ends up. The title and
+    // the legend are moved too, and stay where they are put: a tidy-up lays out the flow, not the
+    // furniture.
+    await page.evaluate(() => {
+      const store = window.__ddStore;
+      const doc = store.getState().doc;
+      store.setState({
+        doc: {
+          ...doc,
+          diagrams: Object.fromEntries(
+            Object.entries(doc.diagrams).map(([id, d]) => [
+              id,
+              { ...d, nodes: d.nodes.map((n, i) => ({ ...n, position: { x: 260 + ((i * 97) % 340), y: 170 + ((i * 151) % 240) } })) },
+            ]),
+          ),
+        },
+      });
+    });
+    await page.waitForTimeout(600);
+    const { frames, snap, glide, center } = recorder(page);
+    await page.mouse.move(600, 600);
+    await snap(2600);
+
+    // Through the palette, so the picture says what the command is called.
+    await glide(await center(page.getByTestId("nd-command-button")), 10);
+    await page.getByTestId("nd-command-button").click();
+    await snap(400);
+    for (const ch of "tidy") {
+      await page.getByTestId("nd-command-input").press(ch);
+      await snap();
+    }
+    await snap(900);
+    await glide(await center(page.getByTestId("nd-command-tidy-level")), 8);
+    await snap(400);
+    await page.getByTestId("nd-command-tidy-level").click();
+    // The engine is fetched on this first run; the frames in between show it arriving.
+    for (let i = 0; i < 14; i++) await snap();
+    await page.waitForTimeout(1200);
+    await page.evaluate(() => window.__rf?.fitView?.({ padding: 0.08 }));
+    await page.waitForTimeout(700);
+    await snap(3200);
+
+    const gif = await encodeGif(page, frames);
+    writeFileSync(`${OUT}/tidy.gif`, Buffer.from(gif));
+    console.log(`tidy.gif: ${frames.length} frames, ${Math.round(gif.length / 1024)} KB`);
+    await page.close();
   }
   console.log("Wrote docs/readme/");
 } finally {
