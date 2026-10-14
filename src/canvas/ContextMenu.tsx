@@ -33,12 +33,15 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
   const diagramId = useDocStore((s) => s.currentDiagramId());
   const navStack = useDocStore((s) => s.navStack);
   const selection = useDocStore((s) => s.selection);
+  const viewerMode = useDocStore((s) => s.ui.viewerMode);
+  const tidyingUp = useDocStore((s) => s.ui.tidyingUp);
   const store = useDocStore.getState;
 
   const diagram = doc.diagrams[diagramId];
   const selectedNodes = diagram.nodes.filter((n) => selection.nodeIds.includes(n.id));
   const selectedEdges = diagram.edges.filter((e) => selection.edgeIds.includes(e.id));
   const singleNode = selectedNodes.length === 1 && selectedEdges.length === 0 ? selectedNodes[0] : undefined;
+  const canTidy = !viewerMode && !tidyingUp && diagram.nodes.length > 1;
 
   useEffect(() => {
     const onPointerDown = () => onClose();
@@ -72,6 +75,19 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
     groups.push([
       { label: "Insert image…", onClick: run(() => void pickImageFiles(true).then((files) => insertImageFiles(files, at))) },
     ]);
+    // Auto-layout with nothing selected: the level, and the levels under it when there are any.
+    if (canTidy) {
+      const tidy: MenuItem[] = [
+        { label: "Tidy up this level", onClick: run(() => void store().tidyUp({ direction: "right", scope: "level" })) },
+      ];
+      if (diagram.nodes.some((n) => n.type === "nested")) {
+        tidy.push({
+          label: "Tidy up every level below",
+          onClick: run(() => void store().tidyUp({ direction: "right", scope: "all-levels" })),
+        });
+      }
+      groups.push(tidy);
+    }
   } else {
     groups.push([
       {
@@ -107,6 +123,12 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
         groupUngroup.push({ label: "Ungroup", onClick: run(() => store().ungroupSelection()) });
       }
       if (groupUngroup.length > 0) groups.push(groupUngroup);
+
+      if (canTidy && selectedNodes.length >= 2) {
+        groups.push([
+          { label: "Tidy up selection", onClick: run(() => void store().tidyUp({ direction: "right", scope: "selection" })) },
+        ]);
+      }
 
       if (singleNode?.type === "shape" && singleNode.shapeRef === IMAGE_SHAPE_REF) {
         groups.push([

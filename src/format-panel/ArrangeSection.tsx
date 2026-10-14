@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useDocStore } from "../model/store";
 import type { AlignMode, DistributeAxis } from "../model/actions";
+import type { LayoutDirection } from "../model/layout";
 import { groupOfSelection } from "../model/selectionGroup";
 import type { DEdge, DNode, GroupNode } from "../model/types";
 import { NumberField } from "./fields";
@@ -15,6 +16,8 @@ import {
   DistributeH,
   DistributeV,
   Forward,
+  TidyDown,
+  TidyRight,
   ToBack,
   ToFront,
 } from "./icons";
@@ -35,6 +38,11 @@ const ALIGN_BUTTONS: { mode: AlignMode; icon: ReactNode; title: string }[] = [
   { mode: "bottom", icon: <AlignBottom />, title: "Align bottom" },
 ];
 
+const TIDY_BUTTONS: { direction: LayoutDirection; icon: ReactNode; title: string }[] = [
+  { direction: "right", icon: <TidyRight />, title: "Tidy up left to right" },
+  { direction: "down", icon: <TidyDown />, title: "Tidy up top to bottom" },
+];
+
 // The Arrange controls: Size (W/H) and Position (X/Y) fields for a single selected shape,
 // rotation, z-order buttons, group/ungroup, and align/distribute for a multi-selection. Once the
 // right panel's Arrange tab; since R1 (D90) the context bar's Arrange popover, which also took
@@ -49,6 +57,8 @@ export function ArrangeSection({ nodes, edges, groups }: ArrangeSectionProps) {
   const distributeSelection = useDocStore((s) => s.distributeSelection);
   const groupSelection = useDocStore((s) => s.groupSelection);
   const ungroupSelection = useDocStore((s) => s.ungroupSelection);
+  const tidyUp = useDocStore((s) => s.tidyUp);
+  const tidyingUp = useDocStore((s) => s.ui.tidyingUp);
 
   const nodeIds = nodes.map((n) => n.id);
   const single = nodes.length === 1 ? nodes[0] : undefined;
@@ -186,6 +196,29 @@ export function ArrangeSection({ nodes, edges, groups }: ArrangeSectionProps) {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {nodeIds.length >= 2 && (
+        <div className={styles.group}>
+          <h4 className={styles.groupHeading}>Tidy up</h4>
+          <div className={styles.iconRow}>
+            {TIDY_BUTTONS.map((b) => (
+              <button
+                key={b.direction}
+                type="button"
+                className={styles.iconBtn}
+                title={b.title}
+                aria-label={b.title}
+                disabled={tidyingUp}
+                data-testid={`nd-tidy-${b.direction}`}
+                onClick={() => void tidyUp({ direction: b.direction, scope: "selection" })}
+              >
+                {b.icon}
+              </button>
+            ))}
+          </div>
+          <div className={styles.hint}>Places these shapes along their connections. Groups keep their members.</div>
         </div>
       )}
 

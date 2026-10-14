@@ -74,8 +74,8 @@ print, and the Animated image export turns a level into a GIF — this one was m
 
 | | |
 |---|---|
-| **Nesting** | Nested Blocks with live miniatures, ports that carry lines inside, ghost links, breadcrumbs, unlimited depth. Turn any selection into a Nested Block, and trace what a shape touches across every level. |
-| **Editing** | Shapes, curved, straight and orthogonal lines with waypoints, labels with rich text, groups, layers, pages, find and replace, alignment, snapping, undo across levels, and a command palette (Ctrl+K). |
+| **Nesting** | Nested Blocks with live miniatures, ports that carry lines inside, ghost links, breadcrumbs, unlimited depth. Turn any selection into a Nested Block, trace what a shape touches across every level, and tidy up every level below in one step. |
+| **Editing** | Shapes, curved, straight and orthogonal lines with waypoints, labels with rich text, groups, layers, pages, find and replace, alignment, snapping, a Tidy up that lays a level out along its connections, undo across levels, and a command palette (Ctrl+K). |
 | **Library** | 18 sections — flowchart, BPMN, UML, C4, entity relation, data flow, network and more — plus the official Azure, AWS and Google Cloud architecture icons, and animated icons. |
 | **Templates** | 38 ready-made diagrams, from flowcharts and C4 models to cloud landing zones, several of them nested. |
 | **Motion** | Flow, packets and throughput on lines; pulse and health on shapes; and Build, Walkthrough and Spotlight presentation modes. |
