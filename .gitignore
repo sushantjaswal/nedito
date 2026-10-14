@@ -39,11 +39,15 @@ yarn-error.log*
 .claude/worktrees/
 .claude/scheduled_tasks.lock
 
-# Local working notes (the project rules, the work queue and the decision log), kept out of the
-# public repository. Backed up to a private repository by `npm run notes:backup`.
+# Working documents live in the private notes repository, not here: the project rules, the work
+# queue and the decision log, and the scope, spec and audit documents a change is worked out in.
+# Backed up by `npm run notes:backup`. Security audits especially: they describe weaknesses,
+# sometimes before they are fixed. These patterns belong to this repository alone — the notes
+# repository must not copy them, or its own sync would commit nothing.
 CLAUDE.md
 PROGRESS.md
 CLAUDE_HISTORY.md
-
-# Security audits stay local: they describe weaknesses, sometimes before they are fixed.
-docs/security-audit-*.md
+Nedito_*.md
+*Scope*.md
+*Spec*.md
+security-audit-*.md

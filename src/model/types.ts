@@ -11,6 +11,48 @@ export interface DiagramDocument {
    * show it. New in formatVersion 3; omitted when the document has none. See model/assets.ts.
    */
   assets?: Record<string, ImageAsset>;
+  /**
+   * What the author wrote about this diagram, in reading order — the array's order *is* the
+   * order, with no separate index to keep in step. New in formatVersion 7; omitted when the
+   * document has none. See model/notes.ts.
+   */
+  notes?: Note[];
+}
+
+/**
+ * A piece of writing about a diagram: a paragraph of why, attached to whatever the author had
+ * selected when they wrote it.
+ *
+ * There is deliberately no shape note, level note and flow note. There is one note, and what it
+ * is about is however much was selected: one shape, several shapes and lines, or nothing at all,
+ * which makes it a note about the level.
+ */
+export interface Note {
+  /** nanoid, unique across the document like every other id. */
+  id: string;
+  /** One line. Falls back to the first line of `body` when absent. */
+  title?: string;
+  /** Plain text; line breaks allowed. */
+  body: string;
+  focus: NoteFocus;
+}
+
+/**
+ * What a note is about. One level only: `diagramId` names it, and a note never reaches across
+ * levels — a trace carries the lit path down through a Nested Block's ports on its own, so a
+ * note on a parent lights the right shapes inside its children without naming them.
+ *
+ * There is no page id here because a diagram id is unique across the whole document (the
+ * document is one flat map of diagrams, and validate.ts checks every id against one set), so
+ * the page is derivable from `diagramId` with nesting.ts's findDiagramPath.
+ */
+export interface NoteFocus {
+  /** The level the note opens at. */
+  diagramId: string;
+  /** Shapes and Nested Blocks it concerns. Absent or empty: the note is about the level. */
+  nodeIds?: string[];
+  /** Lines it concerns. */
+  edgeIds?: string[];
 }
 
 /** An image of the user's own, carried inside the document (there is no server to keep it). */

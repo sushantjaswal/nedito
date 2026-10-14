@@ -162,3 +162,55 @@ describe("buildShareUrl", () => {
     expect(new URL(url).hash).toBe("#d=abc&v=2");
   });
 });
+
+describe("notes and the size limit", () => {
+  // Notes are the first feature that lets an author put unbounded text into a document, so the
+  // share dialog's size limit becomes load bearing. Nothing here changes the limit — the point is
+  // that notes reach the refusal the same way anything else large does.
+  const randomish = (chars: number) => {
+    // Text that does not compress away: gzip would squeeze repetition to nothing, and the limit is
+    // about the finished link rather than the characters typed. Xorshift, staying inside 32 bits
+    // the whole way — a multiply-and-mod generator written in doubles runs past the largest exact
+    // integer and starts repeating, and the text it made compressed 20 to 1, which measured gzip
+    // rather than the limit.
+    let seed = 1;
+    let out = "";
+    while (out.length < chars) {
+      seed ^= seed << 13;
+      seed ^= seed >>> 17;
+      seed ^= seed << 5;
+      out += ((seed >>> 0) % 36).toString(36);
+    }
+    return out;
+  };
+
+  it("refuses a link whose notes push it past the limit, and allows one whose notes do not", async () => {
+    const base = docAtDepth0();
+    const page = base.rootDiagramIds[0];
+
+    const small = { ...base, notes: [{ id: "n1", body: randomish(200), focus: { diagramId: page } }] };
+    const smallUrl = buildShareUrl(await encodeDocToFragment(small), "https://example.test/");
+    expect(classifyShareUrl(smallUrl).level).toBe("ok");
+
+    const huge = { ...base, notes: [{ id: "n1", body: randomish(40_000), focus: { diagramId: page } }] };
+    const hugeUrl = buildShareUrl(await encodeDocToFragment(huge), "https://example.test/");
+    expect(hugeUrl.length).toBeGreaterThan(SHARE_URL_MAX_CHARS);
+    expect(classifyShareUrl(hugeUrl).level).toBe("too-large");
+  });
+
+  it("carries notes through a share link, and leaves behind those about a page it dropped", async () => {
+    const { doc: base, blankPageId: blank } = withBlankPage(docAtDepth0());
+    const page = base.rootDiagramIds[0];
+    const doc = {
+      ...base,
+      notes: [
+        { id: "n1", body: "About the page with something on it.", focus: { diagramId: page } },
+        { id: "n2", body: "About the blank page a share link does not carry.", focus: { diagramId: blank } },
+      ],
+    };
+    const result = await roundTrip(doc);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.doc.notes?.map((n) => n.id)).toEqual(["n1"]);
+  });
+});

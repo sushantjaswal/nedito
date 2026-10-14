@@ -66,6 +66,8 @@ const MIGRATIONS: Record<number, MigrationFn> = {
   4: migrateV4ToV5,
   // v6 only adds optional motion properties (D116): nothing in a v5 file changes.
   5: bumpTo(6),
+  // v7 only adds the optional `notes` array: nothing in a v6 file changes either.
+  6: bumpTo(7),
 };
 
 export function migrate(raw: Record<string, unknown>): Record<string, unknown> {

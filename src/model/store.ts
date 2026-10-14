@@ -6,7 +6,7 @@ import { create, useStore } from "zustand";
 import { APP_VERSION } from "../app/version";
 import { temporal } from "zundo";
 import { nanoid } from "nanoid";
-import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, Port, RichLabel, ShapeNode, StyleMap } from "./types";
+import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, NoteFocus, Port, RichLabel, ShapeNode, StyleMap } from "./types";
 import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
 import { loadLayoutEngine } from "./elkEngine";
@@ -167,6 +167,11 @@ export interface UiState {
   tidyingUp: boolean;
   /** Which way the last tidy-up ran, remembered per browser; what a tidy-up uses when not told. */
   layoutDirection: LayoutDirection;
+  /**
+   * The note the note commands act on — the one just added, until something else is chosen.
+   * Session only, like the trace: which note is open is not part of the document.
+   */
+  selectedNoteId: string | null;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -299,6 +304,19 @@ export interface DocStoreState {
    * arrives on first use; whatever it moves, however many levels deep, is one undo entry.
    */
   tidyUp: (args: { direction?: LayoutDirection; scope: TidyUpScope }) => Promise<void>;
+
+  // ---- notes (model/notes.ts). Each is one undo step; a run of keystrokes becomes one step the
+  // same way the formatting controls do it, by the editing control wrapping them in an edit
+  // session (format-panel/useEditSession.ts), not by anything here.
+  /** Adds a note about `focus`, selects it, and returns its id. */
+  addNote: (focus: NoteFocus, text: string) => string | null;
+  updateNote: (id: string, patch: { title?: string; body?: string }) => void;
+  deleteNote: (id: string) => void;
+  /** Moves a note within the reading order. */
+  reorderNotes: (fromIndex: number, toIndex: number) => void;
+  setNoteFocus: (id: string, focus: NoteFocus) => void;
+  /** Which note the note commands act on. Session state: never saved, never undone. */
+  selectNote: (id: string | null) => void;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -523,6 +541,7 @@ export const useDocStore = create<DocStoreState>()(
           canvasGesture: false,
           tidyingUp: false,
           layoutDirection: readLayoutDirection(),
+          selectedNoteId: null,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -972,6 +991,80 @@ export const useDocStore = create<DocStoreState>()(
         distributeSelection: (axis) => {
           set({ doc: actions.distributeNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds, axis) });
         },
+
+        addNote: (focus, text) => {
+          if (get().ui.viewerMode) return null;
+          if (!get().doc.diagrams[focus.diagramId]) return null;
+          const id = nanoid();
+          const body = text ?? "";
+          const doc = get().doc;
+          set({
+            doc: {
+              ...doc,
+              meta: { ...doc.meta, modified: new Date().toISOString() },
+              notes: [...(doc.notes ?? []), { id, body, focus }],
+            },
+          });
+          get().selectNote(id);
+          return id;
+        },
+        updateNote: (id, patch) => {
+          const doc = get().doc;
+          if (!doc.notes?.some((n) => n.id === id)) return;
+          set({
+            doc: {
+              ...doc,
+              meta: { ...doc.meta, modified: new Date().toISOString() },
+              notes: doc.notes.map((n) =>
+                n.id === id
+                  ? {
+                      ...n,
+                      ...(patch.body !== undefined ? { body: patch.body } : {}),
+                      // An emptied title is removed rather than stored blank, so the note falls
+                      // back to the first line of its text as a note without one always has.
+                      ...(patch.title !== undefined
+                        ? patch.title.trim() === ""
+                          ? { title: undefined }
+                          : { title: patch.title }
+                        : {}),
+                    }
+                  : n,
+              ),
+            },
+          });
+        },
+        deleteNote: (id) => {
+          const doc = get().doc;
+          if (!doc.notes?.some((n) => n.id === id)) return;
+          const notes = doc.notes.filter((n) => n.id !== id);
+          const meta = { ...doc.meta, modified: new Date().toISOString() };
+          // The last note leaves no empty array behind: a document with none is the document it
+          // was before anyone wrote one.
+          set({ doc: notes.length > 0 ? { ...doc, meta, notes } : { ...doc, meta, notes: undefined } });
+          if (get().ui.selectedNoteId === id) get().selectNote(null);
+        },
+        reorderNotes: (fromIndex, toIndex) => {
+          const doc = get().doc;
+          const notes = doc.notes;
+          if (!notes || fromIndex === toIndex) return;
+          if (fromIndex < 0 || fromIndex >= notes.length || toIndex < 0 || toIndex >= notes.length) return;
+          const next = [...notes];
+          next.splice(toIndex, 0, ...next.splice(fromIndex, 1));
+          set({ doc: { ...doc, meta: { ...doc.meta, modified: new Date().toISOString() }, notes: next } });
+        },
+        setNoteFocus: (id, focus) => {
+          const doc = get().doc;
+          if (!doc.notes?.some((n) => n.id === id)) return;
+          if (!doc.diagrams[focus.diagramId]) return;
+          set({
+            doc: {
+              ...doc,
+              meta: { ...doc.meta, modified: new Date().toISOString() },
+              notes: doc.notes.map((n) => (n.id === id ? { ...n, focus } : n)),
+            },
+          });
+        },
+        selectNote: (id) => set((s) => ({ ui: { ...s.ui, selectedNoteId: id } })),
 
         groupSelection: () => {
           const result = groups.groupNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds);
