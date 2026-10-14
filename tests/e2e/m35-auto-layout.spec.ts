@@ -48,16 +48,18 @@ const tangled = {
           style: {},
           label: { text: "Block" },
           collapsed: { icons: [] },
-          ports: [{ id: "p1", side: "left", offset: 0.5, innerNodeId: "x" }],
+          ports: [{ id: "p1", side: "right", offset: 0.5, innerNodeId: "x" }],
         },
       ],
       edges: [line("e1", "a", "b"), line("e2", "b", "c"), { ...line("e3", "c", "block"), target: { nodeId: "block", portId: "p1" } }],
     },
+    // Inside: y -> x. The level above arrives at x through a port on the block's RIGHT side, so a
+    // layout that reads the level above must turn this round and put x last.
     inside: {
       id: "inside",
       title: "Block",
       nodes: [shape("x", 100, 100), shape("y", 110, 110)],
-      edges: [line("ie", "x", "y")],
+      edges: [line("ie", "y", "x")],
     },
   },
 };
@@ -102,8 +104,9 @@ test.describe("tidy up", () => {
     const after = await boxes(page, "main");
     expect(after.a.right).toBeLessThanOrEqual(after.b.left);
     expect(after.b.right).toBeLessThanOrEqual(after.c.left);
-    // The line into the block arrives at a port on its left side, so the block sits to the right.
-    expect(after.c.right).toBeLessThanOrEqual(after.block.left);
+    // The line into the block arrives at a port on its right side, so the block sits to the left
+    // of the shape feeding it.
+    expect(after.block.right).toBeLessThanOrEqual(after.c.left);
     for (const [first, second] of [
       ["a", "b"],
       ["b", "c"],
@@ -129,13 +132,42 @@ test.describe("tidy up", () => {
       .poll(async () => overlaps((await boxes(page, "inside")).x, (await boxes(page, "inside")).y), { timeout: 20_000 })
       .toBe(false);
 
+    // y -> x on its own would put x last anyway; what is being checked is that it stays last
+    // because the level above reaches it through a right-side port.
     const after = await boxes(page, "inside");
-    expect(after.x.right).toBeLessThanOrEqual(after.y.left);
+    expect(after.y.right).toBeLessThanOrEqual(after.x.left);
     // One document update, however many levels it touched: one undo puts all of it back.
     const mainAfter = await boxes(page, "main");
     await page.keyboard.press("Control+z");
     await expect.poll(async () => (await boxes(page, "inside")).x).toEqual(inside.x);
     expect((await boxes(page, "main")).a).not.toEqual(mainAfter.a);
+  });
+
+  test("remembers the direction that was chosen, for the next visit as well", async ({ page }) => {
+    await open(page);
+    await expect.poll(async () => Object.keys(await boxes(page, "main")).length).toBe(4);
+
+    await runCommand(page, "tidy-level-down", "tidy");
+    await expect
+      .poll(async () => overlaps((await boxes(page, "main")).a, (await boxes(page, "main")).b), { timeout: 20_000 })
+      .toBe(false);
+    const down = await boxes(page, "main");
+    expect(down.a.bottom).toBeLessThanOrEqual(down.b.top);
+
+    // The plain command carries no direction of its own: it uses the one last chosen, here and
+    // after a reload, because the choice is kept in this browser.
+    await page.reload();
+    await expect.poll(async () => Object.keys(await boxes(page, "main")).length).toBe(4);
+    await runCommand(page, "tidy-level", "tidy");
+    await expect
+      .poll(
+        async () => {
+          const b = await boxes(page, "main");
+          return b.a.bottom <= b.b.top;
+        },
+        { timeout: 20_000 },
+      )
+      .toBe(true);
   });
 
   test("tidies just the selection from the Arrange popover, leaving the rest alone", async ({ page }) => {

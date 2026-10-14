@@ -59,6 +59,7 @@ export function ArrangeSection({ nodes, edges, groups }: ArrangeSectionProps) {
   const ungroupSelection = useDocStore((s) => s.ungroupSelection);
   const tidyUp = useDocStore((s) => s.tidyUp);
   const tidyingUp = useDocStore((s) => s.ui.tidyingUp);
+  const layoutDirection = useDocStore((s) => s.ui.layoutDirection);
 
   const nodeIds = nodes.map((n) => n.id);
   const single = nodes.length === 1 ? nodes[0] : undefined;
@@ -207,9 +208,10 @@ export function ArrangeSection({ nodes, edges, groups }: ArrangeSectionProps) {
               <button
                 key={b.direction}
                 type="button"
-                className={styles.iconBtn}
+                className={b.direction === layoutDirection ? `${styles.iconBtn} ${styles.iconBtnActive}` : styles.iconBtn}
                 title={b.title}
                 aria-label={b.title}
+                aria-pressed={b.direction === layoutDirection}
                 disabled={tidyingUp}
                 data-testid={`nd-tidy-${b.direction}`}
                 onClick={() => void tidyUp({ direction: b.direction, scope: "selection" })}

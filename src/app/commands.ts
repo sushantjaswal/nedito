@@ -163,6 +163,15 @@ export function getCommands(): Command[] {
       group: "Arrange",
       keywords: TIDY_KEYWORDS,
       disabled: !canTidy,
+      run: () => store().tidyUp({ scope: "level" }),
+    },
+    {
+      id: "tidy-level-right",
+      label: "Tidy Up This Level, Left to Right",
+      group: "Arrange",
+      keywords: TIDY_KEYWORDS,
+      checked: s.ui.layoutDirection === "right",
+      disabled: !canTidy,
       run: () => store().tidyUp({ direction: "right", scope: "level" }),
     },
     {
@@ -170,6 +179,7 @@ export function getCommands(): Command[] {
       label: "Tidy Up This Level, Top to Bottom",
       group: "Arrange",
       keywords: TIDY_KEYWORDS,
+      checked: s.ui.layoutDirection === "down",
       disabled: !canTidy,
       run: () => store().tidyUp({ direction: "down", scope: "level" }),
     },
@@ -179,7 +189,7 @@ export function getCommands(): Command[] {
       group: "Arrange",
       keywords: TIDY_KEYWORDS,
       disabled: !canTidy || nodeIds.length < 2,
-      run: () => store().tidyUp({ direction: "right", scope: "selection" }),
+      run: () => store().tidyUp({ scope: "selection" }),
     },
     {
       id: "tidy-all-levels",
@@ -187,7 +197,7 @@ export function getCommands(): Command[] {
       group: "Arrange",
       keywords: [...TIDY_KEYWORDS, "nested", "all levels", "everything"],
       disabled: !canTidy || !nodes.some((n) => n.type === "nested"),
-      run: () => store().tidyUp({ direction: "right", scope: "all-levels" }),
+      run: () => store().tidyUp({ scope: "all-levels" }),
     },
 
     // ---- the page and the app

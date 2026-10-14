@@ -78,12 +78,12 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
     // Auto-layout with nothing selected: the level, and the levels under it when there are any.
     if (canTidy) {
       const tidy: MenuItem[] = [
-        { label: "Tidy up this level", onClick: run(() => void store().tidyUp({ direction: "right", scope: "level" })) },
+        { label: "Tidy up this level", onClick: run(() => void store().tidyUp({ scope: "level" })) },
       ];
       if (diagram.nodes.some((n) => n.type === "nested")) {
         tidy.push({
           label: "Tidy up every level below",
-          onClick: run(() => void store().tidyUp({ direction: "right", scope: "all-levels" })),
+          onClick: run(() => void store().tidyUp({ scope: "all-levels" })),
         });
       }
       groups.push(tidy);
@@ -126,7 +126,7 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
 
       if (canTidy && selectedNodes.length >= 2) {
         groups.push([
-          { label: "Tidy up selection", onClick: run(() => void store().tidyUp({ direction: "right", scope: "selection" })) },
+          { label: "Tidy up selection", onClick: run(() => void store().tidyUp({ scope: "selection" })) },
         ]);
       }
 
