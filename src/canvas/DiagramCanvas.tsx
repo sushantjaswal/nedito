@@ -34,6 +34,8 @@ import { GhostLinks } from "../nesting/GhostLinks";
 import { PageBoundaries } from "./PageBoundaries";
 import { NestedNode, type FlowNestedNode } from "../nesting/NestedNode";
 import { maybeDrawIn } from "./drawIn";
+import { NoteCard } from "../notes/NoteCard";
+import { NotePager } from "../notes/NotePager";
 import { TraceHint } from "./TraceHint";
 import { usePresentation, type PresentationState } from "./usePresentation";
 import { WalkthroughDot } from "./WalkthroughDot";
@@ -868,6 +870,8 @@ function DiagramCanvasInner() {
         <ContextBar />
         <ZoomVariable />
         <CanvasChip />
+        <NoteCard />
+        <NotePager />
         <GhostLinks />
       </ReactFlow>
       {contextMenu && (

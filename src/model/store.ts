@@ -176,6 +176,13 @@ export interface UiState {
    * everything in `ui` is outside it by construction.
    */
   openNoteId: string | null;
+  /**
+   * Which side the card is on. Sticky on purpose: the side-switch rule compares against where the
+   * card already was, so that stepping through notes near the middle does not flip it about.
+   */
+  cardSide: "left" | "right" | null;
+  /** The pager's full list of notes is showing. */
+  noteListOpen: boolean;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -326,6 +333,10 @@ export interface DocStoreState {
    * rest, so they all come through here rather than each clearing the id for itself.
    */
   closeNote: () => void;
+  /** Remembers the side the card took, which the hysteresis needs to decide whether to move it. */
+  setCardSide: (side: "left" | "right") => void;
+  /** Opens or closes the pager's full list of notes. */
+  setNoteListOpen: (open: boolean) => void;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -551,6 +562,8 @@ export const useDocStore = create<DocStoreState>()(
           tidyingUp: false,
           layoutDirection: readLayoutDirection(),
           openNoteId: null,
+          cardSide: null,
+          noteListOpen: false,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -617,12 +630,17 @@ export const useDocStore = create<DocStoreState>()(
         },
 
         setTrace: (focus) => {
+          // A card asserts that the lit shapes are what it describes, so a trace the reader sets
+          // or clears for themselves closes it. Opening a note sets its trace before opening the
+          // note, so the note it is for survives this.
+          if (get().ui.openNoteId) get().closeNote();
           set({ trace: focus && focus.length ? { diagramId: get().currentDiagramId(), focus } : null });
         },
         navigateInto: (nestedNodeId) => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           const node = diagram.nodes.find((n) => n.id === nestedNodeId);
           if (!node || node.type !== "nested") return;
+          if (get().ui.openNoteId) get().closeNote();
           // A trace that reaches the block follows the connection inside (D117).
           const trace = carryInto(get().doc, get().trace, nestedNodeId);
           set((s) => ({
@@ -634,6 +652,7 @@ export const useDocStore = create<DocStoreState>()(
           }));
         },
         navigateBack: () => {
+          if (get().ui.openNoteId) get().closeNote();
           set((s) => {
             if (s.navStack.length <= 1) return s;
             return {
@@ -661,6 +680,9 @@ export const useDocStore = create<DocStoreState>()(
         navigateToDiagram: (diagramId) => {
           const path = nesting.findDiagramPath(get().doc, diagramId);
           if (!path) return;
+          // Changing level by any route other than opening a note closes the open one; opening a
+          // note navigates first and opens second, so its own card is not caught by this.
+          if (get().ui.openNoteId) get().closeNote();
           set({
             trace: null,
             navStack: path,
@@ -1074,7 +1096,14 @@ export const useDocStore = create<DocStoreState>()(
           });
         },
         openNote: (id) => set((s) => ({ ui: { ...s.ui, openNoteId: id } })),
-        closeNote: () => set((s) => (s.ui.openNoteId === null ? s : { ui: { ...s.ui, openNoteId: null } })),
+        // Closing keeps the side: the next note opens where the last card was, which is what makes
+        // the hysteresis worth having. The list, which belongs to one reading, does not survive.
+        closeNote: () =>
+          set((s) =>
+            s.ui.openNoteId === null && !s.ui.noteListOpen ? s : { ui: { ...s.ui, openNoteId: null, noteListOpen: false } },
+          ),
+        setCardSide: (side) => set((s) => (s.ui.cardSide === side ? s : { ui: { ...s.ui, cardSide: side } })),
+        setNoteListOpen: (open) => set((s) => (s.ui.noteListOpen === open ? s : { ui: { ...s.ui, noteListOpen: open } })),
 
         groupSelection: () => {
           const result = groups.groupNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds);
@@ -1291,9 +1320,14 @@ export const useDocStore = create<DocStoreState>()(
         // a click there traces instead. It had been selecting on click since the viewer began.
         setSelection: (nodeIds, edgeIds = []) => {
           if (get().ui.viewerMode && (nodeIds.length > 0 || edgeIds.length > 0)) return;
+          // Choosing something else to look at is choosing to stop reading about this.
+          if (get().ui.openNoteId) get().closeNote();
           set({ selection: { nodeIds, edgeIds } });
         },
-        clearSelection: () => set({ selection: { nodeIds: [], edgeIds: [] } }),
+        clearSelection: () => {
+          if (get().ui.openNoteId) get().closeNote();
+          set({ selection: { nodeIds: [], edgeIds: [] } });
+        },
         selectAll: () => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           get().setSelection(

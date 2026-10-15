@@ -15,6 +15,8 @@ import { navigateBackOut } from "../nesting/navigation";
 import { imageFilesIn, insertImageFiles } from "./insertImage";
 import { markShapesInEvent } from "./systemClipboard";
 import { openFilePicker, saveCopy } from "./fileActions";
+import { stepNote } from "../notes/noteNavigation";
+import { openNoteAndReveal } from "../notes/revealNote";
 import type { Side } from "../model/connectedCopy";
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -201,15 +203,33 @@ export function useGlobalShortcuts(): void {
         return;
       }
       if (e.key === "Escape") {
-        if (store.editingNodeId) store.setEditingNodeId(null);
+        // The notes precedence, ahead of the rest: the list first, then the text edit the existing
+        // chain already handled, then the open note and the trace it brought with it.
+        if (store.ui.noteListOpen) store.setNoteListOpen(false);
+        else if (store.editingNodeId) store.setEditingNodeId(null);
         else if (store.editingEdgeId) store.setEditingEdgeId(null);
-        else if (store.selection.nodeIds.length > 0 || store.selection.edgeIds.length > 0) store.clearSelection();
+        else if (store.ui.openNoteId) {
+          store.setTrace(null);
+          store.closeNote();
+        } else if (store.selection.nodeIds.length > 0 || store.selection.edgeIds.length > 0) store.clearSelection();
         // A trace ends before the level is left (D117).
         else if (store.trace) store.setTrace(null);
         // So does a preview of Build or Spotlight (A6, D123).
         else if (store.ui.presentationPreview) store.setPresentationPreview(false);
         else if (store.navStack.length > 1) navigateBackOut();
         return;
+      }
+
+      // Alt+Left / Alt+Right step between notes. Plain arrow keys still nudge the selected shapes
+      // in the editor, which the scope is explicit must not be rebound, and Shift is the
+      // clone-and-connect gesture below, so this takes neither.
+      if (e.altKey && !e.shiftKey && !mod && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+        const next = stepNote(store.doc, store.ui.openNoteId, e.key === "ArrowRight" ? 1 : -1);
+        if (next) {
+          e.preventDefault();
+          openNoteAndReveal(next.id);
+          return;
+        }
       }
 
       // Alt+Shift+Arrow: clone-and-connect, which the ＋ handles' click also does — a connected copy of the one selected shape on that side.
