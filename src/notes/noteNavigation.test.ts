@@ -121,15 +121,24 @@ describe("what closes an open note", () => {
     expect(store().ui.openNoteId).toBeNull();
   });
 
-  it("stays open when the selection changes, because selecting is not lighting", () => {
+  it("closes when the selection changes, and when it is cleared", () => {
     const store = openOne();
     store().setSelection(["a"]);
-    // What a card claims is that the *lit* shapes are what it describes, and lighting is the
-    // trace. Selecting leaves the trace alone, so the card is still telling the truth — and the
-    // note has to stay open for "set to selection" to be reachable at all.
-    expect(store().ui.openNoteId).toBe("n1");
+    // A note is open only while it is being read: choosing something else to look at ends that,
+    // rather than leaving the card to follow the author around while they work.
+    expect(store().ui.openNoteId).toBeNull();
+
+    useDocStore.setState({ ui: { ...store().ui, openNoteId: "n1" } });
     store().clearSelection();
-    expect(store().ui.openNoteId).toBe("n1");
+    expect(store().ui.openNoteId).toBeNull();
+  });
+
+  it("is never open until something opens it", () => {
+    // Nothing on load, nothing from having notes in the document: a card appears because a reader
+    // asked for one, never by itself.
+    const initial = useDocStore.getState();
+    useDocStore.setState({ doc: nestedDoc([note("n1", { diagramId: "page" })]), ui: { ...initial.ui, openNoteId: null } });
+    expect(useDocStore.getState().ui.openNoteId).toBeNull();
   });
 
   it("closes when the level changes by any route", () => {
