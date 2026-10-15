@@ -48,3 +48,5 @@ yarn-error.log*
 !CODE_OF_CONDUCT.md
 !FORMAT.md
 !CHANGELOG.md
+!about-copy.md
+!pull_request_template.md

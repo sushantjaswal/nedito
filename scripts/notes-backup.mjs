@@ -24,7 +24,7 @@ const PROJECT = process.cwd();
  * and .gitignore enforces. Stated as what may stay rather than what must go: a filename cannot
  * carry intent, so a deny list always misses the next document someone writes.
  */
-const ALLOWED = new Set(["README.md", "LICENSE.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "FORMAT.md", "CHANGELOG.md"]);
+const ALLOWED = new Set(["README.md", "LICENSE.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "FORMAT.md", "CHANGELOG.md", "about-copy.md", "pull_request_template.md"]);
 
 /** Never walked: a dependency's own markdown is its business, and build output is not a document. */
 const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "dist-ssr", "coverage", "test-results", "playwright-report", "blob-report", ".wrangler", ".vite"]);
