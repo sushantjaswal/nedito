@@ -23,6 +23,7 @@ export function ShareDialog() {
   // How deep the sharer currently is. The checkbox is only meaningful below the top level —
   // "open at this level" when you are already at the top means nothing.
   const navStack = useDocStore((s) => s.navStack);
+  const noteCount = useDocStore((s) => s.doc.notes?.length ?? 0);
   const currentDiagramId = navStack[navStack.length - 1];
   const nested = navStack.length > 1;
 
@@ -79,6 +80,7 @@ export function ShareDialog() {
   if (!open) return null;
 
   const tooLarge = state?.level === "too-large";
+  const hasNotes = noteCount > 0;
 
   return (
     <div className={styles.backdrop} onPointerDown={(e) => e.target === e.currentTarget && closeDialog()}>
@@ -104,8 +106,11 @@ export function ShareDialog() {
 
         {tooLarge ? (
           <p className={styles.tooLarge} data-testid="nd-share-too-large">
-            This diagram is too big to travel inside a link ({formatShareSize(state.chars)}). Send the {BRAND.fileExt}{" "}
-            file instead — Save a copy, in the {BRAND.name} menu (Ctrl+S).
+            This diagram is too big to travel inside a link ({formatShareSize(state.chars)}).{" "}
+            {/* Notes are the one thing in a document whose length has no ceiling, so when there
+                are any they are the first place to look rather than a mystery to work out. */}
+            {hasNotes && <>Its notes are the likeliest reason: a link carries the whole document, text and all. </>}
+            Send the {BRAND.fileExt} file instead — Save a copy, in the {BRAND.name} menu (Ctrl+S).
           </p>
         ) : (
           <>

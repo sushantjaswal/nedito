@@ -59,6 +59,69 @@
   white-space: pre-wrap;
 }
 
+/* The title and body are fields that read as text until you touch them: there is no edit mode to
+   enter or leave, which is one fewer state to be stuck in. */
+.titleField,
+.bodyField {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  font-family: inherit;
+  resize: none;
+}
+
+.titleField {
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bodyField {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.titleField:hover,
+.bodyField:hover {
+  border-color: var(--nd-color-grid);
+}
+
+.titleField:focus,
+.bodyField:focus {
+  border-color: var(--nd-color-nest-accent);
+  background: var(--nd-panel-bg);
+  outline: none;
+}
+
+.titleField::placeholder,
+.bodyField::placeholder {
+  color: var(--nd-color-muted);
+  font-weight: 400;
+}
+
+/* Offered only while the selection is something other than what the note is already about. */
+.retarget {
+  align-self: flex-start;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.retarget:hover,
+.retarget:focus-visible {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}
+
 .footer {
   display: flex;
   align-items: center;

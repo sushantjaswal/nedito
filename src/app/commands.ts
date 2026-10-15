@@ -14,6 +14,7 @@ import { chooseAndInsertImages, pasteFromMenu } from "./insertImage";
 import { markShapesOnSystemClipboard } from "./systemClipboard";
 import { showAbout, startQuickTour } from "./helpActions";
 import { convertSelectionAndName } from "../nesting/navigation";
+import { addNoteHere } from "../notes/addNote";
 import { BRAND } from "./brand";
 import type { Side } from "../model/connectedCopy";
 import {
@@ -211,15 +212,8 @@ export function getCommands(): Command[] {
       group: "Arrange",
       keywords: ["note", "notes", "comment", "annotate", "why", "write"],
       disabled: s.ui.viewerMode,
-      run: () =>
-        void store().addNote(
-          {
-            diagramId: s.currentDiagramId(),
-            ...(nodeIds.length > 0 ? { nodeIds } : {}),
-            ...(s.selection.edgeIds.length > 0 ? { edgeIds: s.selection.edgeIds } : {}),
-          },
-          "",
-        ),
+      shortcut: "Alt+N",
+      run: () => void addNoteHere(),
     },
     {
       id: "delete-note",

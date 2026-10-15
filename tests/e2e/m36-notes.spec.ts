@@ -28,6 +28,9 @@ const doc = {
       title: "Main",
       nodes: [
         shape("left", 0, 0),
+        // Close enough to "left" to still be on screen once the camera has framed it: React Flow
+        // does not render what is out of view, so a far shape cannot be clicked.
+        shape("near", 0, 220),
         shape("right", 1600, 0),
         {
           id: "block",
@@ -138,14 +141,20 @@ test.describe("reading notes", () => {
     await expect(page.getByTestId("nd-note-card-count")).toHaveText("3 of 3");
   });
 
-  test("choosing something else on the canvas closes the note", async ({ page }) => {
+  test("selecting something else offers to point the note at it", async ({ page }) => {
     await open(page);
     await page.getByRole("button", { name: "About the left one" }).click();
     await expect(page.getByTestId("nd-note-card")).toBeVisible();
 
-    // The card asserts the lit shapes are what it describes; selecting something else ends that.
-    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
-    await expect(page.getByTestId("nd-note-card")).toBeHidden();
+    // Selecting does not close the note: lighting is the trace, which a selection does not touch.
+    await page.getByTestId("rf__node-near").click({ position: { x: 10, y: 10 } });
+    await expect(page.getByTestId("nd-note-card")).toBeVisible();
+
+    await page.getByTestId("nd-note-card-retarget").click();
+    // The offer goes once the note is about what is selected, because there is nothing left to do.
+    await expect(page.getByTestId("nd-note-card-retarget")).toHaveCount(0);
+    const notes = (await getDoc(page)).notes;
+    expect(notes?.[0].focus.nodeIds).toEqual(["near"]);
   });
 
   test("a document with no notes shows no pager at all", async ({ page }) => {
@@ -160,5 +169,63 @@ test.describe("reading notes", () => {
     await expect(page.getByTestId("nd-canvas")).toBeVisible();
     await expect(page.getByTestId("nd-note-pager")).toHaveCount(0);
     expect((await getDoc(page)).notes).toBeUndefined();
+  });
+});
+
+test.describe("writing notes", () => {
+  test("Alt+N writes one about the selection, with the title ready to type", async ({ page }) => {
+    await open(page);
+    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
+    await page.keyboard.press("Alt+n");
+
+    await expect(page.getByTestId("nd-note-card")).toBeVisible();
+    // A new note opens with its title focused, as a new Nested Block's name does.
+    await expect(page.getByTestId("nd-note-card-title")).toBeFocused();
+    await page.keyboard.type("Written here");
+    await page.getByTestId("nd-note-card-body").fill("And a body.");
+    await page.getByTestId("nd-note-card-body").blur();
+
+    const notes = (await getDoc(page)).notes;
+    expect(notes).toHaveLength(4);
+    expect(notes?.[3]).toMatchObject({ title: "Written here", body: "And a body.", focus: { diagramId: "page", nodeIds: ["left"] } });
+  });
+
+  test("a typed sentence is one undo step, not one per keystroke", async ({ page }) => {
+    await open(page);
+    await page.getByRole("button", { name: "About the left one" }).click();
+    const body = page.getByTestId("nd-note-card-body");
+
+    await body.click();
+    await body.fill("");
+    await page.keyboard.type("Several words typed in one go.");
+    await body.blur();
+    await expect(body).toHaveValue("Several words typed in one go.");
+
+    await page.keyboard.press("Control+z");
+    // One press, the whole session: the text it had before, not a word of what was typed.
+    await expect(body).toHaveValue("It is over on the left.");
+  });
+
+  test("the right-click menu writes one, on a shape and on bare canvas", async ({ page }) => {
+    await open(page);
+    await page.getByTestId("rf__node-left").click({ button: "right", position: { x: 10, y: 10 } });
+    await page.getByText("Add note", { exact: true }).click();
+    expect((await getDoc(page)).notes?.[3].focus.nodeIds).toEqual(["left"]);
+
+    await page.keyboard.press("Escape");
+    await page.getByTestId("nd-canvas").click({ button: "right", position: { x: 500, y: 420 } });
+    await page.getByText("Add note about this level").click();
+    const added = (await getDoc(page)).notes?.[4];
+    expect(added?.focus.nodeIds).toBeUndefined();
+    expect(added?.focus.diagramId).toBe("page");
+  });
+
+  test("the list reorders by dragging, and the reading order follows", async ({ page }) => {
+    await open(page);
+    await page.getByTestId("nd-note-list-toggle").click();
+    await page.getByTestId("nd-note-list-row-3").dragTo(page.getByTestId("nd-note-list-row-1"));
+
+    const notes = (await getDoc(page)).notes;
+    expect(notes?.map((n) => n.id)).toEqual(["n3", "n1", "n2"]);
   });
 });
