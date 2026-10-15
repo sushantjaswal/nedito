@@ -226,8 +226,8 @@ export function getCommands(): Command[] {
       label: "Delete Note",
       group: "Arrange",
       keywords: ["note", "notes", "remove note"],
-      disabled: s.ui.viewerMode || !s.ui.selectedNoteId,
-      run: () => s.ui.selectedNoteId && store().deleteNote(s.ui.selectedNoteId),
+      disabled: s.ui.viewerMode || !s.ui.openNoteId,
+      run: () => s.ui.openNoteId && store().deleteNote(s.ui.openNoteId),
     },
 
     // ---- the page and the app

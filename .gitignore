@@ -39,15 +39,12 @@ yarn-error.log*
 .claude/worktrees/
 .claude/scheduled_tasks.lock
 
-# Working documents live in the private notes repository, not here: the project rules, the work
-# queue and the decision log, and the scope, spec and audit documents a change is worked out in.
-# Backed up by `npm run notes:backup`. Security audits especially: they describe weaknesses,
-# sometimes before they are fixed. These patterns belong to this repository alone — the notes
-# repository must not copy them, or its own sync would commit nothing.
-CLAUDE.md
-PROGRESS.md
-CLAUDE_HISTORY.md
-Nedito_*.md
-*Scope*.md
-*Spec*.md
-security-audit-*.md
+# Markdown lives in nedito-notes unless allowlisted in CLAUDE.md
+*.md
+!README.md
+!LICENSE.md
+!CONTRIBUTING.md
+!SECURITY.md
+!CODE_OF_CONDUCT.md
+!FORMAT.md
+!CHANGELOG.md
