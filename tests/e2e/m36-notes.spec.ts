@@ -2,7 +2,7 @@
 // to the view. The camera work is the part that cannot be tested anywhere else — whether the lit
 // shapes really end up clear of the card depends on a laid-out canvas.
 import { expect, test, type Page } from "@playwright/test";
-import { getDoc, gotoWithStorage } from "./helpers";
+import { getDoc, gotoWithStorage, openPalette } from "./helpers";
 
 const meta = { title: "Notes", created: "2026-10-15T00:00:00Z", modified: "2026-10-15T00:00:00Z", appVersion: "0.1.0" };
 const shape = (id: string, x: number, y: number) => ({
@@ -227,5 +227,39 @@ test.describe("writing notes", () => {
 
     const notes = (await getDoc(page)).notes;
     expect(notes?.map((n) => n.id)).toEqual(["n3", "n1", "n2"]);
+  });
+});
+
+test.describe("markers", () => {
+  test("a shape wears a dot, a count past one, and clicking it opens that note", async ({ page }) => {
+    await open(page);
+    // "left" is named by one note; the marker is a bare dot rather than a number.
+    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("");
+
+    await page.getByTestId("nd-note-marker-left").click();
+    await expect(page.getByTestId("nd-note-card")).toBeVisible();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
+
+    // A second note about the same shape turns the dot into a count: a bare dot would be a lie.
+    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
+    await page.keyboard.press("Alt+n");
+    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("2");
+  });
+
+  test("a Nested Block advertises the writing beneath it, and clicking drills in", async ({ page }) => {
+    await open(page);
+    // One note lives on the level inside the block.
+    await expect(page.getByTestId("nd-note-marker-below-inside")).toHaveText(/1/);
+
+    await page.getByTestId("nd-note-marker-below-inside").click();
+    await expect(page.getByTestId("nd-note-card-level")).toContainText("Inside");
+    expect(await page.evaluate(() => window.__ddStore!.getState().navStack.length)).toBe(2);
+  });
+
+  test("the palette finds a note by what it says, not only by its title", async ({ page }) => {
+    await open(page);
+    await openPalette(page, "over on the right");
+    await page.getByText("Note: About the right one").click();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("2 of 3");
   });
 });

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { useDocStore } from "../model/store";
 import type { DiagramDocument, Note, ShapeNode } from "../model/types";
-import { depthMark, noteEntries, notePeek, stepNote } from "./noteNavigation";
+import { depthMark, noteEntries, notePeek, notesBelow, notesNaming, stepNote } from "./noteNavigation";
 
 const shape = (id: string): ShapeNode => ({
   id,
@@ -241,5 +241,48 @@ describe("writing a note", () => {
 
     store().openNote("n1");
     expect(store().ui.noteAwaitingTitle).toBe(false);
+  });
+});
+
+describe("what a marker counts", () => {
+  const doc = nestedDoc([
+    note("n1", { diagramId: "page", nodeIds: ["a"] }),
+    note("n2", { diagramId: "page", nodeIds: ["a", "block"] }),
+    note("n3", { diagramId: "inside", nodeIds: ["b"] }),
+  ]);
+
+  it("counts the notes naming a shape on this level, and nothing from another", () => {
+    expect(notesNaming(doc.notes, "page", "a").map((n) => n.id)).toEqual(["n1", "n2"]);
+    expect(notesNaming(doc.notes, "page", "block").map((n) => n.id)).toEqual(["n2"]);
+    // "b" is named by a note, but on a different level: this level's marker says nothing about it.
+    expect(notesNaming(doc.notes, "page", "b")).toEqual([]);
+    expect(notesNaming(doc.notes, "inside", "b").map((n) => n.id)).toEqual(["n3"]);
+  });
+
+  it("counts a line the same way a shape is counted", () => {
+    const withEdge = nestedDoc([note("e", { diagramId: "page", edgeIds: ["edge1"] })]);
+    expect(notesNaming(withEdge.notes, "page", "edge1")).toHaveLength(1);
+  });
+
+  it("counts everything written beneath a Nested Block, however deep", () => {
+    // A parent advertises the writing inside it; "inside" holds one note.
+    expect(notesBelow(doc, "inside").map((n) => n.id)).toEqual(["n3"]);
+    // And the page's own notes are not beneath it.
+    expect(notesBelow(doc, "page").map((n) => n.id)).toEqual(["n1", "n2", "n3"]);
+  });
+
+  it("does not spin on levels that point at each other, and counts a shared level once", () => {
+    const loop: DiagramDocument = {
+      ...nestedDoc([note("n1", { diagramId: "inside" })]),
+      diagrams: {
+        page: { id: "page", title: "Page 1", nodes: [{ id: "block", type: "nested", childDiagramId: "inside", position: { x: 0, y: 0 }, size: { w: 10, h: 10 }, z: 1, style: {}, collapsed: { icons: [] }, ports: [] }], edges: [] },
+        inside: { id: "inside", title: "Inside", nodes: [{ id: "back", type: "nested", childDiagramId: "page", position: { x: 0, y: 0 }, size: { w: 10, h: 10 }, z: 1, style: {}, collapsed: { icons: [] }, ports: [] }], edges: [] },
+      },
+    };
+    expect(notesBelow(loop, "inside")).toHaveLength(1);
+  });
+
+  it("finds nothing beneath a block whose level is gone", () => {
+    expect(notesBelow(doc, "never-existed")).toEqual([]);
   });
 });
