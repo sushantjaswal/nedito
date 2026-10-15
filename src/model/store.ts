@@ -168,10 +168,14 @@ export interface UiState {
   /** Which way the last tidy-up ran, remembered per browser; what a tidy-up uses when not told. */
   layoutDirection: LayoutDirection;
   /**
-   * The note the note commands act on — the one just added, until something else is chosen.
-   * Session only, like the trace: which note is open is not part of the document.
+   * The note that is open — the one just added, until something else opens or closes it. Not
+   * `selected`: a shape selection and an open note are both live at once and neither is the other.
+   *
+   * Session only, like the trace. It is never written to the document, never carried in a share
+   * link, and never recorded by undo — the history records `doc` alone (see partialize below), so
+   * everything in `ui` is outside it by construction.
    */
-  selectedNoteId: string | null;
+  openNoteId: string | null;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -315,8 +319,13 @@ export interface DocStoreState {
   /** Moves a note within the reading order. */
   reorderNotes: (fromIndex: number, toIndex: number) => void;
   setNoteFocus: (id: string, focus: NoteFocus) => void;
-  /** Which note the note commands act on. Session state: never saved, never undone. */
-  selectNote: (id: string | null) => void;
+  /** Opens a note: the one the note commands act on. Session state, never saved, never undone. */
+  openNote: (id: string) => void;
+  /**
+   * Closes whichever note is open. The scope lists several events that close one and NT2 adds the
+   * rest, so they all come through here rather than each clearing the id for itself.
+   */
+  closeNote: () => void;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -541,7 +550,7 @@ export const useDocStore = create<DocStoreState>()(
           canvasGesture: false,
           tidyingUp: false,
           layoutDirection: readLayoutDirection(),
-          selectedNoteId: null,
+          openNoteId: null,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -1005,7 +1014,7 @@ export const useDocStore = create<DocStoreState>()(
               notes: [...(doc.notes ?? []), { id, body, focus }],
             },
           });
-          get().selectNote(id);
+          get().openNote(id);
           return id;
         },
         updateNote: (id, patch) => {
@@ -1041,7 +1050,7 @@ export const useDocStore = create<DocStoreState>()(
           // The last note leaves no empty array behind: a document with none is the document it
           // was before anyone wrote one.
           set({ doc: notes.length > 0 ? { ...doc, meta, notes } : { ...doc, meta, notes: undefined } });
-          if (get().ui.selectedNoteId === id) get().selectNote(null);
+          if (get().ui.openNoteId === id) get().closeNote();
         },
         reorderNotes: (fromIndex, toIndex) => {
           const doc = get().doc;
@@ -1064,7 +1073,8 @@ export const useDocStore = create<DocStoreState>()(
             },
           });
         },
-        selectNote: (id) => set((s) => ({ ui: { ...s.ui, selectedNoteId: id } })),
+        openNote: (id) => set((s) => ({ ui: { ...s.ui, openNoteId: id } })),
+        closeNote: () => set((s) => (s.ui.openNoteId === null ? s : { ui: { ...s.ui, openNoteId: null } })),
 
         groupSelection: () => {
           const result = groups.groupNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds);

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { CURRENT_FORMAT_VERSION, decodeDoc, encodeDoc, writtenVersion } from "../file/documentFormat";
 import { noteTitle, pruneNotes, resolveNotes } from "./notes";
 import type { DiagramDocument, DEdge, DNode, Note, ShapeNode } from "./types";
+import { useDocStore } from "./store";
 import { validateDoc } from "./validate";
 
 const shape = (id: string): ShapeNode => ({
@@ -197,5 +198,57 @@ describe("a note from a document that may come from anyone", () => {
     const clash = doc([shape("a")], [], [note("n1", { diagramId: "d1" }), note("n1", { diagramId: "d1" })]);
     expect(validateDoc(clash).map((e) => e.code)).toContain("DUPLICATE_ID");
     expect(validateDoc(doc([shape("a")], [], [note("a", { diagramId: "d1" })])).map((e) => e.code)).toContain("DUPLICATE_ID");
+  });
+});
+
+describe("the open note is session state", () => {
+  /** An empty document in the store, as store.test.ts sets one up. */
+  const freshStore = () => {
+    const initial = useDocStore.getState();
+    const rootId = initial.doc.rootDiagramIds[0];
+    useDocStore.setState({
+      doc: { ...initial.doc, rootDiagramIds: [rootId], diagrams: { [rootId]: { id: rootId, title: "Page 1", nodes: [], edges: [] } }, notes: undefined },
+      navStack: [rootId],
+      selection: { nodeIds: [], edgeIds: [] },
+      ui: { ...initial.ui, openNoteId: null, viewerMode: false },
+    });
+    useDocStore.temporal.getState().clear();
+    return useDocStore.getState;
+  };
+
+  it("opens with a new note, closes through one place, and never reaches the document", () => {
+    const store = freshStore();
+    const diagramId = store().currentDiagramId();
+
+    const id = store().addNote({ diagramId }, "Why this is here.");
+    expect(id).not.toBeNull();
+    expect(store().ui.openNoteId).toBe(id);
+
+    store().closeNote();
+    expect(store().ui.openNoteId).toBeNull();
+    // Closing a note that is already closed is not a change, so nothing re-renders for it.
+    const before = store().ui;
+    store().closeNote();
+    expect(store().ui).toBe(before);
+
+    // Deleting the open note closes it, through closeNote rather than by clearing the id itself.
+    store().openNote(id as string);
+    store().deleteNote(id as string);
+    expect(store().ui.openNoteId).toBeNull();
+
+    // Which note is open is not a property of the document, so it is not written to one.
+    expect(encodeDoc(store().doc)).not.toContain("openNoteId");
+  });
+
+  it("is outside the undo history: the history records the document alone", () => {
+    const store = freshStore();
+    const id = store().addNote({ diagramId: store().currentDiagramId() }, "Text.") as string;
+    store().closeNote();
+
+    // Undoing the note's creation must not bring back the fact that it was open.
+    useDocStore.temporal.getState().undo();
+    expect(store().doc.notes).toBeUndefined();
+    expect(store().ui.openNoteId).toBeNull();
+    expect(id).toBeTruthy();
   });
 });

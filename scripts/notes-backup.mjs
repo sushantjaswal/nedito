@@ -13,33 +13,46 @@
 // the clone command printed when the clone is missing, is worked out from this repository's own
 // origin remote.
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, readdirSync } from "node:fs";
-import { basename, join, resolve } from "node:path";
+import { copyFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { basename, dirname, join, relative, resolve } from "node:path";
 
 const GOVERNANCE = ["CLAUDE.md", "PROGRESS.md", "CLAUDE_HISTORY.md"];
 const PROJECT = process.cwd();
 
 /**
- * The working documents a change is worked out in — scope and spec documents, audit reports —
- * which belong in the notes repository beside the governance files. Matched by name rather than
- * listed, so a new one is carried over without this script learning its name, and the names match
- * what this project's .gitignore keeps out of the public repository. Only the project root is
- * looked at: these are working documents, not part of docs/.
+ * The markdown this project is allowed to keep, and nothing else — the same list CLAUDE.md states
+ * and .gitignore enforces. Stated as what may stay rather than what must go: a filename cannot
+ * carry intent, so a deny list always misses the next document someone writes.
  */
-const WORKING_DOCUMENT = /^(Nedito_.*|.*Scope.*|.*Spec.*|security-audit-.*)\.md$/i;
+const ALLOWED = new Set(["README.md", "LICENSE.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "FORMAT.md", "CHANGELOG.md"]);
 
-function workingDocuments() {
+/** Never walked: a dependency's own markdown is its business, and build output is not a document. */
+const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "dist-ssr", "coverage", "test-results", "playwright-report", "blob-report", ".wrangler", ".vite"]);
+
+/**
+ * Every markdown file in this project that belongs in the notes repository, as a path relative to
+ * the project, deepest paths included: audits and reports live under docs/, not only at the root.
+ */
+function documents(dir = PROJECT) {
+  const out = [];
+  let entries;
   try {
-    return readdirSync(PROJECT, { withFileTypes: true })
-      .filter((e) => e.isFile() && WORKING_DOCUMENT.test(e.name) && !GOVERNANCE.includes(e.name))
-      .map((e) => e.name)
-      .sort();
+    entries = readdirSync(dir, { withFileTypes: true });
   } catch {
-    return [];
+    return out;
   }
+  for (const entry of entries) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!SKIP_DIRS.has(entry.name)) out.push(...documents(full));
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md") && !ALLOWED.has(entry.name)) {
+      out.push(relative(PROJECT, full).split("\\").join("/"));
+    }
+  }
+  return out.sort();
 }
 
-const FILES = [...GOVERNANCE, ...workingDocuments()];
+const FILES = documents();
 const NOTES = resolve(process.env.NEDITO_NOTES_REPO || join(PROJECT, "..", `${basename(PROJECT)}-notes`));
 
 /** Runs git, returning its trimmed output; on failure, prints git's own message and exits. */
@@ -71,8 +84,13 @@ if (!existsSync(join(NOTES, ".git"))) {
 }
 
 for (const f of FILES) {
-  if (missing.includes(f)) console.log(`notes:backup: ${f} is not in this folder; skipped.`);
-  else copyFileSync(join(PROJECT, f), join(NOTES, f));
+  if (missing.includes(f)) {
+    console.log(`notes:backup: ${f} is not in this folder; skipped.`);
+    continue;
+  }
+  // A document under docs/ keeps its folder, so where it sat here is still readable there.
+  mkdirSync(dirname(join(NOTES, f)), { recursive: true });
+  copyFileSync(join(PROJECT, f), join(NOTES, f));
 }
 
 git(NOTES, "add", "--", ...FILES.filter((f) => !missing.includes(f)));
