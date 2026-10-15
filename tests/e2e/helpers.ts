@@ -6,7 +6,7 @@ import type { DiagramDocument } from "../../src/model/types";
 // state assertions instead of brittle DOM-id scraping (node/edge ids are nanoid-random).
 declare global {
   interface Window {
-    __ddStore?: { getState: () => { doc: DiagramDocument; currentDiagramId: () => string } };
+    __ddStore?: { getState: () => { doc: DiagramDocument; currentDiagramId: () => string; navStack: string[] } };
     __rf?: {
       fitView?: (options?: { padding?: number }) => void;
       getViewport?: () => { x: number; y: number; zoom: number };
