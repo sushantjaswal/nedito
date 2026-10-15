@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { useDocStore } from "../model/store";
 import type { DiagramDocument, Note, ShapeNode } from "../model/types";
-import { depthMark, noteEntries, notePeek, stepNote } from "./noteNavigation";
+import { depthMark, noteEntries, notePeek, notesBelow, notesNaming, stepNote } from "./noteNavigation";
 
 const shape = (id: string): ShapeNode => ({
   id,
@@ -121,15 +121,24 @@ describe("what closes an open note", () => {
     expect(store().ui.openNoteId).toBeNull();
   });
 
-  it("stays open when the selection changes, because selecting is not lighting", () => {
+  it("closes when the selection changes, and when it is cleared", () => {
     const store = openOne();
     store().setSelection(["a"]);
-    // What a card claims is that the *lit* shapes are what it describes, and lighting is the
-    // trace. Selecting leaves the trace alone, so the card is still telling the truth — and the
-    // note has to stay open for "set to selection" to be reachable at all.
-    expect(store().ui.openNoteId).toBe("n1");
+    // A note is open only while it is being read: choosing something else to look at ends that,
+    // rather than leaving the card to follow the author around while they work.
+    expect(store().ui.openNoteId).toBeNull();
+
+    useDocStore.setState({ ui: { ...store().ui, openNoteId: "n1" } });
     store().clearSelection();
-    expect(store().ui.openNoteId).toBe("n1");
+    expect(store().ui.openNoteId).toBeNull();
+  });
+
+  it("is never open until something opens it", () => {
+    // Nothing on load, nothing from having notes in the document: a card appears because a reader
+    // asked for one, never by itself.
+    const initial = useDocStore.getState();
+    useDocStore.setState({ doc: nestedDoc([note("n1", { diagramId: "page" })]), ui: { ...initial.ui, openNoteId: null } });
+    expect(useDocStore.getState().ui.openNoteId).toBeNull();
   });
 
   it("closes when the level changes by any route", () => {
@@ -241,5 +250,48 @@ describe("writing a note", () => {
 
     store().openNote("n1");
     expect(store().ui.noteAwaitingTitle).toBe(false);
+  });
+});
+
+describe("what a marker counts", () => {
+  const doc = nestedDoc([
+    note("n1", { diagramId: "page", nodeIds: ["a"] }),
+    note("n2", { diagramId: "page", nodeIds: ["a", "block"] }),
+    note("n3", { diagramId: "inside", nodeIds: ["b"] }),
+  ]);
+
+  it("counts the notes naming a shape on this level, and nothing from another", () => {
+    expect(notesNaming(doc.notes, "page", "a").map((n) => n.id)).toEqual(["n1", "n2"]);
+    expect(notesNaming(doc.notes, "page", "block").map((n) => n.id)).toEqual(["n2"]);
+    // "b" is named by a note, but on a different level: this level's marker says nothing about it.
+    expect(notesNaming(doc.notes, "page", "b")).toEqual([]);
+    expect(notesNaming(doc.notes, "inside", "b").map((n) => n.id)).toEqual(["n3"]);
+  });
+
+  it("counts a line the same way a shape is counted", () => {
+    const withEdge = nestedDoc([note("e", { diagramId: "page", edgeIds: ["edge1"] })]);
+    expect(notesNaming(withEdge.notes, "page", "edge1")).toHaveLength(1);
+  });
+
+  it("counts everything written beneath a Nested Block, however deep", () => {
+    // A parent advertises the writing inside it; "inside" holds one note.
+    expect(notesBelow(doc, "inside").map((n) => n.id)).toEqual(["n3"]);
+    // And the page's own notes are not beneath it.
+    expect(notesBelow(doc, "page").map((n) => n.id)).toEqual(["n1", "n2", "n3"]);
+  });
+
+  it("does not spin on levels that point at each other, and counts a shared level once", () => {
+    const loop: DiagramDocument = {
+      ...nestedDoc([note("n1", { diagramId: "inside" })]),
+      diagrams: {
+        page: { id: "page", title: "Page 1", nodes: [{ id: "block", type: "nested", childDiagramId: "inside", position: { x: 0, y: 0 }, size: { w: 10, h: 10 }, z: 1, style: {}, collapsed: { icons: [] }, ports: [] }], edges: [] },
+        inside: { id: "inside", title: "Inside", nodes: [{ id: "back", type: "nested", childDiagramId: "page", position: { x: 0, y: 0 }, size: { w: 10, h: 10 }, z: 1, style: {}, collapsed: { icons: [] }, ports: [] }], edges: [] },
+      },
+    };
+    expect(notesBelow(loop, "inside")).toHaveLength(1);
+  });
+
+  it("finds nothing beneath a block whose level is gone", () => {
+    expect(notesBelow(doc, "never-existed")).toEqual([]);
   });
 });

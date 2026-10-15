@@ -18,6 +18,7 @@ import type { DEdge, DNode } from "../model/types";
 import { styledShapes } from "./selectionKinds";
 import { hasShadow } from "../canvas/shapeEffects";
 import { ColorField, NumberField, RangeField } from "./fields";
+import { NoteControl } from "../notes/NoteControl";
 import styles from "./FormatTabs.module.css";
 import { ARROWHEAD_OPTIONS } from "../canvas/arrowheads";
 
@@ -190,6 +191,7 @@ export function EffectsSection({ nodes }: { nodes: DNode[] }) {
           Shadow
         </label>
       </div>
+      <NoteControl nodeId={nodes.length === 1 ? nodes[0].id : undefined} />
     </div>
   );
 }
@@ -361,6 +363,7 @@ export function ImageSection({ nodes }: { nodes: DNode[] }) {
           onCommit={(v) => setNodeStyle(ids, { opacity: v })}
         />
       </div>
+      <NoteControl nodeId={nodes.length === 1 ? nodes[0].id : undefined} />
     </div>
   );
 }

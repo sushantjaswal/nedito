@@ -1329,13 +1329,16 @@ export const useDocStore = create<DocStoreState>()(
         // a click there traces instead. It had been selecting on click since the viewer began.
         setSelection: (nodeIds, edgeIds = []) => {
           if (get().ui.viewerMode && (nodeIds.length > 0 || edgeIds.length > 0)) return;
-          // Selecting does not close an open note. What a card claims is that the *lit* shapes are
-          // what it describes, and lighting is the trace, which selecting does not touch. Keeping
-          // it open is also what makes "set to selection" reachable: choose the shapes, then point
-          // the note at them. Setting or clearing a trace, changing level and Escape still close it.
+          // A note is open only while it is being read. Choosing something else to look at is
+          // choosing to stop reading about this, so the card goes rather than following the author
+          // around the canvas while they work.
+          if (get().ui.openNoteId) get().closeNote();
           set({ selection: { nodeIds, edgeIds } });
         },
-        clearSelection: () => set({ selection: { nodeIds: [], edgeIds: [] } }),
+        clearSelection: () => {
+          if (get().ui.openNoteId) get().closeNote();
+          set({ selection: { nodeIds: [], edgeIds: [] } });
+        },
         selectAll: () => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           get().setSelection(

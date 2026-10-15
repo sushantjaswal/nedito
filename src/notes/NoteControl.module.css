@@ -1,0 +1,53 @@
+/* "Add note" inside a context-bar popover: the same shape as the other groups there. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  margin-top: 6px;
+  border-top: 1px solid var(--nd-color-grid);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add,
+.open {
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.open {
+  border-color: var(--nd-color-grid);
+  background: transparent;
+  color: var(--nd-color-ink);
+}
+
+.add:hover,
+.add:focus-visible {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}
+
+.open:hover,
+.open:focus-visible {
+  border-color: var(--nd-color-nest-accent);
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+}
+
+.hint {
+  margin: 0;
+  color: var(--nd-color-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}

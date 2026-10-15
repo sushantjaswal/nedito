@@ -2,7 +2,7 @@
 // to the view. The camera work is the part that cannot be tested anywhere else — whether the lit
 // shapes really end up clear of the card depends on a laid-out canvas.
 import { expect, test, type Page } from "@playwright/test";
-import { getDoc, gotoWithStorage } from "./helpers";
+import { getDoc, gotoWithStorage, openPalette } from "./helpers";
 
 const meta = { title: "Notes", created: "2026-10-15T00:00:00Z", modified: "2026-10-15T00:00:00Z", appVersion: "0.1.0" };
 const shape = (id: string, x: number, y: number) => ({
@@ -141,20 +141,20 @@ test.describe("reading notes", () => {
     await expect(page.getByTestId("nd-note-card-count")).toHaveText("3 of 3");
   });
 
-  test("selecting something else offers to point the note at it", async ({ page }) => {
+  test("is closed until something opens it, and closes again when the reader moves on", async ({ page }) => {
     await open(page);
+    // A document with notes shows the pager, never a card: one appears because a reader asked.
+    await expect(page.getByTestId("nd-note-pager")).toBeVisible();
+    await expect(page.getByTestId("nd-note-card")).toHaveCount(0);
+
     await page.getByRole("button", { name: "About the left one" }).click();
     await expect(page.getByTestId("nd-note-card")).toBeVisible();
 
-    // Selecting does not close the note: lighting is the trace, which a selection does not touch.
-    await page.getByTestId("rf__node-near").click({ position: { x: 10, y: 10 } });
-    await expect(page.getByTestId("nd-note-card")).toBeVisible();
-
-    await page.getByTestId("nd-note-card-retarget").click();
-    // The offer goes once the note is about what is selected, because there is nothing left to do.
-    await expect(page.getByTestId("nd-note-card-retarget")).toHaveCount(0);
-    const notes = (await getDoc(page)).notes;
-    expect(notes?.[0].focus.nodeIds).toEqual(["near"]);
+    // Choosing something else to look at ends the reading, rather than leaving the card to follow
+    // the author around the canvas while they work.
+    await page.getByTestId("rf__node-near").click({ position: { x: 40, y: 40 } });
+    await expect(page.getByTestId("nd-note-card")).toHaveCount(0);
+    await expect(page.getByTestId("nd-note-pager")).toBeVisible();
   });
 
   test("a document with no notes shows no pager at all", async ({ page }) => {
@@ -227,5 +227,73 @@ test.describe("writing notes", () => {
 
     const notes = (await getDoc(page)).notes;
     expect(notes?.map((n) => n.id)).toEqual(["n3", "n1", "n2"]);
+  });
+});
+
+test.describe("markers", () => {
+  test("a shape wears a dot, a count past one, and clicking it opens that note", async ({ page }) => {
+    await open(page);
+    // "left" is named by one note; the marker is a bare dot rather than a number.
+    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("");
+
+    await page.getByTestId("nd-note-marker-left").click();
+    await expect(page.getByTestId("nd-note-card")).toBeVisible();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
+
+    // A second note about the same shape turns the dot into a count: a bare dot would be a lie.
+    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
+    await page.keyboard.press("Alt+n");
+    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("2");
+  });
+
+  test("a Nested Block advertises the writing beneath it, and clicking drills in", async ({ page }) => {
+    await open(page);
+    // One note lives on the level inside the block.
+    await expect(page.getByTestId("nd-note-marker-below-inside")).toHaveText(/1/);
+
+    await page.getByTestId("nd-note-marker-below-inside").click();
+    await expect(page.getByTestId("nd-note-card-level")).toContainText("Inside");
+    expect(await page.evaluate(() => window.__ddStore!.getState().navStack.length)).toBe(2);
+  });
+
+  test("the palette finds a note by what it says, not only by its title", async ({ page }) => {
+    await open(page);
+    await openPalette(page, "over on the right");
+    await page.getByText("Note: About the right one").click();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("2 of 3");
+  });
+});
+
+test.describe("adding a note from the shape's own bar", () => {
+  test("a selected shape offers it in the ••• popover, and opens what is already there", async ({ page }) => {
+    await open(page);
+    // The first place anyone looks after clicking a shape: the bar above it.
+    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
+    await page.getByTestId("nd-bar-more").click();
+    await expect(page.getByTestId("nd-note-control")).toBeVisible();
+
+    // "left" already has a note, so the bar offers to open it as well as to add another.
+    await page.getByTestId("nd-open-note").click();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
+
+    await page.getByTestId("rf__node-left").click({ position: { x: 10, y: 10 } });
+    await page.getByTestId("nd-bar-more").click();
+    await page.getByTestId("nd-add-note").click();
+    await expect(page.getByTestId("nd-note-card-title")).toBeFocused();
+    const notes = (await getDoc(page)).notes;
+    expect(notes).toHaveLength(4);
+    expect(notes?.[3].focus.nodeIds).toEqual(["left"]);
+  });
+
+  test("a Nested Block offers it too, though its bar has no ••• at all", async ({ page }) => {
+    await open(page);
+    // Away from the top-left corner, which the note marker occupies: that is a button of its own
+    // and clicking it would drill into the block rather than select it.
+    await page.getByTestId("rf__node-block").click({ position: { x: 100, y: 60 } });
+    await page.getByTestId("nd-bar-nested").click();
+    await page.getByTestId("nd-add-note").click();
+
+    await expect(page.getByTestId("nd-note-card-title")).toBeFocused();
+    expect((await getDoc(page)).notes?.[3].focus.nodeIds).toEqual(["block"]);
   });
 });

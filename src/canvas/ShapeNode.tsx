@@ -18,6 +18,7 @@ import { LabelEditor } from "./LabelEditor";
 import { defaultLabelColor, labelBackdrop } from "./labelColor";
 import { RotateHandle } from "./RotateHandle";
 import { HealthBadge } from "./HealthBadge";
+import { NoteMarker } from "../notes/NoteMarker";
 import { StepBadge, type StepBadgeKind } from "./StepBadge";
 import styles from "./ShapeNode.module.css";
 
@@ -131,6 +132,7 @@ function ShapeNodeComponent({ id, data, selected, width, height }: NodeProps<Flo
     >
       <ConnectionHandles visible={hovered && !selected} />
       {node.motion?.health && <HealthBadge state={node.motion.health} />}
+      <NoteMarker nodeId={node.id} />
       {data.step && <StepBadge n={data.step.n} kind={data.step.kind} />}
       <NodeResizer
         isVisible={selected && !editing}
