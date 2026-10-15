@@ -16,6 +16,7 @@ import { imageFilesIn, insertImageFiles } from "./insertImage";
 import { markShapesInEvent } from "./systemClipboard";
 import { openFilePicker, saveCopy } from "./fileActions";
 import { stepNote } from "../notes/noteNavigation";
+import { addNoteHere } from "../notes/addNote";
 import { openNoteAndReveal } from "../notes/revealNote";
 import type { Side } from "../model/connectedCopy";
 
@@ -217,6 +218,13 @@ export function useGlobalShortcuts(): void {
         // So does a preview of Build or Spotlight (A6, D123).
         else if (store.ui.presentationPreview) store.setPresentationPreview(false);
         else if (store.navStack.length > 1) navigateBackOut();
+        return;
+      }
+
+      // Alt+N writes a note about what is selected, or about the level when nothing is.
+      if (e.altKey && !e.shiftKey && !mod && (e.key === "n" || e.key === "N")) {
+        e.preventDefault();
+        addNoteHere();
         return;
       }
 

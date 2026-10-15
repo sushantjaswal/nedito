@@ -183,6 +183,11 @@ export interface UiState {
   cardSide: "left" | "right" | null;
   /** The pager's full list of notes is showing. */
   noteListOpen: boolean;
+  /**
+   * A note was just added and has not been named yet, so the card puts the cursor in its title —
+   * the way a new Nested Block opens with its name ready for typing.
+   */
+  noteAwaitingTitle: boolean;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -564,6 +569,7 @@ export const useDocStore = create<DocStoreState>()(
           openNoteId: null,
           cardSide: null,
           noteListOpen: false,
+          noteAwaitingTitle: false,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -1037,6 +1043,7 @@ export const useDocStore = create<DocStoreState>()(
             },
           });
           get().openNote(id);
+          set((s) => ({ ui: { ...s.ui, noteAwaitingTitle: true } }));
           return id;
         },
         updateNote: (id, patch) => {
@@ -1095,12 +1102,14 @@ export const useDocStore = create<DocStoreState>()(
             },
           });
         },
-        openNote: (id) => set((s) => ({ ui: { ...s.ui, openNoteId: id } })),
+        openNote: (id) => set((s) => ({ ui: { ...s.ui, openNoteId: id, noteAwaitingTitle: false } })),
         // Closing keeps the side: the next note opens where the last card was, which is what makes
         // the hysteresis worth having. The list, which belongs to one reading, does not survive.
         closeNote: () =>
           set((s) =>
-            s.ui.openNoteId === null && !s.ui.noteListOpen ? s : { ui: { ...s.ui, openNoteId: null, noteListOpen: false } },
+            s.ui.openNoteId === null && !s.ui.noteListOpen
+              ? s
+              : { ui: { ...s.ui, openNoteId: null, noteListOpen: false, noteAwaitingTitle: false } },
           ),
         setCardSide: (side) => set((s) => (s.ui.cardSide === side ? s : { ui: { ...s.ui, cardSide: side } })),
         setNoteListOpen: (open) => set((s) => (s.ui.noteListOpen === open ? s : { ui: { ...s.ui, noteListOpen: open } })),
@@ -1320,14 +1329,13 @@ export const useDocStore = create<DocStoreState>()(
         // a click there traces instead. It had been selecting on click since the viewer began.
         setSelection: (nodeIds, edgeIds = []) => {
           if (get().ui.viewerMode && (nodeIds.length > 0 || edgeIds.length > 0)) return;
-          // Choosing something else to look at is choosing to stop reading about this.
-          if (get().ui.openNoteId) get().closeNote();
+          // Selecting does not close an open note. What a card claims is that the *lit* shapes are
+          // what it describes, and lighting is the trace, which selecting does not touch. Keeping
+          // it open is also what makes "set to selection" reachable: choose the shapes, then point
+          // the note at them. Setting or clearing a trace, changing level and Escape still close it.
           set({ selection: { nodeIds, edgeIds } });
         },
-        clearSelection: () => {
-          if (get().ui.openNoteId) get().closeNote();
-          set({ selection: { nodeIds: [], edgeIds: [] } });
-        },
+        clearSelection: () => set({ selection: { nodeIds: [], edgeIds: [] } }),
         selectAll: () => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           get().setSelection(

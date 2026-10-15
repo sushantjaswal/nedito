@@ -2,7 +2,7 @@
 //
 // Its width must not grow with the note count, which is why the dots stop at twelve and why titles
 // live in a hover peek and in the list rather than on the control itself.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDocStore } from "../model/store";
 import { depthMark, noteEntries, notePeek, stepNote } from "./noteNavigation";
 import { openNoteAndReveal } from "./revealNote";
@@ -16,7 +16,11 @@ export function NotePager() {
   const openNoteId = useDocStore((s) => s.ui.openNoteId);
   const listOpen = useDocStore((s) => s.ui.noteListOpen);
   const setNoteListOpen = useDocStore((s) => s.setNoteListOpen);
+  const reorderNotes = useDocStore((s) => s.reorderNotes);
+  const viewerMode = useDocStore((s) => s.ui.viewerMode);
   const list = useRef<HTMLDivElement>(null);
+  /** The row being dragged, by its position in the reading order. */
+  const [dragging, setDragging] = useState<number | null>(null);
 
   const entries = noteEntries(doc);
 
@@ -99,6 +103,16 @@ export function NotePager() {
                 role="menuitem"
                 className={entry.note.id === openNoteId ? `${styles.row} ${styles.rowOpen}` : styles.row}
                 onClick={() => open(entry.note.id)}
+                // Reading order is the author's to arrange, and the list is where it is visible.
+                draggable={!viewerMode && entries.length > 1}
+                onDragStart={() => setDragging(entry.number - 1)}
+                onDragOver={(e) => dragging !== null && e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (dragging !== null && dragging !== entry.number - 1) reorderNotes(dragging, entry.number - 1);
+                  setDragging(null);
+                }}
+                onDragEnd={() => setDragging(null)}
                 data-testid={`nd-note-list-row-${entry.number}`}
               >
                 <span className={styles.rowNumber}>{entry.number}</span>
