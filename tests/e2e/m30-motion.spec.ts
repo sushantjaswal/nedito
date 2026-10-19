@@ -2,7 +2,7 @@
 // the line toolbar, every off switch, the reader's own switch in the viewer, and the resting state
 // a still export draws.
 import { expect, test, type Page } from "@playwright/test";
-import { getDoc, gotoFresh } from "./helpers";
+import { getDoc, gotoFresh, reloadApp } from "./helpers";
 
 interface MotionStore {
   addShapeNode: (r: string, p: { x: number; y: number }, z: { w: number; h: number }) => string;
@@ -87,7 +87,7 @@ test("every off switch stops it: Preferences, reduced motion, and low detail far
   // Remembered by this browser. Let the diagram's motion reach the autosave first (it waits 800ms
   // after the last change), or the reload brings back a still diagram and checks nothing (D120).
   await expect.poll(() => page.evaluate(() => (localStorage.getItem("nedito:autosave") ?? "").includes('"pulse"'))).toBe(true);
-  await page.reload();
+  await reloadApp(page);
   await expect(page.locator(".nd-flow")).toHaveCount(1);
   expect(await both()).toEqual(["none", "none"]);
   await page.evaluate(() => (window.__ddStore!.getState() as unknown as MotionStore).setMotionEnabled(true));
@@ -300,7 +300,7 @@ test("Peek stirs a Nested Block the first time it is seen, then never again (A5,
 
   // A fresh page: the first sight of it stirs.
   await expect.poll(() => page.evaluate(() => (localStorage.getItem("nedito:autosave") ?? "").includes('"peek": true'))).toBe(true);
-  await page.reload();
+  await reloadApp(page);
   const preview = page.locator(`.react-flow__node[data-id="${block}"] [data-peeking]`);
   await expect(preview).toHaveCount(1);
   expect(await preview.evaluate((el) => getComputedStyle(el).animationName)).toBe("nd-peek");

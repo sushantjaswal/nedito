@@ -4,7 +4,7 @@
 // that one tidy-up is one undo, and that a nested document can be tidied all the way down from
 // the level being viewed.
 import { expect, test } from "@playwright/test";
-import { getDoc, gotoWithStorage, runCommand } from "./helpers";
+import { getDoc, gotoWithStorage, reloadApp, runCommand } from "./helpers";
 
 const meta = { title: "Tidy", created: "2026-10-14T00:00:00Z", modified: "2026-10-14T00:00:00Z", appVersion: "0.1.0" };
 const shape = (id: string, x: number, y: number) => ({
@@ -156,7 +156,7 @@ test.describe("tidy up", () => {
 
     // The plain command carries no direction of its own: it uses the one last chosen, here and
     // after a reload, because the choice is kept in this browser.
-    await page.reload();
+    await reloadApp(page);
     await expect.poll(async () => Object.keys(await boxes(page, "main")).length).toBe(4);
     await runCommand(page, "tidy-level", "tidy");
     await expect
