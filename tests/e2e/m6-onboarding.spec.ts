@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { currentDiagramId, getDoc, gotoFirstVisit, gotoFresh } from "./helpers";
+import { currentDiagramId, getDoc, gotoFirstVisit, gotoFresh, reloadApp } from "./helpers";
 
 // Onboarding item 1: the permanent local-only disclosure. The acceptance
 // bar is that it is reachable everywhere and by keyboard — a disclosure the user cannot find,
@@ -128,7 +128,7 @@ test.describe("Onboarding — first-visit sample diagram", () => {
     const doc = await getDoc(page);
     expect(doc.diagrams[doc.rootDiagramIds[0]].nodes).toHaveLength(0);
 
-    await page.reload();
+    await reloadApp(page);
     await expect(page.getByTestId("nd-sample-strip")).toHaveCount(0);
   });
 
@@ -203,7 +203,7 @@ test.describe("Onboarding — coach marks", () => {
     // was still settling would otherwise reload with the tour unfinished (seen once in a full run).
     await expect(page.getByTestId("nd-coach-step-1")).toHaveCount(0);
 
-    await page.reload();
+    await reloadApp(page);
     // The sample is still there (skipping isn't dismissing it), but the tour is done for good.
     await expect(page.getByTestId("nd-sample-strip")).toBeVisible();
     await expect(page.getByTestId("nd-coach-step-1")).toHaveCount(0);
@@ -371,7 +371,7 @@ test.describe("Onboarding - tour step 3, take it anywhere", () => {
       localStorage.setItem("nedito:tourDone", "true");
       localStorage.setItem("nedito:tourVersion", "1");
     });
-    await page.reload();
+    await reloadApp(page);
 
     // The step waits for a real diagram: it is about sharing *this* one.
     await expect(page.getByTestId("nd-coach-step-3")).toHaveCount(0);
@@ -388,7 +388,7 @@ test.describe("Onboarding - tour step 3, take it anywhere", () => {
     await expect(card).not.toContainText("of 3");
 
     await page.getByTestId("nd-coach-skip").click();
-    await page.reload();
+    await reloadApp(page);
     await expect(page.getByTestId("nd-coach-step-3")).toHaveCount(0);
   });
 });
@@ -442,7 +442,7 @@ test.describe("Onboarding - live-link tip on first PNG export", () => {
     await exportPng(page);
     await expect(page.getByTestId("nd-notice")).toHaveCount(0);
 
-    await page.reload();
+    await reloadApp(page);
     await drawSomething(page);
     await exportPng(page);
     await expect(page.getByTestId("nd-notice")).toHaveCount(0);

@@ -55,9 +55,20 @@ export async function gotoFresh(page: Page): Promise<void> {
     // the first-visit 1.8s. m26 exercises the first-visit one deliberately.
     "nedito:splashSeen": "1",
   });
+  // ...and wait for the app to be up before handing back. Most specs here evaluate against the
+  // store within a line or two of opening the page, which races the canvas mounting; on a loaded
+  // runner the evaluate wins and throws `Cannot read properties of undefined`. Waiting once, here,
+  // covers every one of them.
+  await waitForStore(page);
 }
 
-/** A genuinely first-ever visit: no autosave, no onboarding flags, so the sample loads. */
+/**
+ * A genuinely first-ever visit: no autosave, no onboarding flags, so the sample loads.
+ *
+ * Deliberately does **not** wait for the store: the startup screen's spec opens this way to watch
+ * what happens before the canvas mounts — that the screen holds, that a click reaches the canvas
+ * underneath it — and a wait here would step over the very frames it is there to see.
+ */
 export async function gotoFirstVisit(page: Page): Promise<void> {
   await gotoWithStorage(page, {
     "nedito:collapsedSections": "[]",
@@ -65,7 +76,41 @@ export async function gotoFirstVisit(page: Page): Promise<void> {
   });
 }
 
+/**
+ * Waits until the app has attached its store to the page.
+ *
+ * `window.__ddStore` appears when the canvas mounts, which is some way after the navigation
+ * resolves. A spec that navigates or reloads and then evaluates against the store is racing that
+ * mount, and on a loaded CI runner the evaluate wins: the failure is
+ * `Cannot read properties of undefined (reading 'getState')`, thrown in a couple of hundred
+ * milliseconds. An instant failure like that means "too early", so the remedy is to wait for the
+ * thing rather than to raise a timeout.
+ */
+export async function waitForStore(page: Page): Promise<void> {
+  // Short of the 30s a test gets, so a mount that never comes is reported here, in these words,
+  // rather than swallowing the whole budget and surfacing as a bare hook timeout. A mount slower
+  // than this leaves too little of the test left to pass anyway.
+  try {
+    await page.waitForFunction(() => Boolean(window.__ddStore), undefined, { timeout: 25_000 });
+  } catch {
+    throw new Error("The app never attached window.__ddStore: the canvas did not mount within 25s.");
+  }
+}
+
+/**
+ * Reloads and waits for the app to come back up.
+ *
+ * Use this instead of `page.reload()` wherever the test goes on to drive the app. The exception is
+ * a spec about what happens *before* the canvas mounts — the startup screen's, which reloads
+ * deliberately to watch the frames in between and must not be made to wait past them.
+ */
+export async function reloadApp(page: Page): Promise<void> {
+  await page.reload();
+  await waitForStore(page);
+}
+
 export async function getDoc(page: Page): Promise<DiagramDocument> {
+  await waitForStore(page);
   return page.evaluate(() => window.__ddStore!.getState().doc);
 }
 
@@ -82,6 +127,7 @@ export async function runCommand(page: Page, id: string, query = ""): Promise<vo
 }
 
 export async function currentDiagramId(page: Page): Promise<string> {
+  await waitForStore(page);
   return page.evaluate(() => window.__ddStore!.getState().currentDiagramId());
 }
 
