@@ -10,6 +10,7 @@ import {
   useEdgesState,
   useNodesState,
   useReactFlow,
+  useStoreApi,
   useUpdateNodeInternals,
   useViewport,
   type Connection,
@@ -342,6 +343,7 @@ function DiagramCanvasInner() {
 
   const diagram = doc.diagrams[diagramId];
   const { screenToFlowPosition, getViewport, setViewport, getEdges, getNodes } = useReactFlow();
+  const flowStore = useStoreApi();
   const updateNodeInternals = useUpdateNodeInternals();
 
   useEffect(() => {
@@ -413,6 +415,13 @@ function DiagramCanvasInner() {
     // groups (only ever parents, never nested inside another group — flat groups stay flat)
     // go first. A hidden layer's nodes are dropped entirely rather than rendered-but-invisible
     // (hidden layer content doesn't take part in the canvas at all).
+    // While a box is being dragged, React Flow owns what is selected. This effect pushes our
+    // store's idea of it into the canvas, and it re-runs the moment the selection changes — which
+    // happens *during* the drag, overwriting the box's own in-progress state with the selection
+    // from before it started. React Flow then takes the union, so the old selection is folded into
+    // the new one: two shapes, then five, then everything. The gesture's end reconciles both
+    // sides (onSelectionEnd), so nothing is lost by standing back until then.
+    if (boxSelectingRef.current) return;
     const childToGroup = buildChildToGroup(diagram);
     const groupFlowNodes: FlowNode[] = [];
     const otherFlowNodes: FlowNode[] = [];
@@ -491,6 +500,8 @@ function DiagramCanvasInner() {
   // selection change still commits synchronously, exactly as before, so click-driven UI that
   // depends on selection updating immediately (e.g. double-click-to-edit) is unaffected.
   const pendingClearRef = useRef<number | null>(null);
+  /** True between the start and end of a drag-selection; see the node effect for why. */
+  const boxSelectingRef = useRef(false);
   useEffect(() => {
     return () => {
       if (pendingClearRef.current !== null) window.clearTimeout(pendingClearRef.current);
@@ -546,6 +557,50 @@ function DiagramCanvasInner() {
     },
     [setSelection, getEdges, getNodes],
   );
+
+  /**
+   * What React Flow actually has selected, committed at the end of a box-select.
+   *
+   * During a drag React Flow can report a selection that still holds the *previous* one as well as
+   * the new — seen directly by logging both sides: at the end of a second box the canvas had three
+   * nodes selected and this store had all six, including one that was never inside either box. No
+   * further report arrives to correct it, so the two stay apart, every later box adds to the pile,
+   * and once everything is selected React Flow's own multi-selection overlay covers the canvas and
+   * swallows the clicks that would clear it — the editor looks frozen until a reload.
+   *
+   * So the gesture's end re-reads the canvas and commits that, rather than trusting the last
+   * report. This runs after any drag-selection, costs one pass over the nodes, and is the only
+   * thing that can tell the two apart.
+   */
+  /**
+   * A new box-select starts from nothing, unless the author is adding to what they have.
+   *
+   * Without this the previous selection is still in hand when the box begins, and the new one is
+   * laid on top of it: drag a box over two shapes, then another over three elsewhere, and all five
+   * end up selected — then eight, then everything. Clearing first is what makes a box replace
+   * rather than accumulate, which is what every other tool does and what the author expects.
+   * Shift is React Flow's own multi-selection key, so holding it still adds.
+   */
+  const startSelectionBox = useCallback(
+    (event: React.MouseEvent) => {
+      boxSelectingRef.current = true;
+      if (event.shiftKey) return;
+      // React Flow's own selection is cleared directly rather than by letting our store's change
+      // reach it through a render: a render is a frame away, and the box is computed before that
+      // frame lands, which left the old selection in the new box about one drag in six.
+      flowStore.getState().unselectNodesAndEdges();
+      useDocStore.getState().clearSelection();
+    },
+    [flowStore],
+  );
+
+  const reconcileSelection = useCallback(() => {
+    boxSelectingRef.current = false;
+    onSelectionChange({
+      nodes: getNodes().filter((n) => n.selected),
+      edges: getEdges().filter((e) => e.selected),
+    });
+  }, [onSelectionChange, getNodes, getEdges]);
 
   const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
@@ -837,6 +892,8 @@ function DiagramCanvasInner() {
         zoomOnScroll={false}
         zoomOnPinch
         selectionOnDrag={!viewerMode}
+        onSelectionStart={startSelectionBox}
+        onSelectionEnd={reconcileSelection}
         snapToGrid={snapEnabled}
         snapGrid={snapGrid}
         deleteKeyCode={null}
