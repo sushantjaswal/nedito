@@ -28,8 +28,23 @@ export function NoteMarker({ nodeId }: { nodeId: string }) {
   // call, which a store compares by identity and reads as a change — one marker on the canvas was
   // enough to re-render the editor until React gave up. Filter after selecting, memoised.
   const all = useDocStore((s) => s.doc.notes);
+  const show = useDocStore((s) => s.ui.noteMarkers);
+  const numbered = useDocStore((s) => s.ui.noteNumbers);
   const notes = useMemo(() => notesNaming(all, diagramId, nodeId), [all, diagramId, nodeId]);
-  if (notes.length === 0) return null;
+  /**
+   * What a numbered marker says: where this shape comes in the reading order. A shape with several
+   * notes shows the span they cover — "1–2" — since a single number would hide the rest, and new
+   * notes join their siblings so a span is normally the run of them (model/notes.ts).
+   */
+  const place = useMemo(() => {
+    const order = all ?? [];
+    const places = notes.map((n) => order.indexOf(n) + 1).filter((p) => p > 0);
+    if (places.length === 0) return "";
+    const first = Math.min(...places);
+    const last = Math.max(...places);
+    return first === last ? `${first}` : `${first}–${last}`;
+  }, [all, notes]);
+  if (!show || notes.length === 0) return null;
 
   const label = notes.length === 1 ? "1 note about this" : `${notes.length} notes about this`;
   return (
@@ -37,15 +52,19 @@ export function NoteMarker({ nodeId }: { nodeId: string }) {
       type="button"
       className={`${styles.marker} nd-note-marker nodrag`}
       title={peekOf(notes)}
-      aria-label={label}
+      aria-label={numbered ? `${label}, ${notes.length === 1 ? "note" : "notes"} ${place} in reading order` : label}
       onClick={(e) => {
         e.stopPropagation();
         openNoteAndReveal(notes[0].id);
       }}
       data-testid={`nd-note-marker-${nodeId}`}
     >
-      {/* A bare dot on a shape three notes talk about would be a lie, so past one it counts. */}
-      {notes.length > 1 ? notes.length : ""}
+      {/*
+        Numbered, a marker shows where this shape comes in the reading order, so a set of notes
+        reads as a walk through the diagram. Otherwise it shows how many notes are here — and a
+        bare dot on a shape three notes talk about would be a lie, so past one it counts.
+      */}
+      {numbered ? place : notes.length > 1 ? notes.length : ""}
     </button>
   );
 }
@@ -58,8 +77,9 @@ export function NestedNoteMarker({ childDiagramId }: { childDiagramId: string })
   // Counting what is below needs the diagram graph as well as the notes, so this one selects the
   // document and memoises on it — same reason as above: never return a fresh array from a selector.
   const doc = useDocStore((s) => s.doc);
+  const show = useDocStore((s) => s.ui.noteMarkers);
   const notes = useMemo(() => notesBelow(doc, childDiagramId), [doc, childDiagramId]);
-  if (notes.length === 0) return null;
+  if (!show || notes.length === 0) return null;
 
   return (
     <button

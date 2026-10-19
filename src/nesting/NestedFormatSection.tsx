@@ -5,7 +5,6 @@ import { StencilGlyph } from "../library/stencils/StencilGlyph";
 import { useDocStore } from "../model/store";
 import type { NestedNode, Port } from "../model/types";
 import { navigateIntoNested } from "./navigation";
-import { NoteControl } from "../notes/NoteControl";
 import styles from "./NestedFormatSection.module.css";
 
 const MAX_ICONS = 4;
@@ -174,7 +173,6 @@ export function NestedFormatSection({ nestedNode }: NestedFormatSectionProps) {
           </button>
         </div>
       )}
-      <NoteControl nodeId={nestedNode.id} />
     </div>
   );
 }

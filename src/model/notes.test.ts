@@ -2,7 +2,7 @@
 // never lost because something it named was deleted. These are the four things NT1 has to prove.
 import { describe, expect, it } from "vitest";
 import { CURRENT_FORMAT_VERSION, decodeDoc, encodeDoc, writtenVersion } from "../file/documentFormat";
-import { noteTitle, pruneNotes, resolveNotes } from "./notes";
+import { noteInsertionIndex, noteTitle, pruneNotes, resolveNotes } from "./notes";
 import type { DiagramDocument, DEdge, DNode, Note, ShapeNode } from "./types";
 import { useDocStore } from "./store";
 import { validateDoc } from "./validate";
@@ -250,5 +250,43 @@ describe("the open note is session state", () => {
     expect(store().doc.notes).toBeUndefined();
     expect(store().ui.openNoteId).toBeNull();
     expect(id).toBeTruthy();
+  });
+});
+
+describe("where a new note goes in the reading order", () => {
+  const about = (ids: string[]) => ({ diagramId: "d1", nodeIds: ids });
+
+  it("joins the notes about the same shape instead of landing at the end", () => {
+    const notes = [note("n1", about(["a"])), note("n2", about(["b"])), note("n3", about(["c"]))];
+    // A second note about "a" belongs beside the first, not after everything else: a walk through
+    // a diagram does not visit the same box twice.
+    expect(noteInsertionIndex(notes, about(["a"]))).toBe(1);
+    expect(noteInsertionIndex(notes, about(["b"]))).toBe(2);
+    expect(noteInsertionIndex(notes, about(["c"]))).toBe(3);
+  });
+
+  it("goes after the last of them when a shape already has several", () => {
+    const notes = [note("n1", about(["a"])), note("n2", about(["a"])), note("n3", about(["b"]))];
+    expect(noteInsertionIndex(notes, about(["a"]))).toBe(2);
+  });
+
+  it("goes at the end when nothing it names has been written about", () => {
+    const notes = [note("n1", about(["a"]))];
+    expect(noteInsertionIndex(notes, about(["new"]))).toBe(1);
+  });
+
+  it("puts a note about the whole level at the end, having no shape to join", () => {
+    const notes = [note("n1", about(["a"])), note("n2", about(["b"]))];
+    expect(noteInsertionIndex(notes, { diagramId: "d1" })).toBe(2);
+  });
+
+  it("does not join a note on another level that happens to share an id", () => {
+    const notes = [note("n1", { diagramId: "elsewhere", nodeIds: ["a"] })];
+    expect(noteInsertionIndex(notes, about(["a"]))).toBe(1);
+  });
+
+  it("joins the run when a note names several shapes and one of them is already written about", () => {
+    const notes = [note("n1", about(["a"])), note("n2", about(["z"]))];
+    expect(noteInsertionIndex(notes, about(["a", "b"]))).toBe(1);
   });
 });

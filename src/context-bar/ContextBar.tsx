@@ -22,6 +22,7 @@ import type { GroupNode } from "../model/types";
 import { navigateIntoNested } from "../nesting/navigation";
 import { NestedFormatSection } from "../nesting/NestedFormatSection";
 import { ArrangeSection } from "../format-panel/ArrangeSection";
+import { NoteControl } from "../notes/NoteControl";
 import { EdgeSection, EffectsSection, FillSection, ImageSection, LineSection } from "../format-panel/StyleSections";
 import { useImageActions } from "../format-panel/selectionKinds";
 import { MotionSection } from "./MotionSection";
@@ -186,6 +187,7 @@ export function ContextBar() {
       {open === "edge" && <EdgeSection edges={edges} />}
       {open === "nested" && single?.type === "nested" && <NestedFormatSection nestedNode={single} />}
       {open === "motion" && <MotionSection nodes={nodes} />}
+      {open === "note" && <NoteControl nodeId={nodes.length === 1 && edges.length === 0 ? nodes[0].id : undefined} />}
     </div>
   );
 

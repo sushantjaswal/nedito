@@ -14,7 +14,7 @@
 //     deletion brings the note back with it.
 //
 // Validation treats neither as an error. There is a test for that, because it reads like a bug.
-import type { DiagramDocument, Note } from "./types";
+import type { DiagramDocument, Note, NoteFocus } from "./types";
 
 /** Every node and edge id on one level, for resolving what a note names. */
 function idsOn(doc: DiagramDocument, diagramId: string): Set<string> | null {
@@ -83,6 +83,29 @@ function canonical(note: Note): Note {
       ...(note.focus.edgeIds?.length ? { edgeIds: note.focus.edgeIds } : {}),
     },
   };
+}
+
+/**
+ * Where a new note belongs in the reading order: **beside the notes about the same thing**, not at
+ * the end of the document.
+ *
+ * Appending looked right until a shape had two notes. The second one landed wherever the document
+ * happened to end — a shape with notes 1 and 8, with six unrelated notes between them — and the
+ * reading order stopped meaning anything, because a walk through a diagram does not visit the same
+ * box twice. A note about something joins the run of notes about that same something.
+ *
+ * A note about the level as a whole has no shape to join, so it goes at the end.
+ */
+export function noteInsertionIndex(notes: Note[], focus: NoteFocus): number {
+  const named = new Set([...(focus.nodeIds ?? []), ...(focus.edgeIds ?? [])]);
+  if (named.size === 0) return notes.length;
+  let after = -1;
+  notes.forEach((note, i) => {
+    if (note.focus.diagramId !== focus.diagramId) return;
+    const theirs = [...(note.focus.nodeIds ?? []), ...(note.focus.edgeIds ?? [])];
+    if (theirs.some((id) => named.has(id))) after = i;
+  });
+  return after === -1 ? notes.length : after + 1;
 }
 
 /** What a note is called in a list: its title, or the first line of what it says. */
