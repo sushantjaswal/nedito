@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { afterAll, describe, expect, it } from "vitest";
-import { settleLazyLoads } from "../testLazyLoads";
+import { SETTLE_TIMEOUT_MS, settleLazyLoads } from "../testLazyLoads";
 import { writeCollapsedSections } from "../library/collapsedSections";
 import { AppShell } from "./AppShell";
 
@@ -26,4 +26,4 @@ describe("AppShell", () => {
 });
 
 // Wait for the lazy loads rendering started, before Vitest tears the environment down.
-afterAll(settleLazyLoads);
+afterAll(settleLazyLoads, SETTLE_TIMEOUT_MS);

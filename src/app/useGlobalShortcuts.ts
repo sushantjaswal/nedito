@@ -15,9 +15,9 @@ import { navigateBackOut } from "../nesting/navigation";
 import { imageFilesIn, insertImageFiles } from "./insertImage";
 import { markShapesInEvent } from "./systemClipboard";
 import { openFilePicker, saveCopy } from "./fileActions";
-import { stepNote } from "../notes/noteNavigation";
-import { addNoteHere } from "../notes/addNote";
-import { openNoteAndReveal } from "../notes/revealNote";
+import { stepComment } from "../comments/commentNavigation";
+import { addCommentHere } from "../comments/addComment";
+import { openCommentAndReveal } from "../comments/revealComment";
 import type { Side } from "../model/connectedCopy";
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -204,14 +204,14 @@ export function useGlobalShortcuts(): void {
         return;
       }
       if (e.key === "Escape") {
-        // The notes precedence, ahead of the rest: the list first, then the text edit the existing
-        // chain already handled, then the open note and the trace it brought with it.
-        if (store.ui.noteListOpen) store.setNoteListOpen(false);
+        // The comments precedence, ahead of the rest: the list first, then the text edit the existing
+        // chain already handled, then the open comment and the trace it brought with it.
+        if (store.ui.commentListOpen) store.setCommentListOpen(false);
         else if (store.editingNodeId) store.setEditingNodeId(null);
         else if (store.editingEdgeId) store.setEditingEdgeId(null);
-        else if (store.ui.openNoteId) {
+        else if (store.ui.openCommentId) {
           store.setTrace(null);
-          store.closeNote();
+          store.closeComment();
         } else if (store.selection.nodeIds.length > 0 || store.selection.edgeIds.length > 0) store.clearSelection();
         // A trace ends before the level is left (D117).
         else if (store.trace) store.setTrace(null);
@@ -221,21 +221,22 @@ export function useGlobalShortcuts(): void {
         return;
       }
 
-      // Alt+N writes a note about what is selected, or about the level when nothing is.
-      if (e.altKey && !e.shiftKey && !mod && (e.key === "n" || e.key === "N")) {
+      // Alt+C writes a comment about the one shape or line selected. C for comment: N stood for
+      // the word this feature used to go by, and nothing else.
+      if (e.altKey && !e.shiftKey && !mod && (e.key === "c" || e.key === "C")) {
         e.preventDefault();
-        addNoteHere();
+        addCommentHere();
         return;
       }
 
-      // Alt+Left / Alt+Right step between notes. Plain arrow keys still nudge the selected shapes
+      // Alt+Left / Alt+Right step between comments. Plain arrow keys still nudge the selected shapes
       // in the editor, which the scope is explicit must not be rebound, and Shift is the
       // clone-and-connect gesture below, so this takes neither.
       if (e.altKey && !e.shiftKey && !mod && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
-        const next = stepNote(store.doc, store.ui.openNoteId, e.key === "ArrowRight" ? 1 : -1);
+        const next = stepComment(store.doc, store.ui.openCommentId, e.key === "ArrowRight" ? 1 : -1);
         if (next) {
           e.preventDefault();
-          openNoteAndReveal(next.id);
+          openCommentAndReveal(next.id);
           return;
         }
       }

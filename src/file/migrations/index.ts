@@ -66,12 +66,25 @@ const MIGRATIONS: Record<number, MigrationFn> = {
   4: migrateV4ToV5,
   // v6 only adds optional motion properties (D116): nothing in a v5 file changes.
   5: bumpTo(6),
-  // v7 only adds the optional `notes` array: nothing in a v6 file changes either.
+  // v7 only adds the optional `comments` array: nothing in a v6 file changes either.
+  // (Early v7 files spelled that array `notes` — see renameNotesKey below.)
   6: bumpTo(7),
 };
 
+/**
+ * The first v7 files called the comments array `notes`, before the feature took the word every
+ * reader already knows. Those files are read forever, like every older formatId: the key moves
+ * across on the way in, and the document is written back with the current name. No migration step
+ * can do this, because such a file already says 7 and so passes the chain untouched.
+ */
+function renameNotesKey(raw: Record<string, unknown>): Record<string, unknown> {
+  if (!("notes" in raw)) return raw;
+  const { notes, ...rest } = raw;
+  return "comments" in rest ? rest : { ...rest, comments: notes };
+}
+
 export function migrate(raw: Record<string, unknown>): Record<string, unknown> {
-  let current = raw;
+  let current = renameNotesKey(raw);
   let version = current.formatVersion as number;
   while (typeof version === "number" && MIGRATIONS[version]) {
     current = MIGRATIONS[version](current);

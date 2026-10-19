@@ -6,7 +6,7 @@ import { isFreeEnd } from "../model/edgeEnds";
 import { allPictures, styledShapes, useImageActions } from "../format-panel/selectionKinds";
 import styles from "./ContextBar.module.css";
 
-export type PopoverId = "fill" | "line" | "image" | "text" | "arrange" | "edge" | "more" | "nested" | "motion";
+export type PopoverId = "fill" | "line" | "image" | "text" | "arrange" | "edge" | "more" | "nested" | "motion" | "comment";
 
 interface BarButton {
   id: string;
@@ -73,6 +73,7 @@ export function barButtonsFor(
     buttons.push({ id: "motion", label: "Motion", content: <>Motion</>, popover: "motion" });
     if (actions.trace) buttons.push({ id: "trace", label: actions.tracing === nested.id ? "Stop tracing" : "Trace", content: <>{actions.tracing === nested.id ? "Stop" : "Trace"}</>, run: () => actions.trace!(nested.id) });
     buttons.push({ id: "arrange", label: "Arrange", content: <>Arrange</>, popover: "arrange" });
+    buttons.push(commentButton());
     return buttons;
   }
 
@@ -105,8 +106,19 @@ export function barButtonsFor(
     const on = actions.tracing === id;
     buttons.push({ id: "trace", label: on ? "Stop tracing" : "Trace", content: <>{on ? "Stop" : "Trace"}</>, run: () => actions.trace!(id) });
   }
+  // Comment before More: three dots mean "everything else", so nothing follows them.
+  buttons.push(commentButton());
   if (shapes.length > 0 && !pictures) buttons.push({ id: "more", label: "More", content: <>•••</>, popover: "more" });
   return buttons;
+}
+
+/**
+ * A comment is a first-class thing to do with a shape, so it gets its own button beside Trace rather
+ * than a line at the bottom of a popover about fills or ports — which is where it lived at first,
+ * in a different place for every kind of selection, and nobody found it.
+ */
+function commentButton(): BarButton {
+  return { id: "comment", label: "Comment", content: <>Comment</>, popover: "comment" };
 }
 
 export const TITLES: Record<PopoverId, string> = {
@@ -117,6 +129,7 @@ export const TITLES: Record<PopoverId, string> = {
   arrange: "Arrange",
   edge: "Lines",
   more: "More",
+  comment: "Comment",
   nested: "Nested Block",
   motion: "Motion",
 };

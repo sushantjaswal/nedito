@@ -4,10 +4,12 @@
 // one click each; Page opens a small popover with the page size, orientation and background, and
 // the palette's Diagram Settings opens that popover too. Since R2 (D91) the Layers and Outline
 // panels, which the View menu used to open, toggle here as well.
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDocStore } from "../model/store";
+import { isBlank } from "../model/comments";
 import { matchPreset, orientationOf, PAGE_PRESETS } from "../model/pageSize";
 import { PageSettings } from "../format-panel/PageSettings";
+import { CommentsChipPopover } from "../comments/CommentsChipPopover";
 import styles from "./CanvasChip.module.css";
 
 /** What the Page button says: the page size in use, or that the canvas is unbounded. */
@@ -29,10 +31,41 @@ export function CanvasChip() {
   const toggleOutline = useDocStore((s) => s.toggleMinimap);
   const open = useDocStore((s) => s.ui.pageSettingsOpen);
   const setOpen = useDocStore((s) => s.setPageSettingsOpen);
+  // Blank ones do not count: one exists only while its card is open, and the chip would
+  // otherwise read "Comments 1" over a comment with nothing in it.
+  const allComments = useDocStore((s) => s.doc.comments);
+  const commentCount = useMemo(() => (allComments ?? []).filter((c) => !isBlank(c)).length, [allComments]);
+  const commentsOpen = useDocStore((s) => s.ui.commentListOpen);
+  const commentMarkers = useDocStore((s) => s.ui.commentMarkers);
+  const setCommentListOpen = useDocStore((s) => s.setCommentListOpen);
   const pageSize = useDocStore((s) => s.doc.diagrams[s.currentDiagramId()]?.pageSize);
   const viewerMode = useDocStore((s) => s.ui.viewerMode);
   const rootRef = useRef<HTMLDivElement>(null);
   const pageButtonRef = useRef<HTMLButtonElement>(null);
+  const commentsButtonRef = useRef<HTMLButtonElement>(null);
+
+  // The Comments popover answers Esc and an outside click the same way the Page one does. It needs
+  // its own listener rather than the global Escape chain: the chip stops key events from leaving
+  // it, so a press inside here never reaches the window handler that chain lives on.
+  useEffect(() => {
+    if (!commentsOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      setCommentListOpen(false);
+      commentsButtonRef.current?.focus();
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setCommentListOpen(false);
+    };
+    window.addEventListener("keydown", onKey, true);
+    window.addEventListener("pointerdown", onDown, true);
+    return () => {
+      window.removeEventListener("keydown", onKey, true);
+      window.removeEventListener("pointerdown", onDown, true);
+    };
+  }, [commentsOpen, setCommentListOpen]);
 
   // Esc or a click elsewhere closes the popover; Esc hands focus back to the Page button.
   useEffect(() => {
@@ -64,6 +97,12 @@ export function CanvasChip() {
       onPointerDown={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
+      {commentsOpen && commentCount > 0 && (
+        <div className={styles.popover} role="dialog" aria-label="Comments" data-testid="nd-comments-popover">
+          <h4 className={styles.title}>Comments</h4>
+          <CommentsChipPopover />
+        </div>
+      )}
       {open && (
         <div className={styles.popover} role="dialog" aria-label="Page" data-testid="nd-page-popover">
           <h4 className={styles.title}>Page</h4>
@@ -101,6 +140,25 @@ export function CanvasChip() {
           <span className={outlineOpen ? `${styles.dot} ${styles.dotOn}` : styles.dot} aria-hidden="true" />
           Outline
         </button>
+        {/* Comments belongs here rather than in a bar of its own: it is a canvas-wide switch like its
+            neighbours, and as a separate strip it appeared beside this one from nowhere the moment
+            a comment existed, reading as a ragged extension of it. Shown only when the document has
+            comments, so a canvas without any is exactly as it was. */}
+        {commentCount > 0 && (
+          <button
+            ref={commentsButtonRef}
+            type="button"
+            className={styles.button}
+            aria-haspopup="dialog"
+            aria-expanded={commentsOpen}
+            onClick={() => setCommentListOpen(!commentsOpen)}
+            title="Comments on this document"
+            data-testid="nd-comments-button"
+          >
+            <span className={commentMarkers ? `${styles.dot} ${styles.dotOn}` : styles.dot} aria-hidden="true" />
+            Comments {commentCount}
+          </button>
+        )}
         <button
           ref={pageButtonRef}
           type="button"

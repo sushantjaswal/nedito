@@ -45,7 +45,7 @@ describe("encodeDoc", () => {
     // The lowest version that describes the document: v2 without images (D79). Images and v3
     // are covered in model/assets.test.ts.
     expect(parsed.formatVersion).toBe(2);
-    // Notes made the newest version 7 (model/notes.ts); an empty document still says 2.
+    // Comments made the newest version 7 (model/comments.ts); an empty document still says 2.
     expect(CURRENT_FORMAT_VERSION).toBe(7);
   });
 
@@ -218,5 +218,19 @@ describe("appVersion (D110)", () => {
       .filter((f) => literal.test(readFileSync(f, "utf8")));
     expect(offenders).toEqual([]);
     expect(version).toMatch(/^\d+\.\d+\.\d+/);
+  });
+  // The comments array was called `notes` in the first v7 files the app ever wrote. Those say 7
+  // already, so no migration step sees them: the key is moved on the way in instead, and a file
+  // that has both is left alone rather than guessed at.
+  it("opens an early v7 file whose comments were written as notes", () => {
+    const doc = emptyDoc();
+    const raw = JSON.parse(encodeDoc(doc)) as Record<string, unknown>;
+    raw.formatVersion = 7;
+    raw.notes = [{ id: "n1", body: "Why this is here.", focus: { diagramId: "root" } }];
+    const decoded = decodeDoc(JSON.stringify(raw));
+    expect(decoded.ok).toBe(true);
+    if (!decoded.ok) return;
+    expect(decoded.doc.comments?.map((c) => c.body)).toEqual(["Why this is here."]);
+    expect((decoded.doc as unknown as Record<string, unknown>).notes).toBeUndefined();
   });
 });

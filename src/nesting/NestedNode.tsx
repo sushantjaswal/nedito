@@ -11,6 +11,7 @@ import type { NestedNode as NestedNodeModel, Port, RichLabel } from "../model/ty
 import { navigateIntoNested } from "./navigation";
 import { NestedMiniature } from "./NestedMiniature";
 import { HealthBadge } from "../canvas/HealthBadge";
+import { NestedCommentMarker, CommentMarker } from "../comments/CommentMarker";
 import { StepBadge, type StepBadgeKind } from "../canvas/StepBadge";
 import { firstPeek } from "./peek";
 import { PortHandle } from "./PortHandle";
@@ -106,6 +107,8 @@ function NestedNodeComponent({ id, data, selected, width, height }: NodeProps<Fl
       <div className={styles.ghost2} />
       <div className={styles.ghost1} />
       {node.motion?.health && <HealthBadge state={node.motion.health} />}
+      <CommentMarker nodeId={node.id} />
+      <NestedCommentMarker childDiagramId={node.childDiagramId} />
       {data.step && <StepBadge n={data.step.n} kind={data.step.kind} />}
       {/* Pulse (D116). The ripple sits beside the body, which clips its overflow. */}
       {node.motion?.pulse && <span className="nd-anim nd-glow" aria-hidden="true" />}

@@ -1,0 +1,100 @@
+/* The Comments popover's own contents; the panel around it is the canvas chip's. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 240px;
+  max-width: 300px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.check input:disabled + * ,
+.check:has(input:disabled) {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.hint {
+  margin: 0;
+  color: var(--nd-color-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  max-height: 168px;
+  overflow-y: auto;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--nd-color-grid);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 6px;
+  background: transparent;
+  color: var(--nd-color-ink);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--nd-color-nest-soft-fill);
+}
+
+.rowOpen {
+  background: var(--nd-color-nest-soft-fill);
+  font-weight: 600;
+}
+
+.rowNumber {
+  min-width: 14px;
+  color: var(--nd-color-muted);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.depth {
+  color: var(--nd-color-muted);
+  font-size: 10px;
+}
+
+.rowTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add {
+  align-self: flex-start;
+  border: 1px solid var(--nd-color-nest-accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-nest-deep);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.add:hover,
+.add:focus-visible {
+  background: var(--nd-color-nest-accent);
+  color: #ffffff;
+}

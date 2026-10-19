@@ -299,6 +299,12 @@
   animation: none !important;
 }
 
+/* Note markers are per-shape ornaments: they go with the rest once the canvas is too far out to
+   read them (P1). */
+.nd-lod .nd-note-marker {
+  display: none;
+}
+
 .nd-motion-off .nd-packet-moving,
 .nd-lod .nd-packet-moving,
 .nd-motion-off .nd-walk-dot,

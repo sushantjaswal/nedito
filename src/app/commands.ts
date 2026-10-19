@@ -14,7 +14,7 @@ import { chooseAndInsertImages, pasteFromMenu } from "./insertImage";
 import { markShapesOnSystemClipboard } from "./systemClipboard";
 import { showAbout, startQuickTour } from "./helpActions";
 import { convertSelectionAndName } from "../nesting/navigation";
-import { addNoteHere } from "../notes/addNote";
+import { addCommentHere } from "../comments/addComment";
 import { BRAND } from "./brand";
 import type { Side } from "../model/connectedCopy";
 import {
@@ -202,26 +202,28 @@ export function getCommands(): Command[] {
       run: () => store().tidyUp({ scope: "all-levels" }),
     },
 
-    // ---- notes (model/notes.ts). Commands only for now: a note has no card to open yet, so the
+    // ---- comments (model/comments.ts). Commands only for now: a comment has no card to open yet, so the
     // one just added is the one the delete command acts on.
     {
-      id: "add-note",
+      id: "add-comment",
       // Not "...About Selection": the palette matches on the label, and the word about belongs to
-      // the About command — typing it opened a new note instead (caught by the About e2e spec).
-      label: hasNodes || s.selection.edgeIds.length > 0 ? "Add Note to Selection" : "Add Note for This Level",
+      // the About command — typing it opened a new comment instead (caught by the About e2e spec).
+      // A comment belongs to an icon, so there is nothing to write about with nothing selected.
+      label: "Add Comment",
       group: "Arrange",
-      keywords: ["note", "notes", "comment", "annotate", "why", "write"],
-      disabled: s.ui.viewerMode,
-      shortcut: "Alt+N",
-      run: () => void addNoteHere(),
+      keywords: ["comment", "comments", "annotate", "note", "why", "write"],
+      // One icon, one comment: a comment is about a single shape or line, never a selection of them.
+      disabled: s.ui.viewerMode || nodeIds.length + s.selection.edgeIds.length !== 1,
+      shortcut: "Alt+C",
+      run: () => void addCommentHere(),
     },
     {
-      id: "delete-note",
-      label: "Delete Note",
+      id: "delete-comment",
+      label: "Delete Comment",
       group: "Arrange",
-      keywords: ["note", "notes", "remove note"],
-      disabled: s.ui.viewerMode || !s.ui.openNoteId,
-      run: () => s.ui.openNoteId && store().deleteNote(s.ui.openNoteId),
+      keywords: ["comment", "comments", "remove comment", "note"],
+      disabled: s.ui.viewerMode || !s.ui.openCommentId,
+      run: () => s.ui.openCommentId && store().deleteComment(s.ui.openCommentId),
     },
 
     // ---- the page and the app

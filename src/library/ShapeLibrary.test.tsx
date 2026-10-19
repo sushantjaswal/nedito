@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
-import { settleLazyLoads } from "../testLazyLoads";
+import { SETTLE_TIMEOUT_MS, settleLazyLoads } from "../testLazyLoads";
 import { useDocStore } from "../model/store";
 import { writeCollapsedSections } from "./collapsedSections";
 import { ShapeLibrary } from "./ShapeLibrary";
@@ -262,4 +262,4 @@ describe("ShapeLibrary", () => {
 });
 
 // Wait for the lazy loads rendering started, before Vitest tears the environment down.
-afterAll(settleLazyLoads);
+afterAll(settleLazyLoads, SETTLE_TIMEOUT_MS);

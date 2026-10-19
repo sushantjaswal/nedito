@@ -2,7 +2,7 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { settleLazyLoads } from "../testLazyLoads";
+import { SETTLE_TIMEOUT_MS, settleLazyLoads } from "../testLazyLoads";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 let shouldThrow = true;
@@ -99,4 +99,4 @@ describe("AppShell with a broken region", () => {
 });
 
 // Wait for the lazy loads rendering started, before Vitest tears the environment down.
-afterAll(settleLazyLoads);
+afterAll(settleLazyLoads, SETTLE_TIMEOUT_MS);
