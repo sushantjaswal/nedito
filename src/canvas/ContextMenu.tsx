@@ -76,9 +76,6 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
     groups.push([
       { label: "Insert image…", onClick: run(() => void pickImageFiles(true).then((files) => insertImageFiles(files, at))) },
     ]);
-    if (!viewerMode) {
-      groups.push([{ label: "Add note about this level", onClick: run(() => void addNoteHere("level")) }]);
-    }
     // Auto-layout with nothing selected: the level, and the levels under it when there are any.
     if (canTidy) {
       const tidy: MenuItem[] = [

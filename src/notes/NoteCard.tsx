@@ -20,11 +20,10 @@ export function NoteCard() {
   const cardSide = useDocStore((s) => s.ui.cardSide);
   const viewerMode = useDocStore((s) => s.ui.viewerMode);
   const doc = useDocStore((s) => s.doc);
-  const selection = useDocStore((s) => s.selection);
   const closeNote = useDocStore((s) => s.closeNote);
   const setTrace = useDocStore((s) => s.setTrace);
   const updateNote = useDocStore((s) => s.updateNote);
-  const setNoteFocus = useDocStore((s) => s.setNoteFocus);
+  const deleteNote = useDocStore((s) => s.deleteNote);
   const title = useEditSession();
   const body = useEditSession();
   const titleField = useRef<HTMLInputElement>(null);
@@ -62,13 +61,6 @@ export function NoteCard() {
     setTrace(null);
     closeNote();
   };
-  // What the note would be about if it were re-pointed at what is selected now.
-  const selected = [...selection.nodeIds, ...selection.edgeIds];
-  const describesSelection =
-    selected.length > 0 &&
-    selected.length === (entry.note.focus.nodeIds?.length ?? 0) + (entry.note.focus.edgeIds?.length ?? 0) &&
-    selected.every((id) => entry.note.focus.nodeIds?.includes(id) || entry.note.focus.edgeIds?.includes(id));
-
   return (
     <div
       className={`${styles.card} ${narrow ? styles.narrow : cardSide === "left" ? styles.left : styles.right} nodrag nopan nowheel`}
@@ -122,22 +114,6 @@ export function NoteCard() {
             }}
             data-testid="nd-note-card-body"
           />
-          {selected.length > 0 && !describesSelection && (
-            <button
-              type="button"
-              className={styles.retarget}
-              onClick={() =>
-                setNoteFocus(entry.note.id, {
-                  diagramId: entry.note.focus.diagramId,
-                  ...(selection.nodeIds.length > 0 ? { nodeIds: selection.nodeIds } : {}),
-                  ...(selection.edgeIds.length > 0 ? { edgeIds: selection.edgeIds } : {}),
-                })
-              }
-              data-testid="nd-note-card-retarget"
-            >
-              Set to selection ({selected.length})
-            </button>
-          )}
         </>
       )}
 
@@ -165,6 +141,23 @@ export function NoteCard() {
         >
           →
         </button>
+        {!viewerMode && (
+          <button
+            type="button"
+            className={styles.delete}
+            onClick={() => {
+              setTrace(null);
+              deleteNote(entry.note.id);
+            }}
+            // No prompt: this is one undo step like everything else, and a dialog over a sentence
+            // someone wrote is heavier than the thing it guards.
+            title="Delete this note (Ctrl+Z puts it back)"
+            aria-label="Delete note"
+            data-testid="nd-note-card-delete"
+          >
+            Delete
+          </button>
+        )}
         <button type="button" className={styles.close} onClick={close} aria-label="Close note" data-testid="nd-note-card-close">
           ✕
         </button>

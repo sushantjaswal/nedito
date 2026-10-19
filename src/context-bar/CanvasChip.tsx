@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import { useDocStore } from "../model/store";
 import { matchPreset, orientationOf, PAGE_PRESETS } from "../model/pageSize";
 import { PageSettings } from "../format-panel/PageSettings";
+import { NotesChipPopover } from "../notes/NotesChipPopover";
 import styles from "./CanvasChip.module.css";
 
 /** What the Page button says: the page size in use, or that the canvas is unbounded. */
@@ -29,10 +30,38 @@ export function CanvasChip() {
   const toggleOutline = useDocStore((s) => s.toggleMinimap);
   const open = useDocStore((s) => s.ui.pageSettingsOpen);
   const setOpen = useDocStore((s) => s.setPageSettingsOpen);
+  const noteCount = useDocStore((s) => s.doc.notes?.length ?? 0);
+  const notesOpen = useDocStore((s) => s.ui.noteListOpen);
+  const noteMarkers = useDocStore((s) => s.ui.noteMarkers);
+  const setNoteListOpen = useDocStore((s) => s.setNoteListOpen);
   const pageSize = useDocStore((s) => s.doc.diagrams[s.currentDiagramId()]?.pageSize);
   const viewerMode = useDocStore((s) => s.ui.viewerMode);
   const rootRef = useRef<HTMLDivElement>(null);
   const pageButtonRef = useRef<HTMLButtonElement>(null);
+  const notesButtonRef = useRef<HTMLButtonElement>(null);
+
+  // The Notes popover answers Esc and an outside click the same way the Page one does. It needs
+  // its own listener rather than the global Escape chain: the chip stops key events from leaving
+  // it, so a press inside here never reaches the window handler that chain lives on.
+  useEffect(() => {
+    if (!notesOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      setNoteListOpen(false);
+      notesButtonRef.current?.focus();
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setNoteListOpen(false);
+    };
+    window.addEventListener("keydown", onKey, true);
+    window.addEventListener("pointerdown", onDown, true);
+    return () => {
+      window.removeEventListener("keydown", onKey, true);
+      window.removeEventListener("pointerdown", onDown, true);
+    };
+  }, [notesOpen, setNoteListOpen]);
 
   // Esc or a click elsewhere closes the popover; Esc hands focus back to the Page button.
   useEffect(() => {
@@ -64,6 +93,12 @@ export function CanvasChip() {
       onPointerDown={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >
+      {notesOpen && noteCount > 0 && (
+        <div className={styles.popover} role="dialog" aria-label="Notes" data-testid="nd-notes-popover">
+          <h4 className={styles.title}>Notes</h4>
+          <NotesChipPopover />
+        </div>
+      )}
       {open && (
         <div className={styles.popover} role="dialog" aria-label="Page" data-testid="nd-page-popover">
           <h4 className={styles.title}>Page</h4>
@@ -101,6 +136,25 @@ export function CanvasChip() {
           <span className={outlineOpen ? `${styles.dot} ${styles.dotOn}` : styles.dot} aria-hidden="true" />
           Outline
         </button>
+        {/* Notes belongs here rather than in a bar of its own: it is a canvas-wide switch like its
+            neighbours, and as a separate strip it appeared beside this one from nowhere the moment
+            a note existed, reading as a ragged extension of it. Shown only when the document has
+            notes, so a canvas without any is exactly as it was. */}
+        {noteCount > 0 && (
+          <button
+            ref={notesButtonRef}
+            type="button"
+            className={styles.button}
+            aria-haspopup="dialog"
+            aria-expanded={notesOpen}
+            onClick={() => setNoteListOpen(!notesOpen)}
+            title="Notes on this document"
+            data-testid="nd-notes-button"
+          >
+            <span className={noteMarkers ? `${styles.dot} ${styles.dotOn}` : styles.dot} aria-hidden="true" />
+            Notes {noteCount}
+          </button>
+        )}
         <button
           ref={pageButtonRef}
           type="button"

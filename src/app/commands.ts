@@ -208,10 +208,11 @@ export function getCommands(): Command[] {
       id: "add-note",
       // Not "...About Selection": the palette matches on the label, and the word about belongs to
       // the About command — typing it opened a new note instead (caught by the About e2e spec).
-      label: hasNodes || s.selection.edgeIds.length > 0 ? "Add Note to Selection" : "Add Note for This Level",
+      // A note belongs to an icon, so there is nothing to write about with nothing selected.
+      label: "Add Note to Selection",
       group: "Arrange",
       keywords: ["note", "notes", "comment", "annotate", "why", "write"],
-      disabled: s.ui.viewerMode,
+      disabled: s.ui.viewerMode || (!hasNodes && s.selection.edgeIds.length === 0),
       shortcut: "Alt+N",
       run: () => void addNoteHere(),
     },

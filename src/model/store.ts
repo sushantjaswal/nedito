@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, NoteFocus, Port, RichLabel, ShapeNode, StyleMap } from "./types";
 import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
+import { noteInsertionIndex } from "./notes";
 import { loadLayoutEngine } from "./elkEngine";
 import { autoLayout, autoLayoutAllLevels, type LayoutDirection } from "./layout";
 import { readLayoutDirection, writeLayoutDirection } from "./layoutDirection";
@@ -181,8 +182,20 @@ export interface UiState {
    * card already was, so that stepping through notes near the middle does not flip it about.
    */
   cardSide: "left" | "right" | null;
-  /** The pager's full list of notes is showing. */
+  /** The canvas chip's Notes popover is showing. */
   noteListOpen: boolean;
+  /**
+   * Markers on the shapes that notes name. On by default: once the card closes as soon as
+   * attention moves, a marker is the only standing sign that a shape has anything written about
+   * it, so turning these off hides the writing entirely.
+   */
+  noteMarkers: boolean;
+  /**
+   * Markers show each note's place in the reading order instead of a plain dot, so a set of notes
+   * reads as a numbered walk through the diagram. Off by default: most notes are not a sequence,
+   * and a number implies one.
+   */
+  noteNumbers: boolean;
   /**
    * A note was just added and has not been named yet, so the card puts the cursor in its title —
    * the way a new Nested Block opens with its name ready for typing.
@@ -340,8 +353,10 @@ export interface DocStoreState {
   closeNote: () => void;
   /** Remembers the side the card took, which the hysteresis needs to decide whether to move it. */
   setCardSide: (side: "left" | "right") => void;
-  /** Opens or closes the pager's full list of notes. */
+  /** Opens or closes the canvas chip's Notes popover. */
   setNoteListOpen: (open: boolean) => void;
+  toggleNoteMarkers: () => void;
+  toggleNoteNumbers: () => void;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -569,6 +584,8 @@ export const useDocStore = create<DocStoreState>()(
           openNoteId: null,
           cardSide: null,
           noteListOpen: false,
+          noteMarkers: true,
+          noteNumbers: false,
           noteAwaitingTitle: false,
           pageSettingsOpen: false,
           snapEnabled: true,
@@ -1035,11 +1052,14 @@ export const useDocStore = create<DocStoreState>()(
           const id = nanoid();
           const body = text ?? "";
           const doc = get().doc;
+          // Beside the notes about the same shape, not at the end: see noteInsertionIndex.
+          const notes = [...(doc.notes ?? [])];
+          notes.splice(noteInsertionIndex(notes, focus), 0, { id, body, focus });
           set({
             doc: {
               ...doc,
               meta: { ...doc.meta, modified: new Date().toISOString() },
-              notes: [...(doc.notes ?? []), { id, body, focus }],
+              notes,
             },
           });
           get().openNote(id);
@@ -1113,6 +1133,8 @@ export const useDocStore = create<DocStoreState>()(
           ),
         setCardSide: (side) => set((s) => (s.ui.cardSide === side ? s : { ui: { ...s.ui, cardSide: side } })),
         setNoteListOpen: (open) => set((s) => (s.ui.noteListOpen === open ? s : { ui: { ...s.ui, noteListOpen: open } })),
+        toggleNoteMarkers: () => set((s) => ({ ui: { ...s.ui, noteMarkers: !s.ui.noteMarkers } })),
+        toggleNoteNumbers: () => set((s) => ({ ui: { ...s.ui, noteNumbers: !s.ui.noteNumbers } })),
 
         groupSelection: () => {
           const result = groups.groupNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds);
@@ -1329,13 +1351,16 @@ export const useDocStore = create<DocStoreState>()(
         // a click there traces instead. It had been selecting on click since the viewer began.
         setSelection: (nodeIds, edgeIds = []) => {
           if (get().ui.viewerMode && (nodeIds.length > 0 || edgeIds.length > 0)) return;
-          // Selecting does not close an open note. What a card claims is that the *lit* shapes are
-          // what it describes, and lighting is the trace, which selecting does not touch. Keeping
-          // it open is also what makes "set to selection" reachable: choose the shapes, then point
-          // the note at them. Setting or clearing a trace, changing level and Escape still close it.
+          // A note is open only while it is being read. Choosing something else to look at is
+          // choosing to stop reading about this, so the card goes rather than following the author
+          // around the canvas while they work.
+          if (get().ui.openNoteId) get().closeNote();
           set({ selection: { nodeIds, edgeIds } });
         },
-        clearSelection: () => set({ selection: { nodeIds: [], edgeIds: [] } }),
+        clearSelection: () => {
+          if (get().ui.openNoteId) get().closeNote();
+          set({ selection: { nodeIds: [], edgeIds: [] } });
+        },
         selectAll: () => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           get().setSelection(
