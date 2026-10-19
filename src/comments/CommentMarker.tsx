@@ -7,7 +7,7 @@
 import { useMemo } from "react";
 import { useDocStore } from "../model/store";
 import { commentPeek, commentsBelow, commentsNaming } from "./commentNavigation";
-import { commentTitle } from "../model/comments";
+import { commentTitle, isBlank } from "../model/comments";
 import { openCommentAndReveal } from "./revealComment";
 import type { DComment } from "../model/types";
 import styles from "./CommentMarker.module.css";
@@ -51,7 +51,10 @@ export function CommentMarker({ nodeId }: { nodeId: string }) {
   // enough to re-render the editor until React gave up. Filter after selecting, memoised.
   const all = useDocStore((s) => s.doc.comments);
   const show = useDocStore((s) => s.ui.commentMarkers);
-  const comments = useMemo(() => commentsNaming(all, diagramId, nodeId), [all, diagramId, nodeId]);
+  // A comment nobody has written in yet wears no mark: asking for one creates it before there is
+  // anything to say, and a bubble on a shape that stands for nothing is a lie. It is discarded
+  // when its card closes, so this only ever hides the one being written.
+  const comments = useMemo(() => commentsNaming(all, diagramId, nodeId).filter((c) => !isBlank(c)), [all, diagramId, nodeId]);
   if (!show || comments.length === 0) return null;
 
   return (
@@ -80,7 +83,7 @@ export function NestedCommentMarker({ childDiagramId }: { childDiagramId: string
   // document and memoises on it — same reason as above: never return a fresh array from a selector.
   const doc = useDocStore((s) => s.doc);
   const show = useDocStore((s) => s.ui.commentMarkers);
-  const comments = useMemo(() => commentsBelow(doc, childDiagramId), [doc, childDiagramId]);
+  const comments = useMemo(() => commentsBelow(doc, childDiagramId).filter((c) => !isBlank(c)), [doc, childDiagramId]);
   if (!show || comments.length === 0) return null;
 
   return (

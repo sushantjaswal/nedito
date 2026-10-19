@@ -194,6 +194,35 @@ test.describe("writing comments", () => {
     expect(comments?.[3]).toMatchObject({ title: "Written here", body: "And a body.", focus: { diagramId: "page", nodeIds: ["near"] } });
   });
 
+  test("one nobody writes in leaves no mark, and is gone when the card closes", async ({ page }) => {
+    await open(page);
+    await page.getByTestId("rf__node-near").click({ position: { x: 40, y: 40 } });
+    await page.keyboard.press("Alt+c");
+    await expect(page.getByTestId("nd-comment-card-title")).toBeFocused();
+
+    // The card is open over a comment with nothing in it yet. The shape must not be wearing a
+    // bubble for it, and the chip must not be counting it: a mark that stands for nothing is worse
+    // than no mark at all.
+    await expect(page.getByTestId("nd-comment-marker-near")).toHaveCount(0);
+    await expect(page.getByTestId("nd-comments-button")).toHaveText(/Comments 3$/);
+
+    // Changing your mind is clicking somewhere else, which closes the card — and throws the blank
+    // away, so asking for a comment and not writing one costs nothing.
+    await page.locator(".react-flow__pane").click({ position: { x: 40, y: 40 } });
+    await expect(page.getByTestId("nd-comment-card")).toHaveCount(0);
+    expect((await getDoc(page)).comments).toHaveLength(3);
+    await expect(page.getByTestId("nd-comment-marker-near")).toHaveCount(0);
+
+    // One word is enough to keep it, mark and all.
+    await page.getByTestId("rf__node-near").click({ position: { x: 40, y: 40 } });
+    await page.keyboard.press("Alt+c");
+    await page.keyboard.type("Why");
+    await page.getByTestId("nd-comment-card-body").click();
+    await page.locator(".react-flow__pane").click({ position: { x: 40, y: 40 } });
+    expect((await getDoc(page)).comments).toHaveLength(4);
+    await expect(page.getByTestId("nd-comment-marker-near")).toBeVisible();
+  });
+
   test("asking again for a shape that has one opens it instead of writing a second", async ({ page }) => {
     await open(page);
     await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });

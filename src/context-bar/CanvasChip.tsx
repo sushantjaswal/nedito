@@ -4,8 +4,9 @@
 // one click each; Page opens a small popover with the page size, orientation and background, and
 // the palette's Diagram Settings opens that popover too. Since R2 (D91) the Layers and Outline
 // panels, which the View menu used to open, toggle here as well.
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDocStore } from "../model/store";
+import { isBlank } from "../model/comments";
 import { matchPreset, orientationOf, PAGE_PRESETS } from "../model/pageSize";
 import { PageSettings } from "../format-panel/PageSettings";
 import { CommentsChipPopover } from "../comments/CommentsChipPopover";
@@ -30,7 +31,10 @@ export function CanvasChip() {
   const toggleOutline = useDocStore((s) => s.toggleMinimap);
   const open = useDocStore((s) => s.ui.pageSettingsOpen);
   const setOpen = useDocStore((s) => s.setPageSettingsOpen);
-  const commentCount = useDocStore((s) => s.doc.comments?.length ?? 0);
+  // Blank ones do not count: one exists only while its card is open, and the chip would
+  // otherwise read "Comments 1" over a comment with nothing in it.
+  const allComments = useDocStore((s) => s.doc.comments);
+  const commentCount = useMemo(() => (allComments ?? []).filter((c) => !isBlank(c)).length, [allComments]);
   const commentsOpen = useDocStore((s) => s.ui.commentListOpen);
   const commentMarkers = useDocStore((s) => s.ui.commentMarkers);
   const setCommentListOpen = useDocStore((s) => s.setCommentListOpen);
