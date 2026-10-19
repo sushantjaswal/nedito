@@ -15,6 +15,7 @@ const COVERED: SectionId[] = [
   "basic",
   "misc",
   "animated",
+  "ai",
   "advanced",
   "arrows",
   "lines",

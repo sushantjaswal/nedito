@@ -35,7 +35,7 @@ export const LIBRARY_GROUPS: readonly LibraryGroup[] = [
   { id: "cloud", label: "Cloud", sections: ["azure", "aws", "gcp"] },
   { id: "network", label: "Network", sections: ["network"] },
   { id: "people", label: "People & Business", sections: ["business"] },
-  { id: "icons", label: "Icons", sections: ["misc", "animated"] },
+  { id: "icons", label: "Icons", sections: ["misc", "animated", "ai"] },
 ];
 
 /** The group a section is shown in. */

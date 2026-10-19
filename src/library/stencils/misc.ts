@@ -5,23 +5,14 @@
 // used for Azure/AWS/GCP. The last few are our own: the still twins of the animated icons (D124),
 // the same drawing at rest.
 import {
-  AGENT_THINKING,
-  EMBEDDING,
-  GUARDRAIL,
   HEALTHY,
   HEARTBEAT,
-  HUMAN_IN_THE_LOOP,
-  INFERENCE,
   LIVE_TRAFFIC,
-  RETRIEVAL,
   RETRYING,
   RUNNING,
   SCALING_OUT,
   STREAMING,
-  TOKEN_STREAM,
-  TOOL_CALL,
   UPLOADING,
-  VECTOR_SEARCH,
   stillBody,
 } from "./animatedBodies";
 import type { StencilSection } from "./types";
@@ -85,16 +76,6 @@ const section: StencilSection = {
     { id: "misc/healthy", label: "Healthy", keywords: ["health", "ok", "up", "online", "status"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(HEALTHY), pictogram: true },
     { id: "misc/heartbeat", label: "Heartbeat", keywords: ["heart", "pulse", "liveness", "health check"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(HEARTBEAT), pictogram: true },
     { id: "misc/traffic", label: "Traffic", keywords: ["live traffic", "broadcast", "signal", "requests"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(LIVE_TRAFFIC), pictogram: true },
-    // Still twins of the AI and agent icons (I6a).
-    { id: "misc/model", label: "Model", keywords: ["inference", "llm", "chip", "ai", "serving"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(INFERENCE), pictogram: true },
-    { id: "misc/tokens", label: "Tokens", keywords: ["token stream", "llm", "completion", "output", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(TOKEN_STREAM), pictogram: true },
-    { id: "misc/embedding", label: "Embedding", keywords: ["embeddings", "vector", "encode", "chunk", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(EMBEDDING), pictogram: true },
-    { id: "misc/vector-search", label: "Vector Search", keywords: ["vector database", "similarity", "nearest neighbour", "rag", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(VECTOR_SEARCH), pictogram: true },
-    { id: "misc/retrieval", label: "Retrieval", keywords: ["rag", "retrieve", "context", "passages", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(RETRIEVAL), pictogram: true },
-    { id: "misc/agent", label: "Agent", keywords: ["agent thinking", "reasoning", "planning", "llm", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(AGENT_THINKING), pictogram: true },
-    { id: "misc/tool-call", label: "Tool", keywords: ["tool call", "function call", "mcp", "agent", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(TOOL_CALL), pictogram: true },
-    { id: "misc/guardrail", label: "Guardrail", keywords: ["guardrails", "blocked", "policy", "safety", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(GUARDRAIL), pictogram: true },
-    { id: "misc/approval", label: "Approval", keywords: ["human in the loop", "review", "sign off", "oversight", "ai"], defaultSize: { w: 64, h: 64 }, svgBody: stillBody(HUMAN_IN_THE_LOOP), pictogram: true },
   ],
 };
 
