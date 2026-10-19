@@ -2,23 +2,32 @@
 // and found by search beside its still twin. Library entries, not a toggle. Every drawing is in
 // animatedBodies.ts, which says how they rest, colour and export.
 import {
+  AGENT_THINKING,
   CACHE_HIT,
   DEGRADED,
   DOWN,
+  EMBEDDING,
+  GUARDRAIL,
   HEALTHY,
   HEARTBEAT,
+  HUMAN_IN_THE_LOOP,
+  INFERENCE,
   LIVE_TRAFFIC,
   LOAD_BALANCING,
   PROCESSING,
   PROTECTED,
   QUEUE,
   REPLICATING,
+  RETRIEVAL,
   RETRYING,
   RUNNING,
   SCALING_OUT,
   SCHEDULED,
   STREAMING,
+  TOKEN_STREAM,
+  TOOL_CALL,
   UPLOADING,
+  VECTOR_SEARCH,
   WRITES,
 } from "./animatedBodies";
 import type { StencilDef, StencilSection } from "./types";
@@ -56,6 +65,16 @@ const section: StencilSection = {
     // Time and trust (I5).
     icon("scheduled", "Scheduled", "business/schedule", SCHEDULED, ["schedule", "clock", "cron", "timer", "job", "time", "batch"]),
     icon("protected", "Protected", "network/security", PROTECTED, ["shield", "security", "secure", "safe", "guard", "firewall"]),
+    // AI and agents (I6a).
+    icon("inference", "Inference", "misc/model", INFERENCE, ["model", "llm", "chip", "predict", "generate", "ai", "serving"]),
+    icon("token-stream", "Token Stream", "misc/tokens", TOKEN_STREAM, ["tokens", "llm", "generating", "completion", "typing", "output", "ai"]),
+    icon("embedding", "Embedding", "misc/embedding", EMBEDDING, ["embeddings", "vector", "encode", "chunk", "index", "ai"]),
+    icon("vector-search", "Vector Search", "misc/vector-search", VECTOR_SEARCH, ["vector database", "nearest neighbour", "similarity", "knn", "rag", "ai"]),
+    icon("retrieval", "Retrieval", "misc/retrieval", RETRIEVAL, ["rag", "retrieve", "context", "passages", "lookup", "grounding", "ai"]),
+    icon("agent-thinking", "Agent Thinking", "misc/agent", AGENT_THINKING, ["agent", "reasoning", "planning", "thinking", "llm", "ai"]),
+    icon("tool-call", "Tool Call", "misc/tool-call", TOOL_CALL, ["tool", "function call", "mcp", "agent", "action", "ai"]),
+    icon("guardrail", "Guardrail", "misc/guardrail", GUARDRAIL, ["guardrails", "blocked", "refused", "policy", "safety", "filter", "ai"]),
+    icon("human-in-the-loop", "Human in the Loop", "misc/approval", HUMAN_IN_THE_LOOP, ["approval", "review", "sign off", "human", "oversight", "agent", "ai"]),
   ],
 };
 

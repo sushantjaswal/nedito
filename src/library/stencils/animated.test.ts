@@ -62,6 +62,17 @@ describe("the Animated section", () => {
     ["heartbeat", ["animated/heartbeat", "misc/heartbeat"]],
     ["schedule", ["animated/scheduled", "business/schedule"]],
     ["shield", ["animated/protected", "network/security"]],
+    ["inference", ["animated/inference", "misc/model"]],
+    ["token stream", ["animated/token-stream", "misc/tokens"]],
+    ["embedding", ["animated/embedding", "misc/embedding"]],
+    ["vector database", ["animated/vector-search", "misc/vector-search"]],
+    ["rag", ["animated/retrieval", "misc/retrieval", "animated/vector-search"]],
+    ["agent", ["animated/agent-thinking", "misc/agent", "animated/tool-call"]],
+    ["function call", ["animated/tool-call", "misc/tool-call"]],
+    ["guardrail", ["animated/guardrail", "misc/guardrail"]],
+    ["human in the loop", ["animated/human-in-the-loop", "misc/approval"]],
+    // One word reaches the whole AI vocabulary, which is the point of carrying it on every one.
+    ["ai", ["animated/inference", "animated/embedding", "animated/retrieval", "animated/agent-thinking", "animated/guardrail"]],
     ["animated", ["animated/processing", "animated/running", "animated/scaling-out", "animated/retrying"]],
   ])("search for %s finds the animated icon beside its still twin", async (q, ids) => {
     const { animated, others } = await sections();
