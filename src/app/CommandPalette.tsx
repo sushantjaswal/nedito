@@ -4,8 +4,8 @@
 // is where Edit, View and Arrange live, so nothing the menus offered is out of reach.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDocStore } from "../model/store";
-import { noteEntries } from "../notes/noteNavigation";
-import { openNoteAndReveal } from "../notes/revealNote";
+import { commentEntries } from "../comments/commentNavigation";
+import { openCommentAndReveal } from "../comments/revealComment";
 import { goToNode, namedNodes } from "./goTo";
 import { getCommands, type Command } from "./commands";
 import styles from "./CommandPalette.module.css";
@@ -65,19 +65,19 @@ export function CommandPalette() {
         group: n.nested ? `Nested Block · ${n.where}` : `In ${n.where}`,
         run: () => goToNode(n.diagramId, n.nodeId),
       }));
-    // Notes are findable by what they say, not only by the shape they are attached to: the words
-    // someone remembers are usually the note's, which is the whole reason they wrote it down.
-    const notes = noteEntries(doc)
-      .filter((e) => matches(query, e.title, e.note.body))
+    // Comments are findable by what they say, not only by the shape they are attached to: the words
+    // someone remembers are usually the comment's, which is the whole reason they wrote it down.
+    const comments = commentEntries(doc)
+      .filter((e) => matches(query, e.title, e.comment.body))
       .slice(0, MAX_GOTO)
       .map((e) => ({
-        key: `note:${e.note.id}`,
-        label: `Note: ${e.title}`,
+        key: `comment:${e.comment.id}`,
+        label: `Comment: ${e.title}`,
         group: `On ${e.levelTitle}`,
-        run: () => openNoteAndReveal(e.note.id),
+        run: () => openCommentAndReveal(e.comment.id),
       }));
     // A name typed in full is most likely a place to go; a verb is most likely a command.
-    return [...commands, ...places, ...notes];
+    return [...commands, ...places, ...comments];
   }, [open, query, doc]);
 
   useEffect(() => setActive(0), [query]);

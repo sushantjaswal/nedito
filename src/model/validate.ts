@@ -26,7 +26,7 @@ export function validateDoc(doc: DiagramDocument): ValidationError[] {
   errors.push(...checkLayerIdsReferenceRealLayers(doc));
   errors.push(...checkImagesHaveSoundAssets(doc));
   errors.push(...checkEdgeEnds(doc));
-  errors.push(...checkNotes(doc));
+  errors.push(...checkComments(doc));
   errors.push(...motionProblems(doc).map((p) => ({ code: "BAD_MOTION", message: p.message, diagramId: p.diagramId })));
 
   return errors;
@@ -122,37 +122,37 @@ function checkUniqueIds(doc: DiagramDocument): ValidationError[] {
   }
   // Asset ids share the document's one id space, like every other id.
   for (const assetId of Object.keys(doc.assets ?? {})) record(assetId);
-  // So do note ids. What a note *names*, on the other hand, is not checked at all: see
-  // checkNotes below.
-  for (const note of doc.notes ?? []) record(note.id);
+  // So do comment ids. What a comment *names*, on the other hand, is not checked at all: see
+  // checkComments below.
+  for (const comment of doc.comments ?? []) record(comment.id);
 
   return errors;
 }
 
 /**
- * Notes are checked for almost nothing, on purpose.
+ * Comments are checked for almost nothing, on purpose.
  *
- * A note's `focus.nodeIds` and `focus.edgeIds` may name shapes and lines that no longer exist, and
+ * A comment's `focus.nodeIds` and `focus.edgeIds` may name shapes and lines that no longer exist, and
  * that is **not** an error — the opposite of a port's `innerNodeId`, which must resolve. Deleting
  * a shape must never make a document invalid, because the document would then refuse to open and
  * the author would lose writing over a box they meant to delete. The stale ids are dropped when
- * the document loads (model/notes.ts), and a note whose level is gone is dropped when it is
+ * the document loads (model/comments.ts), and a comment whose level is gone is dropped when it is
  * written. Neither is a failure, so neither is reported here.
  *
- * What is checked is the note itself: an id to be unique by (above), and a body to be text.
+ * What is checked is the comment itself: an id to be unique by (above), and a body to be text.
  */
-function checkNotes(doc: DiagramDocument): ValidationError[] {
+function checkComments(doc: DiagramDocument): ValidationError[] {
   const errors: ValidationError[] = [];
-  for (const note of doc.notes ?? []) {
-    if (typeof note.id !== "string" || note.id === "") {
-      errors.push({ code: "INVALID_NOTE", message: "A note has no id" });
+  for (const comment of doc.comments ?? []) {
+    if (typeof comment.id !== "string" || comment.id === "") {
+      errors.push({ code: "INVALID_COMMENT", message: "A comment has no id" });
       continue;
     }
-    if (typeof note.body !== "string") {
-      errors.push({ code: "INVALID_NOTE", message: `Note "${note.id}" has no text` });
+    if (typeof comment.body !== "string") {
+      errors.push({ code: "INVALID_COMMENT", message: `Comment "${comment.id}" has no text` });
     }
-    if (typeof note.focus?.diagramId !== "string" || note.focus.diagramId === "") {
-      errors.push({ code: "INVALID_NOTE", message: `Note "${note.id}" names no diagram` });
+    if (typeof comment.focus?.diagramId !== "string" || comment.focus.diagramId === "") {
+      errors.push({ code: "INVALID_COMMENT", message: `Comment "${comment.id}" names no diagram` });
     }
   }
   return errors;
@@ -450,21 +450,21 @@ export function cleanDocValues(doc: DiagramDocument): number {
     }
   }
 
-  // Notes carry an author's own text, which a hostile document can make anything at all. What is
-  // checked here is only that a note is shaped like one: anything else is dropped, so nothing
-  // downstream has to ask whether a note's body is really a string. Stale ids are a separate
-  // matter and are left alone — model/notes.ts resolves those, and they are not an error.
-  if (doc.notes !== undefined) {
-    const notes = Array.isArray(doc.notes) ? doc.notes : [];
-    if (!Array.isArray(doc.notes)) changed++;
+  // Comments carry an author's own text, which a hostile document can make anything at all. What is
+  // checked here is only that a comment is shaped like one: anything else is dropped, so nothing
+  // downstream has to ask whether a comment's body is really a string. Stale ids are a separate
+  // matter and are left alone — model/comments.ts resolves those, and they are not an error.
+  if (doc.comments !== undefined) {
+    const comments = Array.isArray(doc.comments) ? doc.comments : [];
+    if (!Array.isArray(doc.comments)) changed++;
     const ids = (v: unknown): string[] | undefined => {
       if (!Array.isArray(v)) return undefined;
       const out = v.filter((id): id is string => typeof id === "string");
       if (out.length !== v.length) changed++;
       return out.length > 0 ? out : undefined;
     };
-    const cleaned = notes.filter((n) => typeof n === "object" && n !== null).map((note) => {
-      const n = note as unknown as Record<string, unknown>;
+    const cleaned = comments.filter((n) => typeof n === "object" && n !== null).map((comment) => {
+      const n = comment as unknown as Record<string, unknown>;
       const focus = (typeof n.focus === "object" && n.focus !== null ? n.focus : {}) as Record<string, unknown>;
       const nodeIds = ids(focus.nodeIds);
       const edgeIds = ids(focus.edgeIds);
@@ -480,9 +480,9 @@ export function cleanDocValues(doc: DiagramDocument): number {
       };
     });
     const whole = cleaned.filter((n) => n.id !== "" && n.focus.diagramId !== "");
-    changed += notes.length - whole.length;
-    if (whole.length === 0) delete doc.notes;
-    else doc.notes = whole;
+    changed += comments.length - whole.length;
+    if (whole.length === 0) delete doc.comments;
+    else doc.comments = whole;
   }
   return changed;
 }

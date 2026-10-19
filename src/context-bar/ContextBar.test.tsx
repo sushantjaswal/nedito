@@ -23,13 +23,13 @@ describe("the context bar", () => {
     expect(screen.getByTestId("nd-canvas-chip")).toBeInTheDocument();
   });
 
-  // Note sits on every bar, whatever is selected: it was once a line at the bottom of a different
+  // Comment sits on every bar, whatever is selected: it was once a line at the bottom of a different
   // popover for each kind of selection, and nobody found it. It comes before More, because three
   // dots mean "everything else" and nothing follows them.
-  it("offers Fill, Line, Text, Arrange, Motion, Trace, Note and More for a shape, in that order", () => {
+  it("offers Fill, Line, Text, Arrange, Motion, Trace, Comment and More for a shape, in that order", () => {
     state().setSelection([addRect()]);
     renderBar();
-    expect(barIds()).toEqual(["fill", "line", "text", "arrange", "motion", "trace", "note", "more"]);
+    expect(barIds()).toEqual(["fill", "line", "text", "arrange", "motion", "trace", "comment", "more"]);
     const bar = screen.getByTestId("nd-context-bar");
     expect(bar).toHaveAttribute("role", "toolbar");
     expect(bar).toHaveAttribute("aria-label", "Selection");
@@ -94,7 +94,7 @@ describe("the context bar", () => {
     const e = state().connect({ sourceNodeId: a, sourceHandleId: "right", targetNodeId: b, targetHandleId: "left" });
     state().setSelection([a, b], [e]);
     renderBar();
-    expect(barIds()).toEqual(["fill", "line", "text", "arrange", "edge", "note", "more"]);
+    expect(barIds()).toEqual(["fill", "line", "text", "arrange", "edge", "comment", "more"]);
   });
 
   it("Arrange's position fields edit a single selected shape's position", async () => {
@@ -161,14 +161,14 @@ describe("the context bar", () => {
     // The group alone, as clicking its frame selects it.
     state().setSelection([state().selection.nodeIds[0]]);
     renderBar();
-    expect(barIds()).toEqual(["arrange", "note"]);
+    expect(barIds()).toEqual(["arrange", "comment"]);
   });
 
-  it("gives a single Nested Block Open, Nested, Motion, Trace, Arrange and Note, with the Nested section in its popover", async () => {
+  it("gives a single Nested Block Open, Nested, Motion, Trace, Arrange and Comment, with the Nested section in its popover", async () => {
     const { nestedNodeId } = state().addNestedNode({ x: 0, y: 0 }, { w: 200, h: 140 });
     state().setSelection([nestedNodeId]);
     renderBar();
-    expect(barIds()).toEqual(["open", "nested", "motion", "trace", "arrange", "note"]);
+    expect(barIds()).toEqual(["open", "nested", "motion", "trace", "arrange", "comment"]);
     await userEvent.click(screen.getByTestId("nd-bar-nested"));
     expect(screen.getByTestId("nd-nested-format-section")).toBeInTheDocument();
   });
@@ -223,12 +223,12 @@ describe("what the bar offers, by selection", () => {
 
   it("puts Replace and Original size on the bar for one picture, then Image, Text and Arrange", () => {
     const ids = barButtonsFor([picture], [], [], { open, image: { replace: open, originalSize: open } }).map((b) => b.id);
-    expect(ids).toEqual(["replace", "originalSize", "image", "text", "arrange", "note"]);
+    expect(ids).toEqual(["replace", "originalSize", "image", "text", "arrange", "comment"]);
   });
 
   it("drops Replace and Original size for several pictures, as the panel did", () => {
     const ids = barButtonsFor([picture, { ...picture, id: "q" }], [], [], { open, image: null }).map((b) => b.id);
-    expect(ids).toEqual(["image", "text", "arrange", "note"]);
+    expect(ids).toEqual(["image", "text", "arrange", "comment"]);
   });
 
   it("measures the selection to place the bar, free line ends included", () => {

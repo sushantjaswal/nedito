@@ -7,7 +7,7 @@ import { prunedAssets } from "../model/assets";
 import { hasFreeEnd } from "../model/edgeEnds";
 import { hasOwnLook } from "../model/look";
 import { hasMotion } from "../model/motion";
-import { pruneNotes, resolveNotes } from "../model/notes";
+import { pruneComments, resolveComments } from "../model/comments";
 import { pruneOrders } from "../model/presentation";
 import { splitSharedPorts } from "../model/nesting";
 import { cleanDocValues, validateDoc } from "../model/validate";
@@ -44,12 +44,12 @@ function versionFor(
   freeLines: boolean,
   ownLook: boolean,
   motion: boolean,
-  notes: boolean,
+  comments: boolean,
 ): number {
-  // Notes: only a document that has them says v7, for the same reason motion says v6 — an app
-  // that predates notes refuses the file rather than opening it, dropping the writing and saving
+  // Comments: only a document that has them says v7, for the same reason motion says v6 — an app
+  // that predates comments refuses the file rather than opening it, dropping the writing and saving
   // over it.
-  if (notes) return 7;
+  if (comments) return 7;
   // Motion (D116): only a document that uses it says v6, so every other file stays readable by
   // an app that predates motion, and an animated one is refused there rather than opened, its
   // motion dropped and saved over.
@@ -69,7 +69,7 @@ function hasFreeLines(doc: DiagramDocument): boolean {
  * older app would refuse a link to a diagram it can read perfectly well.
  */
 export function writtenVersion(doc: DiagramDocument): number {
-  return versionFor(prunedAssets(doc), hasFreeLines(doc), hasOwnLook(doc), hasMotion(doc), Boolean(pruneNotes(doc)));
+  return versionFor(prunedAssets(doc), hasFreeLines(doc), hasOwnLook(doc), hasMotion(doc), Boolean(pruneComments(doc)));
 }
 
 function sortedDiagrams(diagrams: Record<string, Diagram>): Record<string, Diagram> {
@@ -87,15 +87,15 @@ export function encodeDoc(doc: DiagramDocument): string {
   // Only the pictures some node still shows: a deleted image's asset stays in memory for undo,
   // but never reaches a file.
   const assets = prunedAssets(doc);
-  // A note whose level was deleted goes no further than memory, where undo still needs it — the
+  // A comment whose level was deleted goes no further than memory, where undo still needs it — the
   // same bargain pruneOrders strikes for a presentation step whose shape is gone.
-  const notes = pruneNotes(doc);
+  const comments = pruneComments(doc);
   const envelope = {
     format: BRAND.formatId,
     // Computed, not doc.formatVersion: saving is what upgrades a file. An opened v1 doc is
     // migrated to the in-memory shape on load, so writing back the version it arrived as would
     // mislabel it. See versionFor for why this is not simply CURRENT_FORMAT_VERSION.
-    formatVersion: versionFor(assets, hasFreeLines(doc), hasOwnLook(doc), hasMotion(doc), Boolean(notes)),
+    formatVersion: versionFor(assets, hasFreeLines(doc), hasOwnLook(doc), hasMotion(doc), Boolean(comments)),
     // The app that writes the file, for the same reason (FORMAT.md: "which app version last
     // wrote the file"); read from package.json (app/version.ts), never written out (D110).
     meta: { ...doc.meta, appVersion: APP_VERSION },
@@ -105,8 +105,8 @@ export function encodeDoc(doc: DiagramDocument): string {
     diagrams: sortedDiagrams(pruneOrders(doc.diagrams)),
     // After the diagrams they are about, and before the assets: a reader meets the writing in
     // the order it was meant to be read. Omitted entirely when there are none, which is what
-    // keeps a notes-free document byte for byte the file it has always been.
-    ...(notes ? { notes } : {}),
+    // keeps a comments-free document byte for byte the file it has always been.
+    ...(comments ? { comments } : {}),
     // Last, so the diagrams read first and the long base64 lines sit at the end of the file.
     ...(assets ? { assets } : {}),
   };
@@ -169,7 +169,7 @@ export function decodeDoc(text: string): DecodeResult {
     meta: migrated.meta as DiagramDocument["meta"],
     rootDiagramIds: migrated.rootDiagramIds as string[],
     diagrams: migrated.diagrams as DiagramDocument["diagrams"],
-    ...(migrated.notes ? { notes: migrated.notes as DiagramDocument["notes"] } : {}),
+    ...(migrated.comments ? { comments: migrated.comments as DiagramDocument["comments"] } : {}),
     ...(migrated.assets ? { assets: migrated.assets as DiagramDocument["assets"] } : {}),
   });
 
@@ -180,11 +180,11 @@ export function decodeDoc(text: string): DecodeResult {
   let errors;
   try {
     cleanDocValues(doc);
-    // A note that names a shape someone has since deleted keeps its text and loses the id. This
-    // runs after cleaning, so what it reads is already shaped like a note (model/notes.ts).
-    const notes = resolveNotes(doc);
-    if (notes) doc.notes = notes;
-    else delete doc.notes;
+    // A comment that names a shape someone has since deleted keeps its text and loses the id. This
+    // runs after cleaning, so what it reads is already shaped like a comment (model/comments.ts).
+    const comments = resolveComments(doc);
+    if (comments) doc.comments = comments;
+    else delete doc.comments;
     errors = validateDoc(doc);
   } catch {
     return { ok: false, error: "This file couldn't be checked — it may be damaged." };

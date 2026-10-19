@@ -1,4 +1,4 @@
-/* "Add note" inside a context-bar popover: the same shape as the other groups there. */
+/* "Add comment" inside a context-bar popover: the same shape as the other groups there. */
 .group {
   display: flex;
   flex-direction: column;

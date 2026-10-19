@@ -1,8 +1,8 @@
-// The two decisions in opening a note that are worth pinning down: which side the card takes, and
+// The two decisions in opening a comment that are worth pinning down: which side the card takes, and
 // what counts as the thing being framed.
 import { describe, expect, it } from "vitest";
-import { cardSideFor, litBounds } from "./revealNote";
-import type { Diagram, DEdge, Note, ShapeNode } from "../model/types";
+import { cardSideFor, litBounds } from "./revealComment";
+import type { Diagram, DEdge, DComment, ShapeNode } from "../model/types";
 
 const shape = (id: string, x: number, y: number): ShapeNode => ({
   id,
@@ -23,7 +23,7 @@ const diagram: Diagram = {
   edges: [edge("e1", "a", "b")],
 };
 
-const note = (focus: Note["focus"]): Note => ({ id: "n1", body: "x", focus });
+const comment = (focus: DComment["focus"]): DComment => ({ id: "n1", body: "x", focus });
 
 describe("which side the card takes", () => {
   const WIDTH = 1000;
@@ -54,25 +54,25 @@ describe("which side the card takes", () => {
 });
 
 describe("what gets framed", () => {
-  it("is the shapes the note names", () => {
-    expect(litBounds(diagram, note({ diagramId: "d1", nodeIds: ["a"] }))).toEqual({ x: 0, y: 0, w: 100, h: 50 });
+  it("is the shapes the comment names", () => {
+    expect(litBounds(diagram, comment({ diagramId: "d1", nodeIds: ["a"] }))).toEqual({ x: 0, y: 0, w: 100, h: 50 });
   });
 
-  it("is the shapes at both ends of a line the note names, since that is what there is to look at", () => {
-    expect(litBounds(diagram, note({ diagramId: "d1", edgeIds: ["e1"] }))).toEqual({ x: 0, y: 0, w: 500, h: 250 });
+  it("is the shapes at both ends of a line the comment names, since that is what there is to look at", () => {
+    expect(litBounds(diagram, comment({ diagramId: "d1", edgeIds: ["e1"] }))).toEqual({ x: 0, y: 0, w: 500, h: 250 });
   });
 
-  it("is the whole level when the note names nothing", () => {
-    expect(litBounds(diagram, note({ diagramId: "d1" }))).toEqual({ x: 0, y: 0, w: 2100, h: 2050 });
+  it("is the whole level when the comment names nothing", () => {
+    expect(litBounds(diagram, comment({ diagramId: "d1" }))).toEqual({ x: 0, y: 0, w: 2100, h: 2050 });
   });
 
   it("ignores an id that no longer resolves, and falls back to the level when none do", () => {
-    expect(litBounds(diagram, note({ diagramId: "d1", nodeIds: ["a", "gone"] }))).toEqual({ x: 0, y: 0, w: 100, h: 50 });
-    // Every id gone makes it a note about the level, which is exactly what it is now about.
-    expect(litBounds(diagram, note({ diagramId: "d1", nodeIds: ["gone"] }))).toEqual({ x: 0, y: 0, w: 2100, h: 2050 });
+    expect(litBounds(diagram, comment({ diagramId: "d1", nodeIds: ["a", "gone"] }))).toEqual({ x: 0, y: 0, w: 100, h: 50 });
+    // Every id gone makes it a comment about the level, which is exactly what it is now about.
+    expect(litBounds(diagram, comment({ diagramId: "d1", nodeIds: ["gone"] }))).toEqual({ x: 0, y: 0, w: 2100, h: 2050 });
   });
 
   it("has nothing to frame on an empty level", () => {
-    expect(litBounds({ id: "d2", title: "Empty", nodes: [], edges: [] }, note({ diagramId: "d2" }))).toBeNull();
+    expect(litBounds({ id: "d2", title: "Empty", nodes: [], edges: [] }, comment({ diagramId: "d2" }))).toBeNull();
   });
 });

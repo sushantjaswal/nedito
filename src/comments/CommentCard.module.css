@@ -1,4 +1,4 @@
-/* The open note's card. It sits over the canvas on the side the camera kept clear for it. */
+/* The open comment's card. It sits over the canvas on the side the camera kept clear for it. */
 .card {
   position: absolute;
   top: 12px;
@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  width: var(--nd-note-card-width, 312px);
+  width: var(--nd-comment-card-width, 312px);
   max-height: calc(100% - 90px);
   overflow-y: auto;
   padding: 12px 14px;
@@ -103,7 +103,7 @@
   font-weight: 400;
 }
 
-/* Offered only while the selection is something other than what the note is already about. */
+/* Offered only while the selection is something other than what the comment is already about. */
 .retarget {
   align-self: flex-start;
   border: 1px solid var(--nd-color-nest-accent);
@@ -168,11 +168,11 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .card {
-    animation: nd-note-card-in 140ms ease-out;
+    animation: nd-comment-card-in 140ms ease-out;
   }
 }
 
-@keyframes nd-note-card-in {
+@keyframes nd-comment-card-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
