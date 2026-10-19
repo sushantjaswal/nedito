@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { useDocStore } from "../model/store";
 import { depthMark, commentEntries } from "./commentNavigation";
+import { isBlank } from "../model/comments";
 import { openCommentAndReveal } from "./revealComment";
 import styles from "./CommentsChipPopover.module.css";
 
@@ -18,7 +19,8 @@ export function CommentsChipPopover() {
   /** The row being dragged, by its place in the reading order. */
   const [dragging, setDragging] = useState<number | null>(null);
 
-  const entries = commentEntries(doc);
+  // The one being written is not listed: it is blank, and discarded if it stays that way.
+  const entries = commentEntries(doc).filter((e) => !isBlank(e.comment));
   const open = (id: string) => {
     setCommentListOpen(false);
     openCommentAndReveal(id);

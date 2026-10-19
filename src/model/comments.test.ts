@@ -2,7 +2,7 @@
 // never lost because something it named was deleted. These are the four things NT1 has to prove.
 import { describe, expect, it } from "vitest";
 import { CURRENT_FORMAT_VERSION, decodeDoc, encodeDoc, writtenVersion } from "../file/documentFormat";
-import { commentInsertionIndex, commentTitle, pruneComments, resolveComments } from "./comments";
+import { commentInsertionIndex, commentTitle, isBlank, pruneComments, resolveComments } from "./comments";
 import type { DiagramDocument, DEdge, DNode, DComment, ShapeNode } from "./types";
 import { useDocStore } from "./store";
 import { validateDoc } from "./validate";
@@ -288,5 +288,76 @@ describe("where a new comment goes in the reading order", () => {
   it("joins the run when a comment names several shapes and one of them is already written about", () => {
     const comments = [comment("n1", about(["a"])), comment("n2", about(["z"]))];
     expect(commentInsertionIndex(comments, about(["a", "b"]))).toBe(1);
+  });
+});
+
+describe("a comment nobody wrote anything in", () => {
+  /** An empty document in the store, with one shape to attach a comment to. */
+  const freshStore = () => {
+    const initial = useDocStore.getState();
+    const rootId = initial.doc.rootDiagramIds[0];
+    useDocStore.setState({
+      doc: { ...initial.doc, rootDiagramIds: [rootId], diagrams: { [rootId]: { id: rootId, title: "Page 1", nodes: [], edges: [] } }, comments: undefined },
+      navStack: [rootId],
+      selection: { nodeIds: [], edgeIds: [] },
+      ui: { ...initial.ui, openCommentId: null, viewerMode: false },
+    });
+    useDocStore.temporal.getState().clear();
+    return useDocStore.getState;
+  };
+
+  it("knows a blank one from a written one, whitespace included", () => {
+    const focus = { diagramId: "d" };
+    expect(isBlank({ id: "a", body: "", focus })).toBe(true);
+    expect(isBlank({ id: "b", body: "   " + String.fromCharCode(10) + " ", focus })).toBe(true);
+    expect(isBlank({ id: "c", body: "", title: "  ", focus })).toBe(true);
+    expect(isBlank({ id: "d", body: "Something.", focus })).toBe(false);
+    expect(isBlank({ id: "e", body: "", title: "A title on its own", focus })).toBe(false);
+  });
+
+  it("is discarded when its card closes, and leaves no undo step behind", () => {
+    const store = freshStore();
+    const diagramId = store().currentDiagramId();
+    const steps = () => useDocStore.temporal.getState().pastStates.length;
+    const before = steps();
+
+    const id = store().addComment({ diagramId }, "");
+    expect(store().doc.comments).toHaveLength(1);
+    // Asking for one is not yet a change to the document.
+    expect(steps()).toBe(before);
+
+    store().closeComment();
+    expect(store().doc.comments ?? []).toHaveLength(0);
+    expect(store().ui.openCommentId).toBeNull();
+    // Nor is throwing the blank away: Ctrl+Z must not have a press that appears to do nothing.
+    expect(steps()).toBe(before);
+    expect(id).not.toBeNull();
+  });
+
+  it("is kept once there is something in it", () => {
+    const store = freshStore();
+    const diagramId = store().currentDiagramId();
+
+    const id = store().addComment({ diagramId }, "") as string;
+    store().updateComment(id, { body: "Orders arrive faster than the ledger settles them." });
+    store().closeComment();
+    expect(store().doc.comments).toHaveLength(1);
+
+    // A title on its own is enough to keep it, too.
+    const second = store().addComment({ diagramId }, "") as string;
+    store().updateComment(second, { title: "Why the queue is here" });
+    store().closeComment();
+    expect(store().doc.comments).toHaveLength(2);
+  });
+
+  it("never reaches a file, even if the document is written while one is open", () => {
+    const store = freshStore();
+    const diagramId = store().currentDiagramId();
+    store().addComment({ diagramId }, "");
+
+    const written = encodeDoc(store().doc);
+    expect(JSON.parse(written).comments).toBeUndefined();
+    // And so a document holding only a blank one is still written at the version it was.
+    expect(writtenVersion(store().doc)).toBeLessThan(7);
   });
 });

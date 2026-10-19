@@ -61,8 +61,24 @@ export function resolveComments(doc: DiagramDocument): DComment[] | undefined {
  */
 export function pruneComments(doc: DiagramDocument): DComment[] | undefined {
   if (!doc.comments || doc.comments.length === 0) return undefined;
-  const out = doc.comments.filter((comment) => doc.diagrams[comment.focus.diagramId]).map(canonical);
+  const out = doc.comments
+    .filter((comment) => doc.diagrams[comment.focus.diagramId] && !isBlank(comment))
+    .map(canonical);
   return out.length === 0 ? undefined : out;
+}
+
+/**
+ * A comment with nothing written in it yet — no title and no text.
+ *
+ * Asking for a comment creates one before there is anything to say, so the card has something to
+ * bind to while it is being written. Such a comment is not writing anybody did: it wears no marker,
+ * is not counted and is not listed, it is discarded when its card closes, and the line above keeps
+ * it out of every file and share link, in case the document is written while one is still open.
+ * So a blank comment exists only while its own card is open, which is the only place it means
+ * anything.
+ */
+export function isBlank(comment: DComment): boolean {
+  return !comment.title?.trim() && !comment.body.trim();
 }
 
 /**

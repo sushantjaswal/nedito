@@ -9,7 +9,7 @@ import { nanoid } from "nanoid";
 import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, CommentFocus, Port, RichLabel, ShapeNode, StyleMap } from "./types";
 import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
-import { commentInsertionIndex } from "./comments";
+import { commentInsertionIndex, isBlank } from "./comments";
 import { loadLayoutEngine } from "./elkEngine";
 import { autoLayout, autoLayoutAllLevels, type LayoutDirection } from "./layout";
 import { readLayoutDirection, writeLayoutDirection } from "./layoutDirection";
@@ -1048,6 +1048,13 @@ export const useDocStore = create<DocStoreState>()(
           // Beside the comments about the same shape, not at the end: see commentInsertionIndex.
           const comments = [...(doc.comments ?? [])];
           comments.splice(commentInsertionIndex(comments, focus), 0, { id, body, focus });
+          // Asking for a comment is not yet a change to the document, so it is not an undo step.
+          // The comment exists only so the card has something to bind to; it wears no marker and
+          // is discarded untouched (closeComment below). Recording it would leave Ctrl+Z with a
+          // press that appears to do nothing, and would undo to a document holding a blank.
+          // Writing the first word is the change, and the edit session records it.
+          const blank = body.trim() === "";
+          if (blank) useDocStore.temporal.getState().pause();
           set({
             doc: {
               ...doc,
@@ -1055,6 +1062,7 @@ export const useDocStore = create<DocStoreState>()(
               comments,
             },
           });
+          if (blank) useDocStore.temporal.getState().resume();
           get().openComment(id);
           set((s) => ({ ui: { ...s.ui, commentAwaitingTitle: true } }));
           return id;
@@ -1118,12 +1126,25 @@ export const useDocStore = create<DocStoreState>()(
         openComment: (id) => set((s) => ({ ui: { ...s.ui, openCommentId: id, commentAwaitingTitle: false } })),
         // Closing keeps the side: the next comment opens where the last card was, which is what makes
         // the hysteresis worth having. The list, which belongs to one reading, does not survive.
-        closeComment: () =>
+        closeComment: () => {
+          // A comment nobody wrote anything in goes with the card, rather than staying as a mark on
+          // a shape that stands for nothing. Not an undo step, for the same reason the add is not.
+          const open = get().ui.openCommentId;
+          const comment = open ? get().doc.comments?.find((c) => c.id === open) : undefined;
+          if (comment && isBlank(comment)) {
+            const doc = get().doc;
+            useDocStore.temporal.getState().pause();
+            const left = doc.comments?.filter((c) => c.id !== comment.id);
+            // Absent rather than empty, as a document that never had one is.
+            set({ doc: { ...doc, comments: left && left.length > 0 ? left : undefined } });
+            useDocStore.temporal.getState().resume();
+          }
           set((s) =>
             s.ui.openCommentId === null && !s.ui.commentListOpen
               ? s
               : { ui: { ...s.ui, openCommentId: null, commentListOpen: false, commentAwaitingTitle: false } },
-          ),
+          );
+        },
         setCardSide: (side) => set((s) => (s.ui.cardSide === side ? s : { ui: { ...s.ui, cardSide: side } })),
         setCommentListOpen: (open) => set((s) => (s.ui.commentListOpen === open ? s : { ui: { ...s.ui, commentListOpen: open } })),
         toggleCommentMarkers: () => set((s) => ({ ui: { ...s.ui, commentMarkers: !s.ui.commentMarkers } })),
