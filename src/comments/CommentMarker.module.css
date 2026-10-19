@@ -1,5 +1,5 @@
-/* The note marker: the corner opposite the Health badge (which is top-right), in muted ink rather
-   than a status colour — a note is not a warning. */
+/* The comment marker: the corner opposite the Health badge (which is top-right), in muted ink rather
+   than a status colour — a comment is not a warning. */
 .marker {
   position: absolute;
   top: -5px;
@@ -11,9 +11,9 @@
   gap: 1px;
   min-width: 16px;
   height: 16px;
-  padding: 0 3px;
-  border: 1px solid var(--nd-color-muted);
-  border-radius: 999px;
+  padding: 0 2px;
+  border: 1px solid var(--nd-color-grid);
+  border-radius: 5px;
   background: var(--nd-panel-bg);
   color: var(--nd-color-muted);
   font-family: var(--font-sans);
@@ -37,6 +37,8 @@
    for "there is something here you cannot see from where you stand". */
 .below {
   border-style: dashed;
+  border-radius: 999px;
+  padding: 0 3px;
 }
 
 .down {

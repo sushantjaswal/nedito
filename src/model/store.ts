@@ -6,10 +6,10 @@ import { create, useStore } from "zustand";
 import { APP_VERSION } from "../app/version";
 import { temporal } from "zundo";
 import { nanoid } from "nanoid";
-import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, NoteFocus, Port, RichLabel, ShapeNode, StyleMap } from "./types";
+import type { DiagramDocument, DEdge, DNode, EdgeLabelPosition, ImageAsset, Layer, NestedNode, CommentFocus, Port, RichLabel, ShapeNode, StyleMap } from "./types";
 import type { ImportNotice } from "../file/importNotices";
 import * as actions from "./actions";
-import { noteInsertionIndex } from "./notes";
+import { commentInsertionIndex } from "./comments";
 import { loadLayoutEngine } from "./elkEngine";
 import { autoLayout, autoLayoutAllLevels, type LayoutDirection } from "./layout";
 import { readLayoutDirection, writeLayoutDirection } from "./layoutDirection";
@@ -169,38 +169,33 @@ export interface UiState {
   /** Which way the last tidy-up ran, remembered per browser; what a tidy-up uses when not told. */
   layoutDirection: LayoutDirection;
   /**
-   * The note that is open — the one just added, until something else opens or closes it. Not
-   * `selected`: a shape selection and an open note are both live at once and neither is the other.
+   * The comment that is open — the one just added, until something else opens or closes it. Not
+   * `selected`: a shape selection and an open comment are both live at once and neither is the other.
    *
    * Session only, like the trace. It is never written to the document, never carried in a share
    * link, and never recorded by undo — the history records `doc` alone (see partialize below), so
    * everything in `ui` is outside it by construction.
    */
-  openNoteId: string | null;
+  openCommentId: string | null;
   /**
    * Which side the card is on. Sticky on purpose: the side-switch rule compares against where the
-   * card already was, so that stepping through notes near the middle does not flip it about.
+   * card already was, so that stepping through comments near the middle does not flip it about.
    */
   cardSide: "left" | "right" | null;
-  /** The canvas chip's Notes popover is showing. */
-  noteListOpen: boolean;
+  /** The canvas chip's Comments popover is showing. */
+  commentListOpen: boolean;
   /**
-   * Markers on the shapes that notes name. On by default: once the card closes as soon as
+   * Markers on the shapes that comments name. On by default: once the card closes as soon as
    * attention moves, a marker is the only standing sign that a shape has anything written about
    * it, so turning these off hides the writing entirely.
    */
-  noteMarkers: boolean;
+  commentMarkers: boolean;
+
   /**
-   * Markers show each note's place in the reading order instead of a plain dot, so a set of notes
-   * reads as a numbered walk through the diagram. Off by default: most notes are not a sequence,
-   * and a number implies one.
-   */
-  noteNumbers: boolean;
-  /**
-   * A note was just added and has not been named yet, so the card puts the cursor in its title —
+   * A comment was just added and has not been named yet, so the card puts the cursor in its title —
    * the way a new Nested Block opens with its name ready for typing.
    */
-  noteAwaitingTitle: boolean;
+  commentAwaitingTitle: boolean;
   /** The canvas chip's Page popover is open — Extras ▸ Diagram Settings opens it (R1, D90). */
   pageSettingsOpen: boolean;
   snapEnabled: boolean;
@@ -334,29 +329,28 @@ export interface DocStoreState {
    */
   tidyUp: (args: { direction?: LayoutDirection; scope: TidyUpScope }) => Promise<void>;
 
-  // ---- notes (model/notes.ts). Each is one undo step; a run of keystrokes becomes one step the
+  // ---- comments (model/comments.ts). Each is one undo step; a run of keystrokes becomes one step the
   // same way the formatting controls do it, by the editing control wrapping them in an edit
   // session (format-panel/useEditSession.ts), not by anything here.
-  /** Adds a note about `focus`, selects it, and returns its id. */
-  addNote: (focus: NoteFocus, text: string) => string | null;
-  updateNote: (id: string, patch: { title?: string; body?: string }) => void;
-  deleteNote: (id: string) => void;
-  /** Moves a note within the reading order. */
-  reorderNotes: (fromIndex: number, toIndex: number) => void;
-  setNoteFocus: (id: string, focus: NoteFocus) => void;
-  /** Opens a note: the one the note commands act on. Session state, never saved, never undone. */
-  openNote: (id: string) => void;
+  /** Adds a comment about `focus`, selects it, and returns its id. */
+  addComment: (focus: CommentFocus, text: string) => string | null;
+  updateComment: (id: string, patch: { title?: string; body?: string }) => void;
+  deleteComment: (id: string) => void;
+  /** Moves a comment within the reading order. */
+  reorderComments: (fromIndex: number, toIndex: number) => void;
+  setCommentFocus: (id: string, focus: CommentFocus) => void;
+  /** Opens a comment: the one the comment commands act on. Session state, never saved, never undone. */
+  openComment: (id: string) => void;
   /**
-   * Closes whichever note is open. The scope lists several events that close one and NT2 adds the
+   * Closes whichever comment is open. The scope lists several events that close one and NT2 adds the
    * rest, so they all come through here rather than each clearing the id for itself.
    */
-  closeNote: () => void;
+  closeComment: () => void;
   /** Remembers the side the card took, which the hysteresis needs to decide whether to move it. */
   setCardSide: (side: "left" | "right") => void;
-  /** Opens or closes the canvas chip's Notes popover. */
-  setNoteListOpen: (open: boolean) => void;
-  toggleNoteMarkers: () => void;
-  toggleNoteNumbers: () => void;
+  /** Opens or closes the canvas chip's Comments popover. */
+  setCommentListOpen: (open: boolean) => void;
+  toggleCommentMarkers: () => void;
   groupSelection: () => string | null;
   ungroupSelection: () => void;
 
@@ -581,12 +575,11 @@ export const useDocStore = create<DocStoreState>()(
           canvasGesture: false,
           tidyingUp: false,
           layoutDirection: readLayoutDirection(),
-          openNoteId: null,
+          openCommentId: null,
           cardSide: null,
-          noteListOpen: false,
-          noteMarkers: true,
-          noteNumbers: false,
-          noteAwaitingTitle: false,
+          commentListOpen: false,
+          commentMarkers: true,
+          commentAwaitingTitle: false,
           pageSettingsOpen: false,
           snapEnabled: true,
           shortcutsDialogOpen: false,
@@ -654,16 +647,16 @@ export const useDocStore = create<DocStoreState>()(
 
         setTrace: (focus) => {
           // A card asserts that the lit shapes are what it describes, so a trace the reader sets
-          // or clears for themselves closes it. Opening a note sets its trace before opening the
-          // note, so the note it is for survives this.
-          if (get().ui.openNoteId) get().closeNote();
+          // or clears for themselves closes it. Opening a comment sets its trace before opening the
+          // comment, so the comment it is for survives this.
+          if (get().ui.openCommentId) get().closeComment();
           set({ trace: focus && focus.length ? { diagramId: get().currentDiagramId(), focus } : null });
         },
         navigateInto: (nestedNodeId) => {
           const diagram = get().doc.diagrams[get().currentDiagramId()];
           const node = diagram.nodes.find((n) => n.id === nestedNodeId);
           if (!node || node.type !== "nested") return;
-          if (get().ui.openNoteId) get().closeNote();
+          if (get().ui.openCommentId) get().closeComment();
           // A trace that reaches the block follows the connection inside (D117).
           const trace = carryInto(get().doc, get().trace, nestedNodeId);
           set((s) => ({
@@ -675,7 +668,7 @@ export const useDocStore = create<DocStoreState>()(
           }));
         },
         navigateBack: () => {
-          if (get().ui.openNoteId) get().closeNote();
+          if (get().ui.openCommentId) get().closeComment();
           set((s) => {
             if (s.navStack.length <= 1) return s;
             return {
@@ -703,9 +696,9 @@ export const useDocStore = create<DocStoreState>()(
         navigateToDiagram: (diagramId) => {
           const path = nesting.findDiagramPath(get().doc, diagramId);
           if (!path) return;
-          // Changing level by any route other than opening a note closes the open one; opening a
-          // note navigates first and opens second, so its own card is not caught by this.
-          if (get().ui.openNoteId) get().closeNote();
+          // Changing level by any route other than opening a comment closes the open one; opening a
+          // comment navigates first and opens second, so its own card is not caught by this.
+          if (get().ui.openCommentId) get().closeComment();
           set({
             trace: null,
             navStack: path,
@@ -1046,40 +1039,40 @@ export const useDocStore = create<DocStoreState>()(
           set({ doc: actions.distributeNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds, axis) });
         },
 
-        addNote: (focus, text) => {
+        addComment: (focus, text) => {
           if (get().ui.viewerMode) return null;
           if (!get().doc.diagrams[focus.diagramId]) return null;
           const id = nanoid();
           const body = text ?? "";
           const doc = get().doc;
-          // Beside the notes about the same shape, not at the end: see noteInsertionIndex.
-          const notes = [...(doc.notes ?? [])];
-          notes.splice(noteInsertionIndex(notes, focus), 0, { id, body, focus });
+          // Beside the comments about the same shape, not at the end: see commentInsertionIndex.
+          const comments = [...(doc.comments ?? [])];
+          comments.splice(commentInsertionIndex(comments, focus), 0, { id, body, focus });
           set({
             doc: {
               ...doc,
               meta: { ...doc.meta, modified: new Date().toISOString() },
-              notes,
+              comments,
             },
           });
-          get().openNote(id);
-          set((s) => ({ ui: { ...s.ui, noteAwaitingTitle: true } }));
+          get().openComment(id);
+          set((s) => ({ ui: { ...s.ui, commentAwaitingTitle: true } }));
           return id;
         },
-        updateNote: (id, patch) => {
+        updateComment: (id, patch) => {
           const doc = get().doc;
-          if (!doc.notes?.some((n) => n.id === id)) return;
+          if (!doc.comments?.some((n) => n.id === id)) return;
           set({
             doc: {
               ...doc,
               meta: { ...doc.meta, modified: new Date().toISOString() },
-              notes: doc.notes.map((n) =>
+              comments: doc.comments.map((n) =>
                 n.id === id
                   ? {
                       ...n,
                       ...(patch.body !== undefined ? { body: patch.body } : {}),
-                      // An emptied title is removed rather than stored blank, so the note falls
-                      // back to the first line of its text as a note without one always has.
+                      // An emptied title is removed rather than stored blank, so the comment falls
+                      // back to the first line of its text as a comment without one always has.
                       ...(patch.title !== undefined
                         ? patch.title.trim() === ""
                           ? { title: undefined }
@@ -1091,50 +1084,49 @@ export const useDocStore = create<DocStoreState>()(
             },
           });
         },
-        deleteNote: (id) => {
+        deleteComment: (id) => {
           const doc = get().doc;
-          if (!doc.notes?.some((n) => n.id === id)) return;
-          const notes = doc.notes.filter((n) => n.id !== id);
+          if (!doc.comments?.some((n) => n.id === id)) return;
+          const comments = doc.comments.filter((n) => n.id !== id);
           const meta = { ...doc.meta, modified: new Date().toISOString() };
-          // The last note leaves no empty array behind: a document with none is the document it
+          // The last comment leaves no empty array behind: a document with none is the document it
           // was before anyone wrote one.
-          set({ doc: notes.length > 0 ? { ...doc, meta, notes } : { ...doc, meta, notes: undefined } });
-          if (get().ui.openNoteId === id) get().closeNote();
+          set({ doc: comments.length > 0 ? { ...doc, meta, comments } : { ...doc, meta, comments: undefined } });
+          if (get().ui.openCommentId === id) get().closeComment();
         },
-        reorderNotes: (fromIndex, toIndex) => {
+        reorderComments: (fromIndex, toIndex) => {
           const doc = get().doc;
-          const notes = doc.notes;
-          if (!notes || fromIndex === toIndex) return;
-          if (fromIndex < 0 || fromIndex >= notes.length || toIndex < 0 || toIndex >= notes.length) return;
-          const next = [...notes];
+          const comments = doc.comments;
+          if (!comments || fromIndex === toIndex) return;
+          if (fromIndex < 0 || fromIndex >= comments.length || toIndex < 0 || toIndex >= comments.length) return;
+          const next = [...comments];
           next.splice(toIndex, 0, ...next.splice(fromIndex, 1));
-          set({ doc: { ...doc, meta: { ...doc.meta, modified: new Date().toISOString() }, notes: next } });
+          set({ doc: { ...doc, meta: { ...doc.meta, modified: new Date().toISOString() }, comments: next } });
         },
-        setNoteFocus: (id, focus) => {
+        setCommentFocus: (id, focus) => {
           const doc = get().doc;
-          if (!doc.notes?.some((n) => n.id === id)) return;
+          if (!doc.comments?.some((n) => n.id === id)) return;
           if (!doc.diagrams[focus.diagramId]) return;
           set({
             doc: {
               ...doc,
               meta: { ...doc.meta, modified: new Date().toISOString() },
-              notes: doc.notes.map((n) => (n.id === id ? { ...n, focus } : n)),
+              comments: doc.comments.map((n) => (n.id === id ? { ...n, focus } : n)),
             },
           });
         },
-        openNote: (id) => set((s) => ({ ui: { ...s.ui, openNoteId: id, noteAwaitingTitle: false } })),
-        // Closing keeps the side: the next note opens where the last card was, which is what makes
+        openComment: (id) => set((s) => ({ ui: { ...s.ui, openCommentId: id, commentAwaitingTitle: false } })),
+        // Closing keeps the side: the next comment opens where the last card was, which is what makes
         // the hysteresis worth having. The list, which belongs to one reading, does not survive.
-        closeNote: () =>
+        closeComment: () =>
           set((s) =>
-            s.ui.openNoteId === null && !s.ui.noteListOpen
+            s.ui.openCommentId === null && !s.ui.commentListOpen
               ? s
-              : { ui: { ...s.ui, openNoteId: null, noteListOpen: false, noteAwaitingTitle: false } },
+              : { ui: { ...s.ui, openCommentId: null, commentListOpen: false, commentAwaitingTitle: false } },
           ),
         setCardSide: (side) => set((s) => (s.ui.cardSide === side ? s : { ui: { ...s.ui, cardSide: side } })),
-        setNoteListOpen: (open) => set((s) => (s.ui.noteListOpen === open ? s : { ui: { ...s.ui, noteListOpen: open } })),
-        toggleNoteMarkers: () => set((s) => ({ ui: { ...s.ui, noteMarkers: !s.ui.noteMarkers } })),
-        toggleNoteNumbers: () => set((s) => ({ ui: { ...s.ui, noteNumbers: !s.ui.noteNumbers } })),
+        setCommentListOpen: (open) => set((s) => (s.ui.commentListOpen === open ? s : { ui: { ...s.ui, commentListOpen: open } })),
+        toggleCommentMarkers: () => set((s) => ({ ui: { ...s.ui, commentMarkers: !s.ui.commentMarkers } })),
 
         groupSelection: () => {
           const result = groups.groupNodes(get().doc, get().currentDiagramId(), get().selection.nodeIds);
@@ -1351,14 +1343,14 @@ export const useDocStore = create<DocStoreState>()(
         // a click there traces instead. It had been selecting on click since the viewer began.
         setSelection: (nodeIds, edgeIds = []) => {
           if (get().ui.viewerMode && (nodeIds.length > 0 || edgeIds.length > 0)) return;
-          // A note is open only while it is being read. Choosing something else to look at is
+          // A comment is open only while it is being read. Choosing something else to look at is
           // choosing to stop reading about this, so the card goes rather than following the author
           // around the canvas while they work.
-          if (get().ui.openNoteId) get().closeNote();
+          if (get().ui.openCommentId) get().closeComment();
           set({ selection: { nodeIds, edgeIds } });
         },
         clearSelection: () => {
-          if (get().ui.openNoteId) get().closeNote();
+          if (get().ui.openCommentId) get().closeComment();
           set({ selection: { nodeIds: [], edgeIds: [] } });
         },
         selectAll: () => {

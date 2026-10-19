@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDocStore } from "../model/store";
 import { groupOfSelection } from "../model/selectionGroup";
-import { addNoteHere } from "../notes/addNote";
+import { addCommentHere } from "../comments/addComment";
 import { chooseAndReplaceImage, insertImageFiles, pasteFromMenu, pickImageFiles } from "../app/insertImage";
 import { markShapesOnSystemClipboard } from "../app/systemClipboard";
 import { IMAGE_SHAPE_REF } from "../model/assets";
@@ -126,7 +126,7 @@ export function ContextMenu({ target, x, y, onClose }: ContextMenuProps) {
       if (groupUngroup.length > 0) groups.push(groupUngroup);
 
       if (!viewerMode) {
-        groups.push([{ label: "Add note", onClick: run(() => void addNoteHere()) }]);
+        groups.push([{ label: "Add comment", onClick: run(() => void addCommentHere()) }]);
       }
 
       if (canTidy && selectedNodes.length >= 2) {

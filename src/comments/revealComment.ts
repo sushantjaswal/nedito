@@ -1,14 +1,14 @@
-// Opening a note: what the reader sees when they go to one.
+// Opening a comment: what the reader sees when they go to one.
 //
 // In order — switch to its page, drill to its level, light what it names, and frame that with room
 // left for the card. Only the last step is new; the rest already existed for the breadcrumb and for
 // Trace, and are reused rather than rebuilt.
 //
-// Leaving a note clears the trace and leaves the reader where they are. It does not navigate back:
-// they may want to keep looking around from where the note brought them.
+// Leaving a comment clears the trace and leaves the reader where they are. It does not navigate back:
+// they may want to keep looking around from where the comment brought them.
 import { revealRect } from "../canvas/canvasApi";
 import { getCanvasInstance } from "../canvas/canvasApi";
-import type { Diagram, DiagramDocument, Note } from "../model/types";
+import type { Diagram, DiagramDocument, DComment } from "../model/types";
 import { useDocStore } from "../model/store";
 
 /** The card's width, and the room the pager needs at the foot of the canvas. */
@@ -30,7 +30,7 @@ export type CardSide = "left" | "right";
 /**
  * Which side the card takes: the one the lit shapes are not on.
  *
- * The hysteresis is the whole point. Stepping through notes whose subjects sit near the middle,
+ * The hysteresis is the whole point. Stepping through comments whose subjects sit near the middle,
  * a card that simply follows the midpoint flips from side to side and reads as a fault rather
  * than as a camera. It only changes sides once the lit shapes are clearly over, and otherwise
  * stays where it was.
@@ -48,18 +48,18 @@ export function cardSideFor(
   return past > viewportWidth * HYSTERESIS ? wanted : previous;
 }
 
-/** The box around what a note names, in diagram coordinates; the whole level when it names nothing. */
-export function litBounds(diagram: Diagram, note: Note): { x: number; y: number; w: number; h: number } | null {
-  const nodeIds = new Set(note.focus.nodeIds ?? []);
+/** The box around what a comment names, in diagram coordinates; the whole level when it names nothing. */
+export function litBounds(diagram: Diagram, comment: DComment): { x: number; y: number; w: number; h: number } | null {
+  const nodeIds = new Set(comment.focus.nodeIds ?? []);
   // A line is lit by the shapes it runs between: that is what there is to look at.
-  for (const edgeId of note.focus.edgeIds ?? []) {
+  for (const edgeId of comment.focus.edgeIds ?? []) {
     const edge = diagram.edges.find((e) => e.id === edgeId);
     if (!edge) continue;
     if (edge.source.nodeId) nodeIds.add(edge.source.nodeId);
     if (edge.target.nodeId) nodeIds.add(edge.target.nodeId);
   }
-  // Ids deleted during this session have not been through the load-time tidy-up yet, so a note
-  // may still name only shapes that are gone. It is a note about the level now, in the same way
+  // Ids deleted during this session have not been through the load-time tidy-up yet, so a comment
+  // may still name only shapes that are gone. It is a comment about the level now, in the same way
   // reopening the document would make it one; framing nothing would be the wrong answer.
   const named = nodeIds.size > 0 ? diagram.nodes.filter((n) => nodeIds.has(n.id)) : [];
   const boxes = named.length > 0 ? named : diagram.nodes;
@@ -71,40 +71,40 @@ export function litBounds(diagram: Diagram, note: Note): { x: number; y: number;
   return { x, y, w: right - x, h: bottom - y };
 }
 
-export function findNote(doc: DiagramDocument, noteId: string): Note | undefined {
-  return doc.notes?.find((n) => n.id === noteId);
+export function findComment(doc: DiagramDocument, commentId: string): DComment | undefined {
+  return doc.comments?.find((n) => n.id === commentId);
 }
 
 /**
- * Opens a note and takes the reader to it. Safe to call for a note that has since gone, or whose
+ * Opens a comment and takes the reader to it. Safe to call for a comment that has since gone, or whose
  * level has: nothing happens rather than a half-finished journey.
  */
-export function openNoteAndReveal(noteId: string): void {
+export function openCommentAndReveal(commentId: string): void {
   const store = useDocStore.getState();
-  const note = findNote(store.doc, noteId);
-  if (!note || !store.doc.diagrams[note.focus.diagramId]) return;
+  const comment = findComment(store.doc, commentId);
+  if (!comment || !store.doc.diagrams[comment.focus.diagramId]) return;
 
   // The page switch and the drill down are the same call: findDiagramPath searches from every
   // root, so a level on another page is reached by naming it.
-  store.navigateToDiagram(note.focus.diagramId);
-  const lit = [...(note.focus.nodeIds ?? []), ...(note.focus.edgeIds ?? [])];
-  // navigateToDiagram clears the trace, so the note's own trace is set after it, not before.
+  store.navigateToDiagram(comment.focus.diagramId);
+  const lit = [...(comment.focus.nodeIds ?? []), ...(comment.focus.edgeIds ?? [])];
+  // navigateToDiagram clears the trace, so the comment's own trace is set after it, not before.
   if (lit.length > 0) useDocStore.getState().setTrace(lit);
-  useDocStore.getState().openNote(noteId);
+  useDocStore.getState().openComment(commentId);
 
-  frameNote(noteId);
+  frameComment(commentId);
 }
 
 /**
- * Frames the open note's subject with the card's side kept clear. Split out because the card
+ * Frames the open comment's subject with the card's side kept clear. Split out because the card
  * remeasures when the canvas resizes, and because it reads the DOM, which the store does not.
  */
-export function frameNote(noteId: string): void {
+export function frameComment(commentId: string): void {
   const store = useDocStore.getState();
-  const note = findNote(store.doc, noteId);
-  const diagram = store.doc.diagrams[note?.focus.diagramId ?? ""];
-  if (!note || !diagram) return;
-  const rect = litBounds(diagram, note);
+  const comment = findComment(store.doc, commentId);
+  const diagram = store.doc.diagrams[comment?.focus.diagramId ?? ""];
+  if (!comment || !diagram) return;
+  const rect = litBounds(diagram, comment);
   if (!rect) return;
 
   const bounds = document.querySelector('[data-testid="nd-canvas"]')?.getBoundingClientRect();

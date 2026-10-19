@@ -14,42 +14,42 @@ export interface DiagramDocument {
   /**
    * What the author wrote about this diagram, in reading order — the array's order *is* the
    * order, with no separate index to keep in step. New in formatVersion 7; omitted when the
-   * document has none. See model/notes.ts.
+   * document has none. See model/comments.ts.
    */
-  notes?: Note[];
+  comments?: DComment[];
 }
 
 /**
  * A piece of writing about a diagram: a paragraph of why, attached to whatever the author had
  * selected when they wrote it.
  *
- * There is deliberately no shape note, level note and flow note. There is one note, and what it
+ * There is deliberately no shape comment, level comment and flow comment. There is one comment, and what it
  * is about is however much was selected: one shape, several shapes and lines, or nothing at all,
- * which makes it a note about the level.
+ * which makes it a comment about the level.
  */
-export interface Note {
+export interface DComment {
   /** nanoid, unique across the document like every other id. */
   id: string;
   /** One line. Falls back to the first line of `body` when absent. */
   title?: string;
   /** Plain text; line breaks allowed. */
   body: string;
-  focus: NoteFocus;
+  focus: CommentFocus;
 }
 
 /**
- * What a note is about. One level only: `diagramId` names it, and a note never reaches across
+ * What a comment is about. One level only: `diagramId` names it, and a comment never reaches across
  * levels — a trace carries the lit path down through a Nested Block's ports on its own, so a
- * note on a parent lights the right shapes inside its children without naming them.
+ * comment on a parent lights the right shapes inside its children without naming them.
  *
  * There is no page id here because a diagram id is unique across the whole document (the
  * document is one flat map of diagrams, and validate.ts checks every id against one set), so
  * the page is derivable from `diagramId` with nesting.ts's findDiagramPath.
  */
-export interface NoteFocus {
-  /** The level the note opens at. */
+export interface CommentFocus {
+  /** The level the comment opens at. */
   diagramId: string;
-  /** Shapes and Nested Blocks it concerns. Absent or empty: the note is about the level. */
+  /** Shapes and Nested Blocks it concerns. Absent or empty: the comment is about the level. */
   nodeIds?: string[];
   /** Lines it concerns. */
   edgeIds?: string[];

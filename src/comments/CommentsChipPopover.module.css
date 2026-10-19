@@ -1,4 +1,4 @@
-/* The Notes popover's own contents; the panel around it is the canvas chip's. */
+/* The Comments popover's own contents; the panel around it is the canvas chip's. */
 .panel {
   display: flex;
   flex-direction: column;
