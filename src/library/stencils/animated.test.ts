@@ -9,24 +9,27 @@ import { cacheStencils, getStencil, loadSection } from "./index";
 import { ICON_TOKEN_HEX, resolveIconTokens, stillBody } from "./animatedBodies";
 import { isIconStyleStencil } from "./defaultStyle";
 
-/** The Animated section, and every shape in the sections its still twins live in. */
+/**
+ * Every icon that moves, wherever it lives, and every shape in the sections their still twins live
+ * in. Icons that move are in two sections now — Animated, and AI & Agents, which holds its own
+ * pairs — and both are held to the same rules, which is the point of looking them up this way
+ * rather than naming one section.
+ */
 async function sections() {
-  const animated = (await loadSection("animated"))!;
-  cacheStencils(animated.shapes);
-  const others = [];
-  for (const id of ["misc", "network", "arrows", "c4", "business"] as const) {
+  const all = [];
+  for (const id of ["animated", "ai", "misc", "network", "arrows", "c4", "business"] as const) {
     const section = (await loadSection(id))!;
     cacheStencils(section.shapes);
-    others.push(...section.shapes);
+    all.push(...section.shapes);
   }
-  return { animated, others };
+  return { animated: all.filter((s) => s.animated), others: all };
 }
 
-describe("the Animated section", () => {
+describe("every icon that moves", () => {
   it("gives every animated icon a still twin that exists and is offered in the picker", async () => {
     const { animated } = await sections();
-    expect(animated.shapes.length).toBeGreaterThan(0);
-    for (const icon of animated.shapes) {
+    expect(animated.length).toBeGreaterThan(0);
+    for (const icon of animated) {
       const twin = getStencil(icon.animated!.still);
       expect(twin, `${icon.id}'s still twin ${icon.animated!.still}`).toBeDefined();
       expect(twin!.hidden).toBeFalsy();
@@ -37,7 +40,7 @@ describe("the Animated section", () => {
 
   it("a twin drawn for it is the same drawing at rest", async () => {
     const { animated } = await sections();
-    for (const icon of animated.shapes) {
+    for (const icon of animated) {
       const twin = getStencil(icon.animated!.still)!;
       if (twin.pictogram) expect(twin.svgBody, twin.id).toBe(stillBody(icon.svgBody));
     }
@@ -62,27 +65,34 @@ describe("the Animated section", () => {
     ["heartbeat", ["animated/heartbeat", "misc/heartbeat"]],
     ["schedule", ["animated/scheduled", "business/schedule"]],
     ["shield", ["animated/protected", "network/security"]],
-    ["inference", ["animated/inference", "misc/model"]],
-    ["token stream", ["animated/token-stream", "misc/tokens"]],
-    ["embedding", ["animated/embedding", "misc/embedding"]],
-    ["vector database", ["animated/vector-search", "misc/vector-search"]],
-    ["rag", ["animated/retrieval", "misc/retrieval", "animated/vector-search"]],
-    ["agent", ["animated/agent-thinking", "misc/agent", "animated/tool-call"]],
-    ["function call", ["animated/tool-call", "misc/tool-call"]],
-    ["guardrail", ["animated/guardrail", "misc/guardrail"]],
-    ["human in the loop", ["animated/human-in-the-loop", "misc/approval"]],
+    ["inference", ["ai/inference", "ai/model"]],
+    ["token stream", ["ai/token-stream", "ai/tokens"]],
+    ["prompt", ["ai/prompt", "ai/message"]],
+    ["model router", ["ai/routing", "ai/router"]],
+    ["chunking", ["ai/chunking", "ai/chunks"]],
+    ["embedding", ["ai/embedding", "ai/vector"]],
+    ["vector database", ["ai/vector-search", "ai/similarity"]],
+    ["reranker", ["ai/reranking", "ai/ranked"]],
+    ["rag", ["ai/retrieval", "ai/context", "ai/vector-search", "ai/chunking"]],
+    ["agent", ["ai/agent-thinking", "ai/agent", "ai/tool-call"]],
+    ["function call", ["ai/tool-call", "ai/tool"]],
+    ["memory", ["ai/recalling", "ai/memory"]],
+    ["multi agent", ["ai/handoff", "ai/handover"]],
+    ["evaluation", ["ai/evaluating", "ai/score"]],
+    ["guardrail", ["ai/guardrail", "ai/blocked"]],
+    ["human in the loop", ["ai/human-in-the-loop", "ai/approval"]],
     // One word reaches the whole AI vocabulary, which is the point of carrying it on every one.
-    ["ai", ["animated/inference", "animated/embedding", "animated/retrieval", "animated/agent-thinking", "animated/guardrail"]],
+    ["ai", ["ai/inference", "ai/embedding", "ai/retrieval", "ai/agent-thinking", "ai/guardrail", "ai/prompt", "ai/handoff"]],
     ["animated", ["animated/processing", "animated/running", "animated/scaling-out", "animated/retrying"]],
   ])("search for %s finds the animated icon beside its still twin", async (q, ids) => {
-    const { animated, others } = await sections();
-    const found = [...others, ...animated.shapes].filter((s) => !s.hidden && stencilMatches(s, q)).map((s) => s.id);
+    const { others } = await sections();
+    const found = others.filter((s) => !s.hidden && stencilMatches(s, q)).map((s) => s.id);
     for (const id of ids) expect(found).toContain(id);
   });
 
   it("moves only through nd-anim classes, which every motion switch stops", async () => {
     const { animated } = await sections();
-    for (const icon of animated.shapes) {
+    for (const icon of animated) {
       expect(icon.svgBody, icon.id).toMatch(/class="nd-anim /);
       // Nothing is hidden at rest: the pose is the markup, so no part starts invisible.
       expect(icon.svgBody, icon.id).not.toMatch(/opacity="0"|display="none"|visibility="hidden"/);
@@ -92,7 +102,7 @@ describe("the Animated section", () => {
 
   it("hardcodes no colour: line work is currentColor, accents are tokens", async () => {
     const { animated } = await sections();
-    for (const icon of animated.shapes) {
+    for (const icon of animated) {
       expect(icon.svgBody, icon.id).not.toMatch(/#[0-9a-f]{3,6}\b/i);
       for (const m of icon.svgBody.matchAll(/(?:fill|stroke)="([^"]+)"/g)) {
         expect(["none", "currentColor"].includes(m[1]) || /^var\(--nd-icon-[a-z]+\)$/.test(m[1]), `${icon.id}: ${m[1]}`).toBe(true);
@@ -112,7 +122,7 @@ describe("a still export", () => {
 
   it("draws each icon at rest: no animation classes, no unresolved variables, the line work in the fill", async () => {
     const { animated } = await sections();
-    for (const icon of animated.shapes) {
+    for (const icon of animated) {
       const svg = diagramToSvg(page(icon.id, { fill: "#B4426A" }));
       expect(svg, icon.id).not.toContain("nd-anim");
       expect(svg, icon.id).not.toContain("var(");

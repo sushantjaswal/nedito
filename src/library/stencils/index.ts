@@ -7,6 +7,7 @@ export const SECTION_IDS = [
   "general",
   "misc",
   "animated",
+  "ai",
   "advanced",
   "basic",
   "arrows",
@@ -30,6 +31,7 @@ const LOADERS: Partial<Record<SectionId, () => Promise<{ default: StencilSection
   general: () => import("./general"),
   misc: () => import("./misc"),
   animated: () => import("./animated"),
+  ai: () => import("./ai"),
   advanced: () => import("./advanced"),
   basic: () => import("./basic"),
   arrows: () => import("./arrows"),
@@ -63,6 +65,7 @@ const ACRONYMS: Partial<Record<SectionId, string>> = {
   bpmn: "BPMN",
   dfd: "Data Flow (DFD)",
   scratchpad: "Favorites",
+  ai: "AI & Agents",
 };
 
 export function sectionLabel(id: SectionId): string {
@@ -85,6 +88,26 @@ export function sectionLabel(id: SectionId): string {
  * too, for the same reason.
  */
 export const RETIRED_STENCIL_IDS: Record<string, string> = {
+  // The AI and agent icons, first shipped inside Animated with their still twins in Misc, now in
+  // a section of their own. Ids moved with them; these keep every diagram drawn in between whole.
+  "animated/inference": "ai/inference",
+  "animated/token-stream": "ai/token-stream",
+  "animated/embedding": "ai/embedding",
+  "animated/vector-search": "ai/vector-search",
+  "animated/retrieval": "ai/retrieval",
+  "animated/agent-thinking": "ai/agent-thinking",
+  "animated/tool-call": "ai/tool-call",
+  "animated/guardrail": "ai/guardrail",
+  "animated/human-in-the-loop": "ai/human-in-the-loop",
+  "misc/model": "ai/model",
+  "misc/tokens": "ai/tokens",
+  "misc/embedding": "ai/vector",
+  "misc/vector-search": "ai/similarity",
+  "misc/retrieval": "ai/context",
+  "misc/agent": "ai/agent",
+  "misc/tool-call": "ai/tool",
+  "misc/guardrail": "ai/blocked",
+  "misc/approval": "ai/approval",
   "misc/grade": "misc/star",
   "misc/new-releases": "misc/verified",
   "arrows/call-made": "arrows/north-east",

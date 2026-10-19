@@ -31,7 +31,7 @@ export function stillBody(body: string): string {
   return body.replace(/ class="nd-anim[^"]*"/g, "");
 }
 
-const ACCENT = "var(--nd-icon-accent)";
+export const ACCENT = "var(--nd-icon-accent)";
 
 // ---- Compute and jobs (I1).
 
@@ -126,11 +126,11 @@ export const CACHE_HIT =
 
 // ---- Status and operations (I4).
 
-const OK = "var(--nd-icon-ok)";
+export const OK = "var(--nd-icon-ok)";
 const WARN = "var(--nd-icon-warn)";
-const BAD = "var(--nd-icon-bad)";
+export const BAD = "var(--nd-icon-bad)";
 /** The symbol on a status disc: white, in either theme. */
-const ON = "var(--nd-icon-on)";
+export const ON = "var(--nd-icon-on)";
 
 /** Healthy: a status light, on, breathing softly. Rests on. */
 export const HEALTHY =
@@ -171,75 +171,3 @@ export const SCHEDULED =
 export const PROTECTED =
   `<path class="nd-anim nd-ic-guard" d="M50 10 L84 22 V48 C84 68 70 82 50 90 C30 82 16 68 16 48 V22 Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round" />` +
   `<path d="M36 50 L46 60 L65 40" fill="none" stroke="${ACCENT}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />`;
-
-// ---- AI and agents (I6a). The parts every agent and retrieval diagram names, drawn here because
-// no icon set owns this vocabulary yet. Each reuses a motion already in animatedIcons.css: what
-// was missing was things to say, not ways to move. None of them implies a rate or a latency —
-// motion on a diagram reads as measurement, and these are illustrations.
-
-/** Inference: a model answering — the core pulses while the chip sits still. Rests at full size. */
-export const INFERENCE =
-  `<path d="M34 8 V20 M50 8 V20 M66 8 V20 M34 80 V92 M50 80 V92 M66 80 V92 M8 34 H20 M8 50 H20 M8 66 H20 M80 34 H92 M80 50 H92 M80 66 H92" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />` +
-  `<rect x="20" y="20" width="60" height="60" rx="11" fill="none" stroke="currentColor" stroke-width="6" />` +
-  `<rect class="nd-anim nd-ic-breathe" x="37" y="37" width="26" height="26" rx="6" fill="${ACCENT}" stroke="none" />`;
-
-/** Token stream: an answer arriving a token at a time, the caret still blinking. Rests mid-line. */
-export const TOKEN_STREAM =
-  `<path class="nd-anim nd-ic-stream" d="M10 28 H90" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="11 6" />` +
-  `<path class="nd-anim nd-ic-stream" d="M10 50 H78" fill="none" stroke="${ACCENT}" stroke-width="6" stroke-linecap="round" stroke-dasharray="11 6" />` +
-  `<path class="nd-anim nd-ic-stream" d="M10 72 H56" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="11 6" />` +
-  `<rect class="nd-anim nd-ic-blink" x="64" y="63" width="8" height="18" rx="2" fill="${ACCENT}" stroke="none" />`;
-
-/** Embedding: a document becoming points in a space. Rests with every point placed. */
-export const EMBEDDING =
-  `<path d="M10 18 H40 L52 30 V78 H10 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />` +
-  `<path d="M60 48 H80 M73 41 L80 48 L73 55" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />` +
-  `<circle class="nd-anim nd-ic-ring" cx="88" cy="24" r="6" fill="${ACCENT}" stroke="none" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-2" cx="92" cy="62" r="6" fill="${ACCENT}" stroke="none" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-3" cx="74" cy="80" r="6" fill="${ACCENT}" stroke="none" />`;
-
-/** Vector search: a query reaching out to its nearest neighbours. Rests with every ring drawn. */
-export const VECTOR_SEARCH =
-  `<circle cx="15" cy="15" r="6" stroke="none" /><circle cx="85" cy="14" r="6" stroke="none" />` +
-  `<circle cx="87" cy="85" r="6" stroke="none" /><circle cx="14" cy="84" r="6" stroke="none" />` +
-  `<circle class="nd-anim nd-ic-ring" cx="50" cy="50" r="13" fill="none" stroke="${ACCENT}" stroke-width="5" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-2" cx="50" cy="50" r="23" fill="none" stroke="${ACCENT}" stroke-width="5" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-3" cx="50" cy="50" r="33" fill="none" stroke="${ACCENT}" stroke-width="5" />` +
-  `<circle cx="50" cy="50" r="7" fill="${ACCENT}" stroke="none" />`;
-
-/** Retrieval: passages coming back out of a store. Rests with two on their way. */
-export const RETRIEVAL =
-  `<path d="M6 26 V70 A14 6 0 0 0 34 70 V26" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />` +
-  `<ellipse cx="20" cy="26" rx="14" ry="6" fill="none" stroke="currentColor" stroke-width="6" />` +
-  `<g class="nd-anim nd-ic-advance">` +
-  `<rect class="nd-anim nd-ic-arrive" x="40" y="36" width="17" height="24" rx="3" fill="${ACCENT}" stroke="none" />` +
-  `<rect class="nd-anim nd-ic-leave" x="69" y="36" width="17" height="24" rx="3" fill="${ACCENT}" stroke="none" />` +
-  `</g>`;
-
-/** Agent thinking: an agent working something out. Rests with all three marks shown. */
-export const AGENT_THINKING =
-  `<path d="M50 9 L85 29 V71 L50 91 L15 71 V29 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />` +
-  `<circle class="nd-anim nd-ic-ring" cx="34" cy="50" r="6" fill="${ACCENT}" stroke="none" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-2" cx="50" cy="50" r="6" fill="${ACCENT}" stroke="none" />` +
-  `<circle class="nd-anim nd-ic-ring nd-ic-ring-3" cx="66" cy="50" r="6" fill="${ACCENT}" stroke="none" />`;
-
-/** Tool call: an agent reaching for a tool, which turns. Rests upright. */
-export const TOOL_CALL =
-  `<g class="nd-anim nd-ic-half-turn">` +
-  `<path d="M60 16 A19 19 0 1 1 40 16" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" />` +
-  `<rect x="43" y="48" width="14" height="40" rx="7" fill="currentColor" stroke="none" />` +
-  `<circle cx="50" cy="32" r="7" fill="${ACCENT}" stroke="none" />` +
-  `</g>`;
-
-/** Guardrail: a request stopped at the rail. Rests blocked. */
-export const GUARDRAIL =
-  `<path d="M8 50 H38 M31 42 L39 50 L31 58" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />` +
-  `<rect x="72" y="10" width="14" height="80" rx="7" fill="none" stroke="currentColor" stroke-width="6" />` +
-  `<path class="nd-anim nd-ic-flash" d="M48 40 L64 60 M64 40 L48 60" fill="none" stroke="${BAD}" stroke-width="8" stroke-linecap="round" />`;
-
-/** Human in the loop: a person whose approval the run is waiting on. Rests with the mark shown. */
-export const HUMAN_IN_THE_LOOP =
-  `<circle cx="36" cy="28" r="14" fill="none" stroke="currentColor" stroke-width="6" />` +
-  `<path d="M10 84 C10 63 22 51 36 51 C44 51 51 54 56 59" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" />` +
-  `<circle cx="72" cy="68" r="22" fill="${ACCENT}" stroke="none" />` +
-  `<path class="nd-anim nd-ic-blink" d="M62 68 L69 76 L83 59" fill="none" stroke="${ON}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />`;

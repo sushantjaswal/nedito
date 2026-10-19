@@ -22,7 +22,7 @@ describe("the purpose groups", () => {
       Cloud: ["azure", "aws", "gcp"],
       Network: ["network"],
       "People & Business": ["business"],
-      Icons: ["misc", "animated"],
+      Icons: ["misc", "animated", "ai"],
     });
     expect(groupOf("dfd")?.label).toBe("Data");
   });
