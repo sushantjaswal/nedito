@@ -15,36 +15,63 @@ import styles from "./NoteControl.module.css";
  * it. `nodeId` names the one thing selected, so the count can be about it rather than about the
  * whole level; with several selected there is nothing single to count and only Add is offered.
  */
-export function NoteControl({ nodeId }: { nodeId?: string }) {
+export function NoteControl() {
   const diagramId = useDocStore((s) => s.currentDiagramId());
   const viewerMode = useDocStore((s) => s.ui.viewerMode);
   // The stored array, filtered outside the selector: one that builds a list returns a new array
   // every call and the store reads that as a change on every render.
   const all = useDocStore((s) => s.doc.notes);
-  const existing = useMemo(() => (nodeId ? notesNaming(all, diagramId, nodeId) : []), [all, diagramId, nodeId]);
+  const selection = useDocStore((s) => s.selection);
+  const deleteNote = useDocStore((s) => s.deleteNote);
+  /**
+   * What is already written about anything in the selection — the whole selection, not just a
+   * lone shape. Several selected with one of them already noted was still offering to add,
+   * which is how a shape ended up with two.
+   */
+  const existing = useMemo(() => {
+    for (const id of [...selection.nodeIds, ...selection.edgeIds]) {
+      const found = notesNaming(all, diagramId, id);
+      if (found.length > 0) return found;
+    }
+    return [];
+  }, [all, diagramId, selection]);
 
   if (viewerMode) return null;
 
+  // One note per shape: once there is one, the only thing on offer is opening it. Adding a second
+  // made the reading order visit the same box twice and the markers say things like "1-8".
   return (
     <div className={styles.group} data-testid="nd-note-control">
       <div className={styles.row}>
-        <button type="button" className={styles.add} onClick={() => void addNoteHere()} data-testid="nd-add-note">
-          Add note
-        </button>
-        {existing.length > 0 && (
-          <button
-            type="button"
-            className={styles.open}
-            onClick={() => openNoteAndReveal(existing[0].id)}
-            data-testid="nd-open-note"
-          >
-            {existing.length === 1 ? "Open note" : `Open notes (${existing.length})`}
+        {existing.length > 0 ? (
+          <>
+            <button
+              type="button"
+              className={styles.open}
+              onClick={() => openNoteAndReveal(existing[0].id)}
+              data-testid="nd-open-note"
+            >
+              Open note
+            </button>
+            <button
+              type="button"
+              className={styles.remove}
+              onClick={() => deleteNote(existing[0].id)}
+              title="Delete this note (Ctrl+Z puts it back)"
+              data-testid="nd-remove-note"
+            >
+              Remove
+            </button>
+          </>
+        ) : (
+          <button type="button" className={styles.add} onClick={() => void addNoteHere()} data-testid="nd-add-note">
+            Add note
           </button>
         )}
       </div>
       <p className={styles.hint}>
         {existing.length > 0
-          ? "A note is about whatever is selected when you write it."
+          ? "This already has a note. Open it to change what it says, or remove it."
           : "Write down why this is here. Notes read back in order, with a card beside the shape."}
       </p>
     </div>

@@ -32,17 +32,14 @@ export function NoteMarker({ nodeId }: { nodeId: string }) {
   const numbered = useDocStore((s) => s.ui.noteNumbers);
   const notes = useMemo(() => notesNaming(all, diagramId, nodeId), [all, diagramId, nodeId]);
   /**
-   * What a numbered marker says: where this shape comes in the reading order. A shape with several
-   * notes shows the span they cover — "1–2" — since a single number would hide the rest, and new
-   * notes join their siblings so a span is normally the run of them (model/notes.ts).
+   * What a numbered marker says: where this shape comes in the reading order. One number, because
+   * a shape holds one note — asking for a second opens the first instead (notes/addNote.ts). It
+   * once showed the span of several, which on a document written before that rule read as "1-8"
+   * and sounded like a claim about every note in between.
    */
   const place = useMemo(() => {
-    const order = all ?? [];
-    const places = notes.map((n) => order.indexOf(n) + 1).filter((p) => p > 0);
-    if (places.length === 0) return "";
-    const first = Math.min(...places);
-    const last = Math.max(...places);
-    return first === last ? `${first}` : `${first}–${last}`;
+    const at = notes[0] ? (all ?? []).indexOf(notes[0]) + 1 : 0;
+    return at > 0 ? `${at}` : "";
   }, [all, notes]);
   if (!show || notes.length === 0) return null;
 
@@ -52,7 +49,7 @@ export function NoteMarker({ nodeId }: { nodeId: string }) {
       type="button"
       className={`${styles.marker} nd-note-marker nodrag`}
       title={peekOf(notes)}
-      aria-label={numbered ? `${label}, ${notes.length === 1 ? "note" : "notes"} ${place} in reading order` : label}
+      aria-label={numbered ? `${label}, note ${place} in reading order` : label}
       onClick={(e) => {
         e.stopPropagation();
         openNoteAndReveal(notes[0].id);

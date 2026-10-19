@@ -187,7 +187,7 @@ export function ContextBar() {
       {open === "edge" && <EdgeSection edges={edges} />}
       {open === "nested" && single?.type === "nested" && <NestedFormatSection nestedNode={single} />}
       {open === "motion" && <MotionSection nodes={nodes} />}
-      {open === "note" && <NoteControl nodeId={nodes.length === 1 && edges.length === 0 ? nodes[0].id : undefined} />}
+      {open === "note" && <NoteControl />}
     </div>
   );
 

@@ -163,7 +163,7 @@
 }
 
 .close {
-  margin-left: auto;
+  margin-left: 4px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -177,4 +177,22 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+}
+
+.delete {
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px;
+  padding: 2px 8px;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.delete:hover,
+.delete:focus-visible {
+  background: var(--nd-color-nest-soft-fill);
+  color: var(--nd-color-ink);
 }

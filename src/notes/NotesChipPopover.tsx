@@ -4,7 +4,6 @@
 // they are numbered, and the list of everything written on this document.
 import { useState } from "react";
 import { useDocStore } from "../model/store";
-import { addNoteHere } from "./addNote";
 import { depthMark, noteEntries } from "./noteNavigation";
 import { openNoteAndReveal } from "./revealNote";
 import styles from "./NotesChipPopover.module.css";
@@ -77,17 +76,6 @@ export function NotesChipPopover() {
         ))}
       </div>
 
-      <button
-        type="button"
-        className={styles.add}
-        onClick={() => {
-          setNoteListOpen(false);
-          void addNoteHere("level");
-        }}
-        data-testid="nd-add-level-note"
-      >
-        Add note about this level
-      </button>
     </div>
   );
 }

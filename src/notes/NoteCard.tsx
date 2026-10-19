@@ -23,6 +23,7 @@ export function NoteCard() {
   const closeNote = useDocStore((s) => s.closeNote);
   const setTrace = useDocStore((s) => s.setTrace);
   const updateNote = useDocStore((s) => s.updateNote);
+  const deleteNote = useDocStore((s) => s.deleteNote);
   const title = useEditSession();
   const body = useEditSession();
   const titleField = useRef<HTMLInputElement>(null);
@@ -140,6 +141,23 @@ export function NoteCard() {
         >
           →
         </button>
+        {!viewerMode && (
+          <button
+            type="button"
+            className={styles.delete}
+            onClick={() => {
+              setTrace(null);
+              deleteNote(entry.note.id);
+            }}
+            // No prompt: this is one undo step like everything else, and a dialog over a sentence
+            // someone wrote is heavier than the thing it guards.
+            title="Delete this note (Ctrl+Z puts it back)"
+            aria-label="Delete note"
+            data-testid="nd-note-card-delete"
+          >
+            Delete
+          </button>
+        )}
         <button type="button" className={styles.close} onClick={close} aria-label="Close note" data-testid="nd-note-card-close">
           ✕
         </button>

@@ -51,3 +51,22 @@
   font-size: 11px;
   line-height: 1.35;
 }
+
+/* Removing writing is undoable like anything else, so it reads as an ordinary action rather than
+   a red one — but it is not the button the eye lands on first. */
+.remove {
+  border: 1px solid var(--nd-color-grid);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: transparent;
+  color: var(--nd-color-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.remove:hover,
+.remove:focus-visible {
+  border-color: var(--nd-color-ink);
+  color: var(--nd-color-ink);
+}

@@ -156,26 +156,32 @@ test.describe("writing notes", () => {
     // The first place anyone looks after clicking a shape: the bar above it. One button, in the
     // same place, for every selection — it used to be a line at the bottom of a different popover
     // each time, and nobody found it.
+    // "left" already has a note, so the bar offers to open it and nothing else: one note per shape.
     await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
     await page.getByTestId("nd-bar-note").click();
     await expect(page.getByTestId("nd-open-note")).toBeVisible();
-    await page.getByTestId("nd-add-note").click();
-    await expect(page.getByTestId("nd-note-card-title")).toBeFocused();
-    // Beside the note already about "left", not at the end of the document: a reading order that
-    // visits the same shape at 1 and again at 8 is not a walk through anything.
-    expect((await getDoc(page)).notes?.map((n) => n.focus.nodeIds?.[0])).toEqual(["left", "left", "right", undefined]);
+    await expect(page.getByTestId("nd-add-note")).toHaveCount(0);
+    await page.getByTestId("nd-open-note").click();
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
+    expect((await getDoc(page)).notes).toHaveLength(3);
 
-    // A Nested Block has no More popover at all, and used to hide this at the foot of a long panel.
+    // Opening that note framed the camera on "left", which puts the block off screen — and React
+    // Flow does not render what is out of view. Close the note and fit the page before going on.
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Control+Shift+h");
+    await expect(page.getByTestId("rf__node-block")).toBeVisible();
+
+    // Nothing is written about the block yet, so there it offers to add. A Nested Block has no
+    // More popover at all, and this used to hide at the foot of a long panel about ports.
     await page.getByTestId("rf__node-block").click({ position: { x: 100, y: 60 } });
     await page.getByTestId("nd-bar-note").click();
     await page.getByTestId("nd-add-note").click();
-    // Nothing had been written about the block, so this one goes at the end.
-    expect((await getDoc(page)).notes?.[4].focus.nodeIds).toEqual(["block"]);
+    expect((await getDoc(page)).notes?.[3].focus.nodeIds).toEqual(["block"]);
   });
 
   test("Alt+N writes one about the selection, with the title ready to type", async ({ page }) => {
     await open(page);
-    await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
+    await page.getByTestId("rf__node-near").click({ position: { x: 40, y: 40 } });
     await page.keyboard.press("Alt+n");
 
     await expect(page.getByTestId("nd-note-card-title")).toBeFocused();
@@ -185,7 +191,19 @@ test.describe("writing notes", () => {
 
     const notes = (await getDoc(page)).notes;
     expect(notes).toHaveLength(4);
-    expect(notes?.[1]).toMatchObject({ title: "Written here", body: "And a body.", focus: { diagramId: "page", nodeIds: ["left"] } });
+    expect(notes?.[3]).toMatchObject({ title: "Written here", body: "And a body.", focus: { diagramId: "page", nodeIds: ["near"] } });
+  });
+
+  test("asking again for a shape that has one opens it instead of writing a second", async ({ page }) => {
+    await open(page);
+    await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
+    await page.keyboard.press("Alt+n");
+
+    // A shape holds one note. Two made the reading order visit the same box twice, and markers
+    // claim a span like "1-8" across notes that had nothing to do with each other.
+    await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
+    await expect(page.getByTestId("nd-note-card-title")).toHaveValue("About the left one");
+    expect((await getDoc(page)).notes).toHaveLength(3);
   });
 
   test("a typed sentence is one undo step, not one per keystroke", async ({ page }) => {
@@ -206,22 +224,63 @@ test.describe("writing notes", () => {
 
   test("the right-click menu writes one, on a shape and on bare canvas", async ({ page }) => {
     await open(page);
-    await page.getByTestId("rf__node-left").click({ button: "right", position: { x: 40, y: 40 } });
+    await page.getByTestId("rf__node-near").click({ button: "right", position: { x: 40, y: 40 } });
     await page.getByText("Add note", { exact: true }).click();
-    expect((await getDoc(page)).notes?.[1].focus.nodeIds).toEqual(["left"]);
+    expect((await getDoc(page)).notes?.[3].focus.nodeIds).toEqual(["near"]);
 
+    // A note belongs to an icon: bare canvas offers nothing to write about, here or anywhere else.
     await page.keyboard.press("Escape");
     await page.getByTestId("nd-canvas").click({ button: "right", position: { x: 500, y: 420 } });
-    await page.getByText("Add note about this level").click();
-    const added = (await getDoc(page)).notes?.[4];
-    // It says "about this level" and means it, whatever happens to be selected elsewhere.
-    expect(added?.focus.nodeIds).toBeUndefined();
-    expect(added?.focus.diagramId).toBe("page");
+    await expect(page.getByText("Add note", { exact: true })).toHaveCount(0);
+    await expect(page.getByText("Add note about this level")).toHaveCount(0);
+  });
+
+  test("several selected, one of them already noted, is not offered another", async ({ page }) => {
+    await open(page);
+    // "left" has a note and "near" does not; together they must not offer to write a second about
+    // "left", which is how a shape ended up with two.
+    await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
+    await page.getByTestId("rf__node-near").click({ position: { x: 40, y: 40 }, modifiers: ["Shift"] });
+    await page.getByTestId("nd-bar-note").click();
+
+    await expect(page.getByTestId("nd-add-note")).toHaveCount(0);
+    await expect(page.getByTestId("nd-open-note")).toBeVisible();
+    expect((await getDoc(page)).notes).toHaveLength(3);
+  });
+
+  test("nothing selected means nothing to write about", async ({ page }) => {
+    await open(page);
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Alt+n");
+    // No level note appears, and no card: a note needs an icon to be about.
+    expect((await getDoc(page)).notes).toHaveLength(3);
+    await expect(page.getByTestId("nd-note-card")).toHaveCount(0);
+  });
+
+  test("a note can be removed, from the card and from the shape's own bar, and undone", async ({ page }) => {
+    await open(page);
+    await openFromList(page, 1);
+    await page.getByTestId("nd-note-card-delete").click();
+
+    await expect(page.getByTestId("nd-note-card")).toHaveCount(0);
+    expect((await getDoc(page)).notes).toHaveLength(2);
+    // Writing is never thrown away for good by one click: deleting is one undo step like anything else.
+    await page.keyboard.press("Control+z");
+    expect((await getDoc(page)).notes).toHaveLength(3);
+
+    // And without opening it first, from the bar of the shape it is about.
+    await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
+    await page.getByTestId("nd-bar-note").click();
+    await page.getByTestId("nd-remove-note").click();
+    expect((await getDoc(page)).notes?.map((n) => n.id)).toEqual(["n2", "n3"]);
+    // The marker goes with it: nothing is written about that shape any more.
+    await expect(page.getByTestId("nd-note-marker-left")).toHaveCount(0);
   });
 
   test("the list reorders by dragging, and the reading order follows", async ({ page }) => {
     await open(page);
     await page.getByTestId("nd-notes-button").click();
+    await expect(page.getByTestId("nd-add-level-note")).toHaveCount(0);
     await page.getByTestId("nd-note-list-row-3").dragTo(page.getByTestId("nd-note-list-row-1"));
 
     expect((await getDoc(page)).notes?.map((n) => n.id)).toEqual(["n3", "n1", "n2"]);
@@ -229,24 +288,13 @@ test.describe("writing notes", () => {
 });
 
 test.describe("markers", () => {
-  test("a shape wears a dot, a count past one, and clicking it opens that note", async ({ page }) => {
+  test("a shape wears a plain dot, and clicking it opens that note", async ({ page }) => {
     await open(page);
-    // "left" is named by one note; the marker is a bare dot rather than a number.
+    // One note per shape, so a marker is a dot and never a count or a span.
     await expect(page.getByTestId("nd-note-marker-left")).toHaveText("");
 
     await page.getByTestId("nd-note-marker-left").click();
     await expect(page.getByTestId("nd-note-card-count")).toHaveText("1 of 3");
-
-    // A second note about the same shape turns the dot into a count: a bare dot would be a lie.
-    await page.getByTestId("rf__node-left").click({ position: { x: 40, y: 40 } });
-    await page.keyboard.press("Alt+n");
-    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("2");
-
-    // And numbered, it shows the span those two cover rather than hiding one of them. They are
-    // adjacent because a new note joins its siblings.
-    await page.getByTestId("nd-notes-button").click();
-    await page.getByTestId("nd-notes-numbers-toggle").check();
-    await expect(page.getByTestId("nd-note-marker-left")).toHaveText("1–2");
   });
 
   test("numbering turns the markers into a walk through the diagram", async ({ page }) => {
