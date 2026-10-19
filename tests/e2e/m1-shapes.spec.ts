@@ -115,6 +115,51 @@ test.describe("M1 — shapes on canvas", () => {
     expect(afterClick.selection.nodeIds).toEqual([thirdId]);
   });
 
+  test("a second rubber-band replaces the first selection instead of piling onto it", async ({ page }) => {
+    await page.evaluate(() => {
+      const s = window.__ddStore!.getState() as unknown as {
+        addShapeNode: (ref: string, pos: { x: number; y: number }, size: { w: number; h: number }) => string;
+        setSelection: (nodeIds: string[]) => void;
+      };
+      s.addShapeNode("general/rect", { x: 100, y: 100 }, { w: 100, h: 60 });
+      s.addShapeNode("general/rect", { x: 100, y: 320 }, { w: 100, h: 60 });
+      s.setSelection([]);
+    });
+    const diagramId = await currentDiagramId(page);
+    const [topId, bottomId] = (await getDoc(page)).diagrams[diagramId].nodes.map((n) => n.id);
+    const boxOf = async (id: string) => {
+      const b = await page.getByTestId(`nd-shape-node-${id}`).boundingBox();
+      if (!b) throw new Error("node not rendered");
+      return b;
+    };
+    const drag = async (b: { x: number; y: number; width: number; height: number }) => {
+      await page.mouse.move(b.x - 25, b.y - 25);
+      await page.mouse.down();
+      await page.mouse.move(b.x + b.width + 25, b.y + b.height + 25, { steps: 10 });
+      await page.mouse.up();
+    };
+    const selected = async () =>
+      (await page.evaluate(() => window.__ddStore!.getState() as unknown as { selection: { nodeIds: string[] } })).selection
+        .nodeIds;
+
+    await drag(await boxOf(topId));
+    expect(await selected()).toEqual([topId]);
+
+    // The second band must take the bottom shape *instead of*, not as well as, the top one. The
+    // canvas and the store both used to keep the first selection while the new band was dragged,
+    // so each band added to the last until everything was selected — and with everything selected
+    // React Flow's own overlay covers the canvas and swallows the clicks that would clear it,
+    // which left the editor looking frozen until a reload.
+    await drag(await boxOf(bottomId));
+    expect(await selected()).toEqual([bottomId]);
+
+    // What the canvas draws as selected must agree with the store, or the two drift apart again.
+    const shown = await page.evaluate(() =>
+      document.querySelectorAll(".react-flow__node.selected").length,
+    );
+    expect(shown).toBe(1);
+  });
+
   test("dragging a stencil from the library onto the Favorites section saves it there", async ({ page }) => {
     // Native HTML5 drag-and-drop cannot be driven by synthetic mouse moves, so the drag payload
     // is handed to the drop zone directly — exactly the payload ShapeLibrary puts on the
