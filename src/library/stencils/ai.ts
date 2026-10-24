@@ -16,6 +16,7 @@
 import {
   AGENT_THINKING,
   CHUNKING,
+  CITATION,
   EMBEDDING,
   EVALUATING,
   GUARDRAIL,
@@ -79,6 +80,8 @@ const section: StencilSection = {
     still("context", "Context", RETRIEVAL, ["retrieval", "rag", "passages", "grounding"]),
     moving("reranking", "Reranking", "ai/ranked", RERANKING, ["rerank", "reranker", "order", "relevance", "rag"]),
     still("ranked", "Ranked", RERANKING, ["reranking", "reranker", "relevance", "rag"]),
+    moving("citation", "Citation", "ai/source", CITATION, ["cite", "grounding", "provenance", "reference", "attribution", "rag"]),
+    still("source", "Source", CITATION, ["citation", "cite", "grounding", "reference", "rag"]),
 
     // Agents: what they do, and what holds them back.
     moving("agent-thinking", "Agent Thinking", "ai/agent", AGENT_THINKING, ["agent", "reasoning", "planning", "thinking", "llm"]),
