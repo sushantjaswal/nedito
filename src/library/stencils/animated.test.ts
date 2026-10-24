@@ -73,6 +73,7 @@ describe("every icon that moves", () => {
     ["embedding", ["ai/embedding", "ai/vector"]],
     ["vector database", ["ai/vector-search", "ai/similarity"]],
     ["reranker", ["ai/reranking", "ai/ranked"]],
+    ["grounding", ["ai/citation", "ai/source"]],
     ["rag", ["ai/retrieval", "ai/context", "ai/vector-search", "ai/chunking"]],
     ["agent", ["ai/agent-thinking", "ai/agent", "ai/tool-call"]],
     ["function call", ["ai/tool-call", "ai/tool"]],
