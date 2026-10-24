@@ -132,3 +132,10 @@ export const HANDOFF =
   `<circle class="nd-anim nd-ic-arrive" cx="38" cy="50" r="6" fill="${ACCENT}" stroke="none" />` +
   `<circle class="nd-anim nd-ic-leave" cx="67" cy="50" r="6" fill="${ACCENT}" stroke="none" />` +
   `</g>`;
+
+/** Citation: an answer traced back to the line it came from. Rests with the line marked. */
+export const CITATION =
+  `<path d="M16 10 H62 L80 28 V90 H16 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />` +
+  `<path d="M62 10 V28 H80" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />` +
+  `<path d="M30 46 H66 M30 74 H58" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />` +
+  `<path class="nd-anim nd-ic-blink" d="M30 60 H66" fill="none" stroke="${ACCENT}" stroke-width="8" stroke-linecap="round" />`;
