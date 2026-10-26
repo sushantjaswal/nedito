@@ -1,0 +1,53 @@
+# Static analysis of the JavaScript and TypeScript, by GitHub's own scanner. Actions are pinned to
+# full commit SHAs and the workflow token can only read, except for the one permission the scanner
+# needs to file what it finds.
+#
+# It runs beside the verification sweep rather than inside it: analysis takes a few minutes but
+# nothing waits on it, so it never touches the time to merge, which is set by the slowest
+# end-to-end part.
+#
+# It is deliberately NOT a required status check yet. This codebase hand-rolls its PDF, ZIP, GIF
+# and PNG writers and reads bytes from documents that may come from anyone, which is exactly the
+# shape that makes a first scan noisy. Read what it says, fix or dismiss, and promote it to
+# required once it is quiet — a check that cries wolf teaches people to ignore red.
+#
+# The default query suite is the starting point for the same reason: high confidence first. The
+# wider "security-extended" suite is a later choice, once the baseline is clean.
+name: Code scanning
+
+on:
+  pull_request:
+  schedule:
+    # Mondays, so a new advisory against unchanged code is still found.
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      # The one write the scanner needs: filing its results under Security.
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@793b778da9c9275a0f276522b27cb5fc14bba279 # v4
+        with:
+          languages: javascript-typescript
+          # The app is built by Vite; there is nothing to compile for the scanner's purposes, and
+          # letting it read the sources directly keeps this job off the critical path.
+          build-mode: none
+      - uses: github/codeql-action/analyze@793b778da9c9275a0f276522b27cb5fc14bba279 # v4
+        with:
+          category: "/language:javascript-typescript"
