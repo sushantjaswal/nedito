@@ -273,7 +273,7 @@ app sends us your work.
 4. One pull request open at a time: the next branch starts after the last one merges.
 
 Every pull request runs the full sweep in GitHub Actions (`.github/workflows/ci.yml`), the
-end-to-end tests split across four machines, and must be up to date with `main` and green before
+end-to-end tests split across six machines, and must be up to date with `main` and green before
 it merges. Commits use conventional messages (`feat(canvas): …`), and new dependencies need a
 stated reason.
 
