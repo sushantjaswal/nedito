@@ -46,6 +46,19 @@ const values = Object.values(known).sort((a, b) => a - b);
 const median = values.length ? values[Math.floor(values.length / 2)] : 1;
 const cost = (f) => known[f] ?? median;
 
+// A spec file with no recorded time is costed as the median and balanced on a guess. That is how
+// m36-comments.spec.ts, 19 tests of it, ended up invisible to the planner: the parts read as even
+// while one machine ran two minutes longer than another. Say so where it will be seen — as a
+// pull request annotation under Actions — rather than letting the drift stay silent. It warns and
+// carries on instead of failing, because a spec file cannot have a measured time until it has run
+// at least once, and blocking that would be a chicken and egg.
+const unmeasured = files.filter((f) => !(f in known));
+if (unmeasured.length > 0) {
+  const line = `${unmeasured.length} spec file(s) have no recorded duration and are being balanced as the median (~${Math.round(median)}s each): ${unmeasured.join(", ")}. Refresh with --record after a full run; see the header of this file.`;
+  console.warn(`WARNING: ${line}`);
+  if (process.env.GITHUB_ACTIONS) console.log(`::warning title=Unmeasured end-to-end spec files::${line}`);
+}
+
 const parts = Array.from({ length: total }, () => ({ files: [], seconds: 0 }));
 for (const f of [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b))) {
   const lightest = parts.reduce((min, p) => (p.seconds < min.seconds ? p : min));

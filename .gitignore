@@ -50,3 +50,4 @@ yarn-error.log*
 !CHANGELOG.md
 !about-copy.md
 !pull_request_template.md
+.playwright/

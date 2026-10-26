@@ -55,7 +55,7 @@ one pull request is open at a time:
    The first end-to-end run needs the browser: `npx playwright install chromium`. Run the whole
    suite (`npm run test:e2e`) when a change is broad: the store, the canvas, export, the shell.
 4. Open the pull request with the template filled in: what changed, why, and how you checked it.
-   CI runs the full sweep, the end-to-end tests split across four machines, and the pull request
+   CI runs the full sweep, the end-to-end tests split across six machines, and the pull request
    must be up to date with `main` and green before it merges.
 
 Commits use conventional messages (`feat(canvas): edge waypoints`, `fix(library): …`).
