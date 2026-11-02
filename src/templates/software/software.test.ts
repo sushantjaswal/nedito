@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ARROWHEAD_OPTIONS } from "../../canvas/arrowheads";
 import type { DiagramDocument, NestedNode } from "../../model/types";
 import c4Model from "./c4Model";
+import ciCdPipeline from "./ciCdPipeline";
 import umlActivity from "./umlActivity";
 import umlClass from "./umlClass";
 import umlComponent from "./umlComponent";
@@ -12,6 +13,7 @@ import umlUseCase from "./umlUseCase";
 
 const ALL: [string, DiagramDocument][] = [
   ["c4-model", c4Model],
+  ["ci-cd-pipeline", ciCdPipeline],
   ["uml-class", umlClass],
   ["uml-sequence", umlSequence],
   ["uml-use-case", umlUseCase],
@@ -90,6 +92,39 @@ describe("the Software & UML templates", () => {
           expect(attached, `${port.id} carries no edge`).toBe(true);
         }
       }
+    }
+  });
+
+  // A pipeline diagram is read under pressure, and its one job then is to say which line is the
+  // run and which is the way out. Every stop — a blocked PR, a rollback, a wait — is a grey box,
+  // and nothing solid is allowed to arrive at one.
+  it("reaches every stop in the pipeline on a dashed line, never on the line the run takes", () => {
+    let stops = 0;
+    for (const diagram of Object.values(ciCdPipeline.diagrams)) {
+      const grey = new Set(
+        diagram.nodes.filter((n) => n.type === "shape" && n.style.fill === "#F4F5F7").map((n) => n.id),
+      );
+      stops += grey.size;
+      for (const edge of diagram.edges) {
+        if (!edge.target.nodeId || !grey.has(edge.target.nodeId)) continue;
+        expect(edge.style.dash, `${edge.id} arrives at a stop on a solid line`).toBe("dashed");
+      }
+    }
+    expect(stops, "the pipeline draws no stops at all").toBeGreaterThan(3);
+  });
+
+  it("opens each pipeline stage onto its own jobs, in at one end and out at the other", () => {
+    const root = ciCdPipeline.diagrams[ciCdPipeline.rootDiagramIds[0]];
+    const stages = root.nodes.filter((n): n is NestedNode => n.type === "nested");
+    expect(stages).toHaveLength(3);
+    for (const stage of stages) {
+      const child = ciCdPipeline.diagrams[stage.childDiagramId];
+      expect(child.nodes.length, `${stage.id} opens onto almost nothing`).toBeGreaterThan(5);
+      // The two ends of a stage are different jobs: a stage whose way in and way out were the
+      // same node would be a box with no pipeline inside it.
+      const [first, last] = [stage.ports[0], stage.ports[1]];
+      expect(first.innerNodeId).not.toBe(last.innerNodeId);
+      for (const port of stage.ports) expect(child.nodes.some((n) => n.id === port.innerNodeId)).toBe(true);
     }
   });
 });

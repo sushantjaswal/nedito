@@ -33,6 +33,15 @@ const ENTRIES: Entry[] = [
     load: () => import("./starters/flowchartWithSubprocess"),
   },
   {
+    id: "incident-runbook",
+    name: "Incident response runbook",
+    category: "process",
+    description: "Alert to post-incident review, where each phase opens into its own steps.",
+    keywords: ["incident", "runbook", "on call", "oncall", "sre", "severity", "escalation", "mitigation", "outage", "postmortem", "post-incident", "status page", "process", "nested"],
+    featured: false,
+    load: () => import("./business/incidentRunbook"),
+  },
+  {
     id: "c4-model",
     name: "C4 model",
     category: "software",
@@ -40,6 +49,15 @@ const ENTRIES: Entry[] = [
     keywords: ["c4", "architecture", "context", "container", "component", "software", "nested", "system"],
     featured: true,
     load: () => import("./software/c4Model"),
+  },
+  {
+    id: "ci-cd-pipeline",
+    name: "CI/CD pipeline",
+    category: "software",
+    description: "Commit to production, where each stage opens into the jobs it runs.",
+    keywords: ["ci", "cd", "cicd", "pipeline", "build", "test", "deploy", "release", "devops", "canary", "rollback", "artifact", "delivery", "nested"],
+    featured: false,
+    load: () => import("./software/ciCdPipeline"),
   },
   {
     id: "uml-class",
@@ -222,6 +240,15 @@ const ENTRIES: Entry[] = [
     load: () => import("./architecture/kubernetesCluster"),
   },
   {
+    id: "microservices-platform",
+    name: "Microservices platform",
+    category: "architecture",
+    description: "A gateway, services that own their own data, and an event bus between them.",
+    keywords: ["microservices", "micro services", "services", "api gateway", "event bus", "event driven", "platform", "domain", "vendor neutral", "cloud agnostic", "architecture", "nested"],
+    featured: false,
+    load: () => import("./architecture/microservices"),
+  },
+  {
     id: "org-chart",
     name: "Org chart",
     category: "business",
@@ -346,6 +373,15 @@ const ENTRIES: Entry[] = [
     keywords: ["sitemap", "information architecture", "ia", "navigation", "pages", "website", "structure"],
     featured: false,
     load: () => import("./thinking/sitemap"),
+  },
+  {
+    id: "user-story-map",
+    name: "User story map",
+    category: "thinking",
+    description: "A backbone of user activities, each opening into its tasks and release bands.",
+    keywords: ["story map", "user story", "story mapping", "backbone", "agile", "product", "release", "backlog", "mvp", "slicing", "planning", "discovery", "nested"],
+    featured: false,
+    load: () => import("./thinking/userStoryMap"),
   },
   {
     id: "mind-map",

@@ -10,6 +10,7 @@ import conceptMap from "./conceptMap";
 import decisionTree from "./decisionTree";
 import sitemap from "./sitemap";
 import treeDiagram from "./treeDiagram";
+import userStoryMap from "./userStoryMap";
 import vennThree from "./vennThree";
 import vennTwo from "./vennTwo";
 
@@ -20,12 +21,23 @@ const ALL: [string, DiagramDocument][] = [
   ["decision-tree", decisionTree],
   ["concept-map", conceptMap],
   ["sitemap", sitemap],
+  ["user-story-map", userStoryMap],
 ];
 
 const nodesOf = (doc: DiagramDocument) => Object.values(doc.diagrams).flatMap((d) => d.nodes);
 const edgesOf = (doc: DiagramDocument) => Object.values(doc.diagrams).flatMap((d) => d.edges);
 const ellipses = (doc: DiagramDocument) =>
   nodesOf(doc).filter((n) => n.type === "shape" && n.shapeRef === "general/ellipse");
+
+/** Is `inner` wholly within `outer`? A story card inside its release band. */
+function contains(outer: DNode, inner: DNode): boolean {
+  return (
+    inner.position.x >= outer.position.x &&
+    inner.position.y >= outer.position.y &&
+    inner.position.x + inner.size.w <= outer.position.x + outer.size.w &&
+    inner.position.y + inner.size.h <= outer.position.y + outer.size.h
+  );
+}
 
 /** Do two boxes overlap at all? Good enough for circles laid out on a grid. */
 function overlaps(a: DNode, b: DNode): boolean {
@@ -40,8 +52,12 @@ function overlaps(a: DNode, b: DNode): boolean {
 describe("the Thinking & Planning templates", () => {
   it.each(ALL)("%s names both ends of every link", (_id, doc) => {
     for (const edge of edgesOf(doc)) {
-      expect(edge.style.sourceHandle, `${edge.id} has an unanchored source`).toBeTruthy();
-      expect(edge.style.targetHandle, `${edge.id} has an unanchored target`).toBeTruthy();
+      // A port end names itself: its handle is derived from the port's side, not from the
+      // style, so leaving one unset is correct rather than an oversight. The other three
+      // category suites have always made this exception; this one had no nested template
+      // in it until the story map.
+      if (!edge.source.portId) expect(edge.style.sourceHandle, `${edge.id} has an unanchored source`).toBeTruthy();
+      if (!edge.target.portId) expect(edge.style.targetHandle, `${edge.id} has an unanchored target`).toBeTruthy();
     }
   });
 
@@ -112,6 +128,36 @@ describe("the Thinking & Planning templates", () => {
       const child = byId.get(e.target.nodeId!)!;
       // A hierarchy read top-down stops being readable the moment one branch goes up.
       expect(child.position.y, `${e.id} points upwards`).toBeGreaterThan(parent.position.y);
+    }
+  });
+
+  // The two claims a story map makes are both geometric: which release band a card is in says
+  // when it ships, and which column it is in says which task it belongs to. A card adrift in
+  // either direction says something the author did not mean.
+  const activityLevels = () =>
+    Object.entries(userStoryMap.diagrams).filter(([id]) => id !== userStoryMap.rootDiagramIds[0]);
+
+  it("puts every story card squarely inside exactly one release band", () => {
+    for (const [id, d] of activityLevels()) {
+      const bands = d.nodes.filter((n) => n.type === "shape" && n.shapeRef === "general/rect");
+      const cards = d.nodes.filter((n) => n.type === "shape" && n.label?.fontSize === 10);
+      expect(bands, `${id} does not have its three bands`).toHaveLength(3);
+      expect(cards.length, `${id} has no stories`).toBeGreaterThan(4);
+      for (const card of cards) {
+        const owning = bands.filter((b) => contains(b, card));
+        expect(owning, `${id}: ${card.id} is not cleanly in one release`).toHaveLength(1);
+      }
+    }
+  });
+
+  it("lines every story card up under the task it belongs to", () => {
+    for (const [id, d] of activityLevels()) {
+      const tasks = d.nodes.filter((n) => n.type === "shape" && n.label?.fontSize === 11 && n.shapeRef !== "general/rect");
+      const columns = new Set(tasks.map((t) => t.position.x));
+      expect(columns.size, `${id} does not have its task columns`).toBe(3);
+      for (const card of d.nodes.filter((n) => n.type === "shape" && n.label?.fontSize === 10)) {
+        expect(columns.has(card.position.x), `${id}: ${card.id} is between columns`).toBe(true);
+      }
     }
   });
 

@@ -15,6 +15,7 @@ import azureLandingZone from "./azureLandingZone";
 import gcpMlPlatform from "./gcpMlPlatform";
 import gcpWebApp from "./gcpWebApp";
 import kubernetesCluster from "./kubernetesCluster";
+import microservices from "./microservices";
 import networkTopology from "./networkTopology";
 
 const ALL: [string, DiagramDocument][] = [
@@ -23,6 +24,7 @@ const ALL: [string, DiagramDocument][] = [
   ["aws-three-tier", awsThreeTier],
   ["gcp-web-app", gcpWebApp],
   ["kubernetes-cluster", kubernetesCluster],
+  ["microservices-platform", microservices],
   ["aws-bedrock-rag", awsBedrockRag],
   ["azure-foundry-chat", azureFoundryChat],
   ["gcp-ml-platform", gcpMlPlatform],
@@ -65,9 +67,15 @@ describe("the Architecture & Cloud templates", () => {
 
   // The spec is explicit: Kubernetes icons only if an openly licensed set is added with NOTICE
   // attribution, otherwise generic shapes. No such set is in the repo.
-  it("draws the Kubernetes cluster without any vendor artwork", async () => {
+  // The microservices platform makes the same claim for its own reason: it is the template for
+  // the shape of a system before anyone has picked a cloud, so a vendor glyph on it would be
+  // answering the question it exists to leave open.
+  it.each([
+    ["kubernetes-cluster", kubernetesCluster],
+    ["microservices-platform", microservices],
+  ])("draws %s without any vendor artwork", async (_id, doc) => {
     await Promise.all([loadSection("azure"), loadSection("aws"), loadSection("gcp")]);
-    for (const node of shapes(kubernetesCluster)) {
+    for (const node of shapes(doc)) {
       expect(node.shapeRef.startsWith("azure/"), `${node.id} uses an Azure icon`).toBe(false);
       expect(node.shapeRef.startsWith("aws/"), `${node.id} uses an AWS icon`).toBe(false);
       expect(node.shapeRef.startsWith("gcp/"), `${node.id} uses a GCP icon`).toBe(false);
@@ -90,6 +98,7 @@ describe("the Architecture & Cloud templates", () => {
     for (const r of vendorRefs(azureFoundryChat)) expect(r.startsWith("azure/")).toBe(true);
     for (const r of vendorRefs(gcpMlPlatform)) expect(r.startsWith("gcp/")).toBe(true);
     expect(vendorRefs(networkTopology)).toEqual([]);
+    expect(vendorRefs(microservices)).toEqual([]);
   }, 20_000); // loads ~1,000 vendor icons: past the 5s default when the whole suite runs at once
 
   it("keeps S3 outside the VPC, because that is where it is", () => {
@@ -113,6 +122,7 @@ describe("the Architecture & Cloud templates", () => {
   it.each([
     ["azure-landing-zone", azureLandingZone, 2],
     ["kubernetes-cluster", kubernetesCluster, 2],
+    ["microservices-platform", microservices, 3],
   ])("%s opens each of its %i blocks onto a real child, through a mapped port", (_id, doc, count) => {
     const root = doc.diagrams[doc.rootDiagramIds[0]];
     const blocks = root.nodes.filter((n): n is NestedNode => n.type === "nested");
@@ -135,8 +145,32 @@ describe("the Architecture & Cloud templates", () => {
     }
   });
 
+  // "Each service owns its own data" is the claim this template exists to make, and it is made
+  // by where the stores are drawn: one inside each service, none on the platform view. A shared
+  // cylinder up there would quietly turn it into a diagram of a distributed monolith.
+  it("keeps every microservice's store inside the service that owns it", () => {
+    const root = microservices.diagrams[microservices.rootDiagramIds[0]];
+    const stores = (d: (typeof root)["nodes"]) => d.filter((n) => n.type === "shape" && n.shapeRef === "general/cylinder");
+    expect(stores(root.nodes), "the platform view has a shared store on it").toEqual([]);
+
+    const blocks = root.nodes.filter((n): n is NestedNode => n.type === "nested");
+    const gateway = root.nodes.find((n) => n.id.startsWith("mGw"))!;
+    const bus = root.nodes.find((n) => n.id.startsWith("mBus"))!;
+    for (const block of blocks) {
+      const child = microservices.diagrams[block.childDiagramId];
+      expect(stores(child.nodes).length, `${block.id} has no store of its own`).toBe(1);
+
+      // The other half of the same claim: one way in, through the gateway, and one way out,
+      // onto the bus. Anything else would be services reaching into each other.
+      const inbound = root.edges.filter((e) => e.target.nodeId === block.id);
+      expect(inbound.map((e) => e.source.nodeId), `${block.id} is reached from somewhere else`).toEqual([gateway.id]);
+      const outbound = root.edges.filter((e) => e.source.nodeId === block.id);
+      expect(outbound.map((e) => e.target.nodeId), `${block.id} publishes somewhere else`).toEqual([bus.id]);
+    }
+  });
+
   it("gives every spoke and namespace its own ids, so two can coexist", () => {
-    for (const doc of [azureLandingZone, kubernetesCluster]) {
+    for (const doc of [azureLandingZone, kubernetesCluster, microservices]) {
       const ids = [
         ...Object.keys(doc.diagrams),
         ...nodesOf(doc).map((n) => n.id),

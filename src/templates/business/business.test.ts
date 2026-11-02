@@ -10,6 +10,7 @@ import bpmnBasic from "./bpmnBasic";
 import businessModelCanvas from "./businessModelCanvas";
 import customerJourney from "./customerJourney";
 import fishbone from "./fishbone";
+import incidentRunbook from "./incidentRunbook";
 import milestoneTimeline from "./milestoneTimeline";
 import orgChart from "./orgChart";
 import swimlane from "./swimlane";
@@ -17,6 +18,7 @@ import swot from "./swot";
 
 const ALL: [string, DiagramDocument][] = [
   ["org-chart", orgChart],
+  ["incident-runbook", incidentRunbook],
   ["swimlane-process", swimlane],
   ["bpmn-basic", bpmnBasic],
   ["fishbone", fishbone],
@@ -178,5 +180,27 @@ describe("the Business & Process templates", () => {
         expect(child.nodes.some((n) => n.id === port.innerNodeId), `${port.id} points outside its child`).toBe(true);
       }
     }
+  });
+
+  // Same reason as the BPMN gateway: an unlabelled branch out of a decision is the commonest
+  // way a process diagram stops being usable, and on a runbook it is read at 3am.
+  it("labels both branches out of the incident severity gate", () => {
+    const gate = find(incidentRunbook, "iSev");
+    const out = edgesOf(incidentRunbook).filter((e) => e.source.nodeId === gate.id);
+    expect(out.length).toBeGreaterThan(1);
+    for (const e of out) expect(e.label?.text.trim(), `${e.id} leaves the gate unlabelled`).toBeTruthy();
+  });
+
+  it("sends a failed mitigation back to choosing another one, not to the top of the phase", () => {
+    const root = incidentRunbook.diagrams[incidentRunbook.rootDiagramIds[0]];
+    const phase = root.nodes.find((n): n is NestedNode => n.type === "nested" && n.label?.text === "Mitigate")!;
+    const entry = phase.ports.find((p) => p.label === "declared")!;
+    const retry = phase.ports.find((p) => p.label === "try another")!;
+    // Two ways into the same phase, deliberately landing on different steps: coming back round
+    // means picking a different mitigation, not declaring the incident again.
+    expect(retry.innerNodeId).not.toBe(entry.innerNodeId);
+    const child = incidentRunbook.diagrams[phase.childDiagramId];
+    const landsOn = child.nodes.find((n) => n.id === retry.innerNodeId)!;
+    expect(landsOn.label?.text).toContain("Choose a mitigation");
   });
 });
