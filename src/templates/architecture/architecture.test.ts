@@ -145,7 +145,7 @@ describe("the Architecture & Cloud templates", () => {
       expect(new Set(ids).size).toBe(ids.length);
     }
   });
-});
+});
 
 describe("the AI infrastructure templates", () => {
   const finder = (doc: DiagramDocument) => {
